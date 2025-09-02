@@ -23,7 +23,7 @@
   MyApp.Logger = {
     _ts: () => new Date().toISOString(),
     debug: (...args) => MyApp.config.ENV === 'development' && console.debug(`[DEBUG ${MyApp.Logger._ts()}]`, ...args),
-    info: (...args) => console.info(`[INFO ${MyApp.Logger._ts()}]`, ...args),
+    info: (...args) => MyApp.config.ENV === 'development' && console.info(`[INFO ${MyApp.Logger._ts()}]`, ...args),
     warn: (...args) => console.warn(`[WARN ${MyApp.Logger._ts()}]`, ...args),
     error: (...args) => console.error(`[ERROR ${MyApp.Logger._ts()}]`, ...args)
   };
@@ -161,6 +161,13 @@
 
         e.preventDefault();
 
+        // Honeypot check (anti-bot)
+        const honeypot = form.querySelector('.honeypot');
+        if (honeypot && honeypot.value.trim() !== '') {
+          MyApp.Logger.warn('Formulário bloqueado pelo honeypot.');
+          return;
+        }
+
         const nome = form.querySelector('#nome');
         const email = form.querySelector('#email');
         const mensagem = form.querySelector('#mensagem');
@@ -228,7 +235,7 @@
       if (!btnTop) return;
 
       const toggleVisibility = MyApp.throttle(() => {
-        btnTop.style.display = window.scrollY > MyApp.config.scrollTopThreshold ? 'block' : 'none';
+        btnTop.classList.toggle('show', window.scrollY > MyApp.config.scrollTopThreshold);
       }, 100);
 
       window.addEventListener('scroll', toggleVisibility);
@@ -256,6 +263,10 @@
             const el = entry.target;
             if (el.tagName === 'IMG') {
               el.src = el.dataset.src;
+              el.onerror = () => {
+                MyApp.Logger.warn(`Erro ao carregar imagem: ${el.dataset.src}`);
+                el.style.display = 'none'; // fallback simples
+              };
               el.removeAttribute('data-src');
             } else {
               const src = el.dataset.lazy;
@@ -274,6 +285,31 @@
   };
 
   /** =============================
+   *  ScrollSpy - ativa link do menu
+   * ============================= */
+  MyApp.initScrollSpy = () => {
+    try {
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.nav-menu a[href^="#"]');
+      if (!sections.length || !navLinks.length) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            navLinks.forEach(link => link.classList.remove('active'));
+            const activeLink = document.querySelector(`.nav-menu a[href="#${entry.target.id}"]`);
+            if (activeLink) activeLink.classList.add('active');
+          }
+        });
+      }, { threshold: 0.6 });
+
+      sections.forEach(section => observer.observe(section));
+    } catch (err) {
+      MyApp.Logger.error('Erro no ScrollSpy:', err);
+    }
+  };
+
+  /** =============================
    *  Inicialização Completa
    * ============================= */
   MyApp.init = () => {
@@ -283,6 +319,7 @@
     MyApp.initTimeline();
     MyApp.initScrollTopButton();
     MyApp.initLazyLoad();
+    MyApp.initScrollSpy();
     MyApp.Logger.info('Scripts iniciais carregados com sucesso.');
   };
 
