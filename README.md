@@ -62,19 +62,6 @@ Font Awesome: Para os ícones de redes sociais e interface.
 
 Google Fonts: Para a tipografia do projeto.
 
-Estrutura de Arquivos
-O projeto está organizado da seguinte forma:
-
-/
-├── index.html          # Página Inicial
-├── sobre.html          # Página Sobre Nós com a timeline
-├── eventos.html        # Página de Eventos
-├── contato.html        # Página de Contato com formulário e mapa
-├── style.css           # Folha de estilos principal
-├── script.js           # Arquivo JavaScript com toda a lógica
-└── imagens/
-    ├── logo.png
-    └── ... (demais imagens do projeto)
 Como Executar Localmente
 Este é um projeto estático, então não há necessidade de um processo de build complexo. Para rodar em sua máquina local:
 
