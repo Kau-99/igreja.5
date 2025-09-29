@@ -1,80 +1,68 @@
-Site Institucional - Assembleia de Deus de Vila de Cava (ADVIC)
-Sobre o Projeto
-Este é o site que desenvolvi para a Assembleia de Deus de Vila de Cava (ADVIC). O objetivo foi criar uma presença online moderna, acolhedora e informativa para a igreja, servindo como um canal de comunicação central para membros da comunidade e visitantes.
+#  Documentação Técnica - ADVIC Website Scripts
 
-O projeto foi construído do zero, com foco em um design limpo, performance e, acima de tudo, facilidade de uso em qualquer dispositivo.
+Este documento explica a arquitetura e as decisões de engenharia do arquivo `script.js` do site institucional da Assembleia de Deus Vila de Cava (ADVIC).
 
-Funcionalidades Principais
-O site conta com diversas seções e funcionalidades para atender às necessidades da igreja:
+---
 
-Design Responsivo: Totalmente adaptado para uma experiência de navegação perfeita em celulares, tablets e desktops.
+##  Objetivos do Script
 
-Páginas Institucionais:
+O código foi projetado para:
 
-Início: Uma página de boas-vindas com acesso rápido aos cultos e últimos eventos.
+- Garantir **segurança** no front-end (hardening contra XSS, clickjacking, links maliciosos).
+- Melhorar a **performance e fluidez**, inclusive em dispositivos mais antigos.
+- Aumentar a **resiliência** (fallbacks quando features modernas não existem).
+- Garantir **acessibilidade** (navegação por teclado, aria-atributos).
+- Manter uma arquitetura **modular, limpa e expansível**.
 
-Sobre: Apresenta a história da igreja através de uma linha do tempo interativa e animada que revela os marcos conforme o usuário rola a página.
+---
 
-Eventos: Uma área dedicada à divulgação da programação e eventos especiais da igreja.
+##  Segurança
 
-Contato: Inclui um formulário para envio de mensagens e um mapa integrado para facilitar a localização.
+- **Sanitização de links:** remove `javascript:` e `data:` de hrefs.
+- **Força `rel=noopener noreferrer`:** evita ataques de tabnabbing em links externos.
+- **Frame-busting:** bloqueia tentativa de carregar o site em iframes não autorizados.
+- **Silenciamento de logs em produção:** reduz exposição de informações sensíveis no console.
 
-Otimização de Performance:
+> **Nota:** Para produção real, o ideal é configurar também **CSP (Content Security Policy)** no servidor ou GitHub Pages.
 
-Lazy Loading: Imagens são carregadas somente quando se aproximam da tela, economizando dados e acelerando o carregamento inicial.
+---
 
-JavaScript Eficiente: O código utiliza técnicas como throttle para eventos de rolagem, garantindo uma animação fluida sem sobrecarregar o navegador.
+##  Performance
 
-Acessibilidade: Uso de tags semânticas do HTML5 e atributos ARIA para melhorar a navegação para usuários de tecnologias assistivas.
+- **Polyfill de `requestIdleCallback`:** executa tarefas leves sem travar o render.
+- **Eventos passivos (wheel/touch):** evita bloqueio de scroll em mobile.
+- **Preconnect:** antecipa conexões com CDNs comuns (Google Fonts, cdnjs).
+- **Prefetch on-hover:** páginas internas carregam mais rápido quando o usuário passa o mouse.
+- **Lazy Loading avançado:** imagens, iframes e backgrounds só carregam quando entram no viewport.
+- **Decodificação assíncrona de imagens:** uso de `decode()` quando disponível.
 
-Componentes Interativos:
+---
 
-Menu de navegação "hambúrguer" para dispositivos móveis.
+## Modo Low-End
 
-Botão "Voltar ao Topo" que aparece de forma suave.
+Detecta dispositivos limitados via:
+- `navigator.connection.saveData`
+- `navigator.deviceMemory <= 2`
+- `navigator.hardwareConcurrency <= 2`
+- `prefers-reduced-motion`
 
-Animações sutis em cards e outros elementos para uma experiência mais dinâmica.
+Quando ativo:
+- Remove animações/transições pesadas.
+- Usa thresholds mais baixos em observers.
+- Evita consumo extra de CPU.
 
-Tecnologias Utilizadas
-Para construir este site, utilizei as seguintes tecnologias:
+---
 
-HTML5: Estrutura semântica e bem organizada.
+# Estrutura do Namespace `MyApp`
 
-CSS3: Estilização completa com recursos modernos como:
+O código roda dentro de um IIFE e expõe apenas o objeto `MyApp`.
 
-Flexbox e Grid Layout para alinhamento e estrutura.
-
-Variáveis CSS para um tema de cores consistente e fácil de manter.
-
-Media Queries para a responsividade.
-
-Animações e Transições para interatividade.
-
-JavaScript (ES6+): Para toda a interatividade do site, incluindo:
-
-Manipulação do DOM.
-
-Menu responsivo.
-
-Intersection Observer API para animar elementos na rolagem (como a timeline) e para o lazy loading.
-
-Font Awesome: Para os ícones de redes sociais e interface.
-
-Google Fonts: Para a tipografia do projeto.
-
-Como Executar Localmente
-Este é um projeto estático, então não há necessidade de um processo de build complexo. Para rodar em sua máquina local:
-
-Clone este repositório:
-
-Bash
-
-git clone https://github.com/seu-usuario/nome-do-repositorio.git
-Navegue até o diretório do projeto:
-
-Bash
-
-cd nome-do-repositorio
-Abra o arquivo index.html diretamente no seu navegador.
-
-Dica: Para uma melhor experiência de desenvolvimento, recomendo usar a extensão Live Server no Visual Studio Code, que atualiza o site automaticamente a cada alteração.
+ Configurações
+```js
+MyApp.config = {
+  ENV: 'production' | 'development',
+  scrollTopThreshold: 300,
+  toastDuration: 3000,
+  lazySelector: 'img[data-src], [data-lazy], iframe[data-src]',
+  lowEndMode: boolean
+}
