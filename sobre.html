@@ -6,26 +6,30 @@
   <meta name="description" content="Conheça a história da Assembleia de Deus Vila de Cava, sua trajetória de fé, liderança pastoral e crescimento ao longo dos anos.">
   <meta name="keywords" content="Assembleia de Deus, Vila de Cava, Igreja, História, Pastores, Fé, Comunidade Cristã">
   <meta name="author" content="Assembleia de Deus Vila de Cava">
+  <meta name="robots" content="index, follow">
   <title>Sobre Nós - Assembleia de Deus Vila de Cava</title>
   <link rel="stylesheet" href="style.css">
- <link rel="icon" href="imagens/logo.png" type="image/png">
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="icon" href="imagens/logo.png" type="image/png">
+
+  <!-- Font Awesome otimizado -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
 </head>
 <body>
   <!-- Header -->
-  <header class="site-header">
+  <header class="site-header" role="banner">
     <div class="container header-content">
-      <a href="index.html" class="logo">
-        <img src="imagens/logo.png" alt="Logo Assembleia de Deus Vila de Cava">
+      <a href="index.html" class="logo" aria-label="Página inicial ADVIC">
+        <img src="imagens/logo.png" alt="Logo Assembleia de Deus Vila de Cava" width="70" height="70" loading="lazy">
         <span class="logo-text">ADVIC</span>
       </a>
       <button class="nav-toggle" aria-label="Abrir Menu">
         <span class="hamburger"></span>
       </button>
-      <nav class="nav-wrapper">
+      <nav class="nav-wrapper" aria-label="Navegação principal">
         <ul class="nav-menu">
           <li><a href="index.html">Início</a></li>
-          <li><a href="sobre.html" class="active">Sobre</a></li>
+          <li><a href="sobre.html" class="active" aria-current="page">Sobre</a></li>
           <li><a href="eventos.html">Eventos</a></li>
           <li><a href="contato.html">Contato</a></li>
         </ul>
@@ -34,71 +38,82 @@
   </header>
 
   <!-- Seção Sobre -->
-  <section class="sobre container">
-    <h1>Sobre Nós</h1>
-    <p>
-      A Assembleia de Deus em Vila de Cava tem uma rica trajetória de fé, crescimento e liderança espiritual. 
-      Ao longo dos anos, muitos pastores dedicados contribuíram para edificar esta obra, guiando a igreja em amor, oração e serviço à comunidade.
-    </p>
-  </section>
+  <main id="conteudo">
+    <section class="sobre container">
+      <h1>Sobre Nós</h1>
+      <p>
+        A Assembleia de Deus em Vila de Cava tem uma rica trajetória de fé, crescimento e liderança espiritual. 
+        Ao longo dos anos, muitos pastores dedicados contribuíram para edificar esta obra, guiando a igreja em amor, oração e serviço à comunidade.
+      </p>
+    </section>
 
-  <!-- Linha do Tempo -->
-  <section class="container">
-    <h2>Nossa História</h2>
-    <div class="timeline">
-      
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-photo">
-            <img src="imagens/pastor lider em 1950.jpg" alt="Pastor João Silva">
+    <!-- Linha do Tempo -->
+    <section class="container">
+      <h2>Nossa História</h2>
+      <div class="timeline">
+
+        <div class="timeline-item color-1">
+          <div class="timeline-content">
+            <div class="timeline-photo">
+              <img src="imagens/pastor lider em 1950.jpg" alt="Pastor João Silva - Fundador da igreja">
+            </div>
+            <h3>1950 <i class="fas fa-cross timeline-icon" aria-hidden="true"></i></h3>
+            <p><strong>Pastor João Silva</strong><br>Fundação da Assembleia de Deus em Vila de Cava.</p>
           </div>
-          <h3>1950</h3>
-          <p><strong>Pastor João Silva</strong><br>Fundação da Assembleia de Deus em Vila de Cava.</p>
         </div>
-      </div>
 
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-photo">
-            <img src="imagens/pastor2.jpg" alt="Pastor Carlos Mendes">
+        <div class="timeline-item color-2">
+          <div class="timeline-content">
+            <div class="timeline-photo">
+              <img src="imagens/pastor2.jpg" alt="Pastor Carlos Mendes - Expansão regional">
+            </div>
+            <h3>1970 <i class="fas fa-church timeline-icon" aria-hidden="true"></i></h3>
+            <p><strong>Pastor Carlos Mendes</strong><br>Expansão das congregações na região.</p>
           </div>
-          <h3>1970</h3>
-          <p><strong>Pastor Carlos Mendes</strong><br>Expansão das congregações na região.</p>
         </div>
-      </div>
 
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-photo">
-            <img src="imagens/pastor3.jpg" alt="Pastor Roberto Santos">
+        <div class="timeline-item color-1">
+          <div class="timeline-content">
+            <div class="timeline-photo">
+              <img src="imagens/pastor3.jpg" alt="Pastor Roberto Santos - Missões internacionais">
+            </div>
+            <h3>1990 <i class="fas fa-globe timeline-icon" aria-hidden="true"></i></h3>
+            <p><strong>Pastor Roberto Santos</strong><br>Início dos trabalhos missionários internacionais.</p>
           </div>
-          <h3>1990</h3>
-          <p><strong>Pastor Roberto Santos</strong><br>Início dos trabalhos missionários internacionais.</p>
         </div>
-      </div>
 
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-photo">
-            <img src="imagens/pastor4.jpg" alt="Pastor Marcos Almeida">
+        <div class="timeline-item color-2">
+          <div class="timeline-content">
+            <div class="timeline-photo">
+              <img src="imagens/pastor4.jpg" alt="Pastor Marcos Almeida - Projetos sociais">
+            </div>
+            <h3>2010 <i class="fas fa-hands-helping timeline-icon" aria-hidden="true"></i></h3>
+            <p><strong>Pastor Marcos Almeida</strong><br>Implantação de novos ministérios e projetos sociais.</p>
           </div>
-          <h3>2010</h3>
-          <p><strong>Pastor Marcos Almeida</strong><br>Implantação de novos ministérios e projetos sociais.</p>
         </div>
-      </div>
 
-      <div class="timeline-item">
-        <div class="timeline-content">
-          <div class="timeline-photo">
-            <img src="imagens/pastor5.jpg" alt="Pastor Atual">
+        <div class="timeline-item color-1">
+          <div class="timeline-content">
+            <div class="timeline-photo">
+              <img src="imagens/pastor5.jpg" alt="Pastor Atual - Era digital e expansão">
+            </div>
+            <h3>2025 <i class="fas fa-bible timeline-icon" aria-hidden="true"></i></h3>
+            <p><strong>Pastor Atual</strong><br>Avanço na era digital e fortalecimento da obra do Senhor.</p>
           </div>
-          <h3>2025</h3>
-          <p><strong>Pastor Atual</strong><br>Avanço na era digital e fortalecimento da obra do Senhor.</p>
         </div>
-      </div>
 
-    </div>
-  </section>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+      <div class="container">
+        <h2>Faça parte da nossa história!</h2>
+        <p>Venha conhecer mais de perto a obra do Senhor e participe conosco.</p>
+        <a href="contato.html" class="btn btn-primary">Entre em Contato</a>
+      </div>
+    </section>
+  </main>
 
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-content">
@@ -113,9 +128,9 @@
       </nav>
     </div>
   </footer>
-   <div class="version-badge">v1.0</div>
+  <div class="version-badge">v1.1</div>
 
   <!-- Scripts -->
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

@@ -5,36 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contato - ADVIC</title>
   <meta name="description" content="Entre em contato com a Assembleia de Deus Vila de Cava. Envie sua mensagem e saiba como chegar.">
-<meta name="author" content="ADVIC - Assembleia de Deus de Vila de Cava">
-<meta property="og:title" content="Contato - ADVIC">
-<meta property="og:description" content="Entre em contato com a Assembleia de Deus Vila de Cava. Envie sua mensagem e saiba como chegar.">
-<meta property="og:image" content="imagens/og-image.jpg">
-<meta property="og:url" content="https://seudominio.com/contato.html">
-<meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Contato - ADVIC">
-<meta name="twitter:description" content="Entre em contato com a Assembleia de Deus Vila de Cava.">
-<meta name="twitter:image" content="imagens/og-image.jpg">
+  <meta name="author" content="ADVIC - Assembleia de Deus de Vila de Cava">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Contato - ADVIC">
+  <meta property="og:description" content="Entre em contato com a Assembleia de Deus Vila de Cava. Envie sua mensagem e saiba como chegar.">
+  <meta property="og:image" content="imagens/og-image.jpg">
+  <meta property="og:url" content="https://seudominio.com/contato.html">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contato - ADVIC">
+  <meta name="twitter:description" content="Entre em contato com a Assembleia de Deus Vila de Cava.">
+  <meta name="twitter:image" content="imagens/og-image.jpg">
 
   <!-- CSS principal -->
   <link rel="icon" href="imagens/logo.png" type="image/png">
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Merriweather:wght@700&display=swap" rel="stylesheet">
 
   <!-- Font Awesome otimizado -->
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-        integrity="sha512-..."
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
 
   <!-- JS principal -->
   <script defer src="script.js"></script>
 </head>
 <body>
+  <a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
   <!-- Header -->
   <header class="site-header" role="banner">
     <div class="container header-content">
@@ -56,12 +59,15 @@
     </div>
   </header>
 
-  <main role="main">
+  <main id="conteudo" role="main">
     <!-- Formulário de contato -->
     <section class="container" aria-labelledby="titulo-contato">
       <h1 id="titulo-contato">Entre em Contato</h1>
       <form class="contact-form" action="" method="POST" novalidate aria-describedby="instrucoes-form">
         <p id="instrucoes-form">Preencha todos os campos obrigatórios antes de enviar.</p>
+
+        <!-- Honeypot invisível -->
+        <input type="text" class="honeypot" name="website" tabindex="-1" autocomplete="off">
 
         <label for="nome">Nome <span aria-hidden="true">*</span></label>
         <input type="text" id="nome" name="nome" required aria-required="true">
@@ -69,10 +75,14 @@
         <label for="email">E-mail <span aria-hidden="true">*</span></label>
         <input type="email" id="email" name="email" required aria-required="true">
 
+        <label for="assunto">Assunto <span aria-hidden="true">*</span></label>
+        <input type="text" id="assunto" name="assunto" required aria-required="true">
+
         <label for="mensagem">Mensagem <span aria-hidden="true">*</span></label>
         <textarea id="mensagem" name="mensagem" rows="5" required aria-required="true"></textarea>
 
         <button type="submit" class="btn btn-primary">Enviar</button>
+        <p class="email-note">Suas informações não serão compartilhadas. Apenas membros autorizados da igreja terão acesso às mensagens.</p>
       </form>
     </section>
 
@@ -108,7 +118,7 @@
     </div>
   </footer>
 
-   <div class="version-badge">v1.0</div>
+  <div class="version-badge">v1.1</div>
 
   <!-- Botões flutuantes -->
   <a href="#" id="btnTop" aria-label="Voltar ao topo"><i class="fas fa-arrow-up"></i></a>

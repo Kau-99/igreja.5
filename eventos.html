@@ -7,27 +7,33 @@
   <meta name="description" content="Confira os próximos eventos e programações especiais da Assembleia de Deus Vila de Cava. Participe e esteja conosco.">
   <meta name="keywords" content="igreja, eventos, programação, Assembleia de Deus, Vila de Cava">
   <meta name="author" content="Assembleia de Deus Vila de Cava">
-<link rel="icon" href="imagens/logo.png" type="image/png">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <meta name="robots" content="index, follow">
+
+  <link rel="icon" href="imagens/logo.png" type="image/png">
+
+  <!-- Font Awesome otimizado -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+
   <link rel="stylesheet" href="style.css">
   <script defer src="script.js"></script>
 </head>
 <body>
   <!-- Header -->
-  <header class="site-header">
+  <header class="site-header" role="banner">
     <div class="container header-content">
-      <a href="index.html" class="logo">
-        <img src="imagens/logo.png" alt="Logo Assembleia de Deus Vila de Cava">
+      <a href="index.html" class="logo" aria-label="Página inicial ADVIC">
+        <img src="imagens/logo.png" alt="Logo Assembleia de Deus Vila de Cava" width="70" height="70" loading="lazy">
         <span class="logo-text">ADVIC</span>
       </a>
       <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
         <span class="hamburger"></span>
       </button>
-      <nav class="nav-wrapper">
+      <nav class="nav-wrapper" aria-label="Navegação principal">
         <ul class="nav-menu">
           <li><a href="index.html">Início</a></li>
           <li><a href="sobre.html">Sobre</a></li>
-          <li><a href="eventos.html" class="active">Eventos</a></li>
+          <li><a href="eventos.html" class="active" aria-current="page">Eventos</a></li>
           <li><a href="contato.html">Contato</a></li>
         </ul>
       </nav>
@@ -36,45 +42,71 @@
 
   <!-- Hero -->
   <section class="hero hero-eventos">
-  <div class="container">
-    <h1>Eventos da Igreja</h1>
-    <p>Fique por dentro da nossa programação e participe conosco.</p>
-  </div>
-</section>
-
-  <!-- Lista de eventos -->
-  <section class="destaques">
     <div class="container">
-      <h2>Programação</h2>
-      <div class="grid">
-        
-        <!-- Evento 1 -->
-        <div class="card">
-          <img src="imagens/evento1.jpg" alt="Evento de Louvor e Adoração">
-          <h3>Noite de Louvor</h3>
-          <p><strong>Data:</strong> 15 de Setembro - 19h</p>
-          <p>Uma noite especial de louvor, adoração e palavra de edificação para toda a família.</p>
-        </div>
-
-        <!-- Evento 2 -->
-        <div class="card">
-          <img src="imagens/evento2.jpg" alt="Culto da Família">
-          <h3>Culto da Família</h3>
-          <p><strong>Data:</strong> 22 de Setembro - 19h</p>
-          <p>Um culto dedicado às famílias, com ministrações voltadas para união e fortalecimento espiritual.</p>
-        </div>
-
-        <!-- Evento 3 -->
-        <div class="card">
-          <img src="imagens/evento3.jpg" alt="Vigília da Vitória">
-          <h3>Vigília da Vitória</h3>
-          <p><strong>Data:</strong> 29 de Setembro - 23h</p>
-          <p>Um tempo de oração e busca intensa pela presença de Deus, venha se fortalecer espiritualmente.</p>
-        </div>
-
-      </div>
+      <h1>Eventos da Igreja</h1>
+      <p>Fique por dentro da nossa programação e participe conosco.</p>
     </div>
   </section>
+
+  <!-- Lista de eventos -->
+  <main id="conteudo">
+    <section class="destaques">
+      <div class="container">
+        <h2>Programação</h2>
+
+        <!-- Campo de filtro -->
+        <div class="eventos-filtro">
+          <label for="filtro-eventos" class="sr-only">Filtrar eventos</label>
+          <select id="filtro-eventos" aria-label="Filtrar eventos">
+            <option value="todos">Todos</option>
+            <option value="louvor">Louvor</option>
+            <option value="familia">Família</option>
+            <option value="vigilia">Vigília</option>
+          </select>
+        </div>
+
+        <div class="grid">
+
+          <!-- Evento 1 -->
+          <div class="card" data-tipo="louvor" tabindex="0">
+            <img src="imagens/evento1.jpg" alt="Noite de Louvor e Adoração">
+            <h3>Noite de Louvor</h3>
+            <p><strong>Data:</strong> <time datetime="2025-09-15T19:00">15 de Setembro - 19h</time></p>
+            <p>Uma noite especial de louvor, adoração e palavra de edificação para toda a família.</p>
+            <div class="event-actions">
+              <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Noite+de+Louvor&dates=20250915T220000Z/20250916T000000Z&details=Participe+da+noite+de+louvor&location=ADVIC" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Adicionar ao Google Calendar</a>
+              <a href="https://wa.me/?text=Participe+da+Noite+de+Louvor+na+ADVIC+dia+15+de+Setembro+às+19h" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Compartilhar no WhatsApp</a>
+            </div>
+          </div>
+
+          <!-- Evento 2 -->
+          <div class="card" data-tipo="familia" tabindex="0">
+            <img src="imagens/evento2.jpg" alt="Culto da Família">
+            <h3>Culto da Família</h3>
+            <p><strong>Data:</strong> <time datetime="2025-09-22T19:00">22 de Setembro - 19h</time></p>
+            <p>Um culto dedicado às famílias, com ministrações voltadas para união e fortalecimento espiritual.</p>
+            <div class="event-actions">
+              <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Culto+da+Família&dates=20250922T220000Z/20250923T000000Z&details=Participe+do+culto+da+família&location=ADVIC" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Adicionar ao Google Calendar</a>
+              <a href="https://wa.me/?text=Venha+ao+Culto+da+Família+na+ADVIC+dia+22+de+Setembro+às+19h" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Compartilhar no WhatsApp</a>
+            </div>
+          </div>
+
+          <!-- Evento 3 -->
+          <div class="card" data-tipo="vigilia" tabindex="0">
+            <img src="imagens/evento3.jpg" alt="Vigília da Vitória">
+            <h3>Vigília da Vitória</h3>
+            <p><strong>Data:</strong> <time datetime="2025-09-29T23:00">29 de Setembro - 23h</time></p>
+            <p>Um tempo de oração e busca intensa pela presença de Deus, venha se fortalecer espiritualmente.</p>
+            <div class="event-actions">
+              <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Vigília+da+Vitória&dates=20250930T020000Z/20250930T050000Z&details=Participe+da+vigília+da+vitória&location=ADVIC" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Adicionar ao Google Calendar</a>
+              <a href="https://wa.me/?text=Participe+da+Vigília+da+Vitória+na+ADVIC+dia+29+de+Setembro+às+23h" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Compartilhar no WhatsApp</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
 
   <!-- CTA -->
   <section class="cta">
@@ -98,9 +130,9 @@
       </nav>
     </div>
   </footer>
-   <div class="version-badge">v1.0</div>
+  <div class="version-badge">v1.1</div>
+
   <!-- Botão Voltar ao Topo -->
   <button id="btnTop" aria-label="Voltar ao topo">↑</button>
-
 </body>
 </html>

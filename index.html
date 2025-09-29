@@ -9,37 +9,41 @@
   <meta name="description" content="Site oficial da Assembleia de Deus de Vila de Cava (ADVIC). Conheça nossa igreja, programação e participe dos nossos cultos.">
   <meta name="keywords" content="igreja, assembleia de deus, vila de cava, advic, culto, programação, eventos">
   <meta name="author" content="ADVIC - Assembleia de Deus de Vila de Cava">
+  <meta name="robots" content="index, follow">
 
   <link rel="icon" href="imagens/logo.png" type="image/png">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <!-- Font Awesome otimizado -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
 
+  <!-- SEO Open Graph -->
   <meta property="og:title" content="Assembleia de Deus de Vila de Cava - ADVIC">
   <meta property="og:description" content="Conheça a Assembleia de Deus de Vila de Cava. Programação, eventos e muito mais.">
   <meta property="og:image" content="imagens/og-image.jpg">
   <meta property="og:url" content="https://seudominio.com">
   <meta property="og:type" content="website">
 
+  <!-- SEO Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Assembleia de Deus de Vila de Cava - ADVIC">
   <meta name="twitter:description" content="Conheça a Assembleia de Deus de Vila de Cava. Programação, eventos e muito mais.">
   <meta name="twitter:image" content="imagens/og-image.jpg">
 
   <link rel="stylesheet" href="style.css">
-
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Merriweather:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header class="site-header">
+  <header class="site-header" role="banner">
     <div class="container header-content">
-      <a href="index.html" class="logo">
-        <img src="imagens/logo.png" alt="Logo ADVIC">
+      <a href="index.html" class="logo" aria-label="Página inicial ADVIC">
+        <img src="imagens/logo.png" alt="Logo ADVIC" loading="lazy" width="70" height="70">
         <span class="logo-text">ADVIC</span>
       </a>
       <button class="nav-toggle" aria-label="Abrir Menu"><span class="hamburger"></span></button>
-      <nav class="nav-wrapper">
+      <nav class="nav-wrapper" aria-label="Navegação principal">
         <ul class="nav-menu">
-          <li><a href="index.html" class="active">Início</a></li>
+          <li><a href="index.html" class="active" aria-current="page">Início</a></li>
           <li><a href="sobre.html">Sobre</a></li>
           <li><a href="eventos.html">Eventos</a></li>
           <li><a href="contato.html">Contato</a></li>
@@ -48,7 +52,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="conteudo">
     <section class="hero">
       <h1>Bem-vindo à Assembleia de Deus de Vila de Cava</h1>
       <p>Um lugar de adoração, comunhão e crescimento espiritual.</p>
@@ -58,7 +62,7 @@
     <section class="sobre container">
       <h2>Quem Somos</h2>
       <div class="grid-2-col">
-        <img src="imagens/imagem-igreja.jpg" alt="Imagem da igreja" loading="lazy">
+        <img src="imagens/imagem-igreja.jpg" alt="Fachada da Assembleia de Deus de Vila de Cava" loading="lazy">
         <div>
           <p>A Assembleia de Deus de Vila de Cava é uma comunidade de fé dedicada a proclamar o Evangelho de Cristo e servir ao próximo. Acreditamos no poder transformador da Palavra de Deus para impactar vidas e famílias.</p>
           <p>Com uma história de mais de 50 anos, nossa missão é ser uma luz na comunidade, oferecendo um ambiente acolhedor para que todos possam encontrar seu propósito em Deus e crescer espiritualmente.</p>
@@ -71,17 +75,17 @@
       <h2>Nossos Cultos</h2>
       <p>Participe dos nossos cultos semanais e junte-se a nós para adorar a Deus.</p>
       <div class="grid">
-        <article class="card">
+        <article class="card" tabindex="0">
           <h3>Culto de Doutrina</h3>
-          <p>Terças-feiras às 19h30</p>
+          <time datetime="2025-09-30T19:30">Terças-feiras às 19h30</time>
         </article>
-        <article class="card">
+        <article class="card" tabindex="0">
           <h3>Culto Público</h3>
-          <p>Quinta-feira às 19h</p>
+          <time datetime="2025-10-02T19:00">Quinta-feira às 19h</time>
         </article>
-        <article class="card">
+        <article class="card" tabindex="0">
           <h3>Culto Público</h3>
-          <p>Domingos às 18h</p>
+          <time datetime="2025-10-05T18:00">Domingos às 18h</time>
         </article>
       </div>
     </section>
@@ -90,17 +94,17 @@
       <h2>Últimos Eventos</h2>
       <div class="grid">
         <div class="card">
-          <img src="https://placehold.co/400x250?text=Evento+1" alt="Imagem do Evento 1" loading="lazy">
+          <img src="https://placehold.co/400x250?text=Evento+1" alt="Imagem do Congresso de Missões" loading="lazy">
           <h3>Congresso de Missões</h3>
           <p>Conheça mais sobre nosso último congresso e os resultados alcançados.</p>
         </div>
         <div class="card">
-          <img src="imagens/irmas.jpg" alt="Imagem do Evento 2" loading="lazy">
+          <img src="imagens/irmas.jpg" alt="Festividade das irmãs em oração" loading="lazy">
           <h3>Festividade das Irmãs</h3>
           <p>Uma noite de adoração e oração com as nossas irmãs.</p>
         </div>
         <div class="card">
-          <img src="https://placehold.co/400x250?text=Evento+3" alt="Imagem do Evento 3" loading="lazy">
+          <img src="https://placehold.co/400x250?text=Evento+3" alt="Celebração do aniversário da igreja" loading="lazy">
           <h3>Aniversário da Igreja</h3>
           <p>Nossa festa de aniversário com a participação de convidados especiais.</p>
         </div>
@@ -114,20 +118,21 @@
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-content">
-      <div class="footer-logo"><img src="imagens/logo.png" alt="Logo ADVIC" width="70" height="70" loading="lazy"></div>
-      <p>&copy; 2025 ADVIC - Todos os direitos reservados</p>
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-content" itemscope itemtype="https://schema.org/Organization">
+      <div class="footer-logo">
+        <img src="imagens/logo.png" alt="Logo ADVIC" width="70" height="70" loading="lazy" itemprop="logo">
+      </div>
+      <p>&copy; 2025 <span itemprop="name">ADVIC</span> - Todos os direitos reservados</p>
       <div class="social-links">
-        <a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-        <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" itemprop="sameAs"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer" aria-label="Facebook" itemprop="sameAs"><i class="fab fa-facebook"></i></a>
+        <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube" itemprop="sameAs"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
   </footer>
-  <div class="version-badge">v1.0</div>
+  <div class="version-badge">v1.1</div>
 
-  <!-- Corrigido: apenas este script -->
   <script src="script.js" defer></script>
 </body>
 </html>
