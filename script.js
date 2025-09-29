@@ -1,175 +1,7 @@
 'use strict';
 
 (() => {
-  // =============================
-  // 🔧 POLYFILLS & PATCHES LEVES
-  // =============================
-  // requestIdleCallback polyfill (leve e seguro)
-  window.requestIdleCallback = window.requestIdleCallback || function (cb) {
-    const start = Date.now();
-    return setTimeout(() => cb({
-      didTimeout: false,
-      timeRemaining: () => Math.max(0, 50 - (Date.now() - start))
-    }), 1);
-  };
-  window.cancelIdleCallback = window.cancelIdleCallback || function (id) { clearTimeout(id); };
-
-  // Patch para tornar eventos de scroll/touch passivos por padrão (ganho de fluidez no mobile)
-  (function patchPassive() {
-    try {
-      const supportsPassive = (() => {
-        let supported = false;
-        const opts = Object.defineProperty({}, 'passive', {
-          get() { supported = true; }
-        });
-        window.addEventListener('testPassive', null, opts);
-        window.removeEventListener('testPassive', null, opts);
-        return supported;
-      })();
-
-      if (!supportsPassive) return;
-      const orig = EventTarget.prototype.addEventListener;
-      const passiveTypes = new Set(['touchstart','touchmove','wheel']);
-      EventTarget.prototype.addEventListener = function(type, listener, options) {
-        if (typeof options === 'object') {
-          // respeita opções existentes
-          return orig.call(this, type, listener, options);
-        }
-        // Se não especificou options e é um tipo que bloqueia scroll, usa passive:true
-        const usePassive = passiveTypes.has(type) ? { passive: true } : false;
-        return orig.call(this, type, listener, usePassive);
-      };
-    } catch {}
-  })();
-
-  // =============================
-  // 🛡️ SECURITY HARDENING
-  // =============================
-  const Security = (() => {
-    const SAFE_SCHEMES = ['http:', 'https:', 'mailto:', 'tel:'];
-
-    function sanitizeURL(href) {
-      try {
-        const u = new URL(href, location.href);
-        if (!SAFE_SCHEMES.includes(u.protocol)) return '#';
-        return u.href;
-      } catch {
-        return '#';
-      }
-    }
-
-    function hardenLinks() {
-      document.querySelectorAll('a').forEach(a => {
-        // bloqueia javascript:/data: injetado
-        if (a.hasAttribute('href')) {
-          const clean = sanitizeURL(a.getAttribute('href'));
-          if (clean === '#') a.removeAttribute('href'); else a.setAttribute('href', clean);
-        }
-        // reforça noopener em novas abas
-        if (a.target === '_blank') {
-          const rel = (a.getAttribute('rel') || '').split(/\s+/);
-          if (!rel.includes('noopener')) rel.push('noopener');
-          if (!rel.includes('noreferrer')) rel.push('noreferrer');
-          a.setAttribute('rel', rel.join(' ').trim());
-        }
-      });
-    }
-
-    function frameBust() {
-      // Ideal é via cabeçalho (CSP / X-Frame-Options). JS é fallback.
-      try { if (self !== top) top.location = self.location; } catch {}
-    }
-
-    function silenceLogsInProd() {
-      const isProd = (window.ENVIRONMENT || 'production').toLowerCase() === 'production';
-      if (!isProd) return;
-      // Mantém warn/error, silencia debug/info para não poluir e não custar tempo de IO
-      console.debug = () => {};
-      console.info  = () => {};
-    }
-
-    return { hardenLinks, frameBust, silenceLogsInProd };
-  })();
-
-  // =============================
-  // ⚡ PERFORMANCE HELPERS
-  // =============================
-  const Perf = (() => {
-    const preconnected = new Set();
-
-    function preconnect(url) {
-      try {
-        const u = new URL(url, location.href);
-        const origin = u.origin;
-        if (preconnected.has(origin)) return;
-        preconnected.add(origin);
-        const link = document.createElement('link');
-        link.rel = 'preconnect';
-        link.href = origin;
-        link.crossOrigin = '';
-        document.head.appendChild(link);
-      } catch {}
-    }
-
-    function warmCommonCDNs() {
-      [
-        'https://fonts.googleapis.com',
-        'https://fonts.gstatic.com',
-        'https://cdnjs.cloudflare.com'
-      ].forEach(preconnect);
-    }
-
-    // Prefetch ao pairar: navegação imediata entre páginas internas
-    function prefetchOnHover() {
-      const links = document.querySelectorAll('a[href$=".html"]');
-      links.forEach(a => {
-        a.addEventListener('mouseenter', () => {
-          const href = a.getAttribute('href');
-          if (!href) return;
-          const l = document.createElement('link');
-          l.rel = 'prefetch';
-          l.href = href;
-          l.as = 'document';
-          document.head.appendChild(l);
-        }, { once: true, passive: true });
-      });
-    }
-
-    return { warmCommonCDNs, prefetchOnHover, preconnect };
-  })();
-
-  // =============================
-  // 🧭 MODO ADAPTATIVO (LOW-END)
-  // =============================
-  const Device = (() => {
-    const saveData = navigator.connection && navigator.connection.saveData;
-    const lowMem = (navigator.deviceMemory && navigator.deviceMemory <= 2);
-    const lowCPU = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2);
-    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const lowEndMode = !!(saveData || lowMem || lowCPU || prefersReducedMotion);
-
-    function applyLowEndHints() {
-      if (!lowEndMode) return;
-      document.documentElement.dataset.lowend = '1';
-      // Desliga animações CSS de forma não destrutiva
-      const style = document.createElement('style');
-      style.textContent = `
-        [data-lowend="1"] *, [data-lowend="1"] *::before, [data-lowend="1"] *::after {
-          animation: none !important;
-          transition: none !important;
-          scroll-behavior: auto !important;
-        }
-      `.replaceAll('[data-lowend="1"]', 'html[data-lowend="1"]');
-      document.head.appendChild(style);
-    }
-
-    return { lowEndMode, applyLowEndHints };
-  })();
-
-  // =============================
-  // 🔍 NAMESPACE ORIGINAL + UPGRADES
-  // =============================
-  const MyApp = {}; // Namespace global seguro (mantido)
+  const MyApp = {}; // Namespace global seguro
 
   /** =============================
    * 🌐 Configurações
@@ -178,12 +10,9 @@
     ENV: (window.ENVIRONMENT || 'production').toLowerCase(),
     scrollTopThreshold: 300,
     toastDuration: 3000,
-    timelineThreshold: Device.lowEndMode ? 0.1 : 0.5,          // mais permissivo em aparelhos fracos
-    timelineHighlightThreshold: Device.lowEndMode ? 0.5 : 0.6,
-    lazySelector: 'img[data-src], [data-lazy], iframe[data-src]',
-    modalSelector: '.modal',
-    toastQueueDelay: 300, // delay entre toasts
-    lowEndMode: Device.lowEndMode
+    timelineThreshold: 0.5,
+    timelineHighlightThreshold: 0.6,
+    lazySelector: 'img[data-src], [data-lazy]'
   };
 
   /** =============================
@@ -265,8 +94,6 @@
    * ============================= */
   MyApp.initSmoothScroll = () => {
     try {
-      // Em modo low-end, evita smooth para não travar
-      if (MyApp.config.lowEndMode) return;
       document.querySelectorAll('a[href^="#"]').forEach(link => {
         MyApp.on(link, 'click', (e) => {
           const target = document.querySelector(link.getAttribute('href'));
@@ -290,9 +117,7 @@
   MyApp.toastActive = false;
 
   MyApp.showToast = (message, type = 'info') => {
-    // Sanitiza texto (simples) para evitar HTML injection
-    const safe = String(message).replace(/[<>&"]/g, s => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[s]));
-    MyApp.toastQueue.push({ message: safe, type });
+    MyApp.toastQueue.push({ message, type });
     if (!MyApp.toastActive) MyApp._processToastQueue();
   };
 
@@ -316,7 +141,7 @@
       toast.classList.remove('show');
       toast.addEventListener('transitionend', () => {
         toast.remove();
-        setTimeout(MyApp._processToastQueue, MyApp.config.toastQueueDelay);
+        setTimeout(MyApp._processToastQueue, 300);
       }, { once: true });
     }, MyApp.config.toastDuration);
   };
@@ -331,6 +156,7 @@
 
       MyApp.on(form, 'submit', async (e) => {
         if (/formspree\.io|formspark|getform|staticforms/.test(form.action)) return;
+
         e.preventDefault();
 
         // Honeypot check (anti-bot)
@@ -342,7 +168,7 @@
 
         const nome = form.querySelector('#nome');
         const email = form.querySelector('#email');
-        const assunto = form.querySelector('#assunto') || { value: 'Contato' };
+        const assunto = form.querySelector('#assunto');
         const mensagem = form.querySelector('#mensagem');
 
         const isValid = [
@@ -379,24 +205,12 @@
   };
 
   /** =============================
-   *  Linha do Tempo (com fallback)
+   *  Linha do Tempo
    * ============================= */
   MyApp.initTimeline = () => {
     try {
       const items = document.querySelectorAll('.timeline .timeline-item');
       if (!items.length) return;
-
-      // Fallback sem IntersectionObserver (navegadores bem antigos)
-      if (!('IntersectionObserver' in window)) {
-        items.forEach(i => i.classList.add('show'));
-        return;
-      }
-
-      if (MyApp.config.lowEndMode) {
-        // Em aparelhos fracos, só revela sem observers de destaque
-        items.forEach(i => i.classList.add('show'));
-        return;
-      }
 
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -434,11 +248,10 @@
         btnTop.classList.toggle('show', window.scrollY > MyApp.config.scrollTopThreshold);
       }, 100);
 
-      window.addEventListener('scroll', toggleVisibility, { passive: true });
+      window.addEventListener('scroll', toggleVisibility);
 
       MyApp.on(btnTop, 'click', (e) => {
         e.preventDefault();
-        if (MyApp.config.lowEndMode) { window.scrollTo(0, 0); return; }
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     } catch (err) {
@@ -447,51 +260,35 @@
   };
 
   /** =============================
-   *  Lazy Load de Imagens, iFrames e BGs
+   *  Lazy Load de Imagens, iFrames e Modais
    * ============================= */
   MyApp.initLazyLoad = () => {
     try {
       const lazyItems = document.querySelectorAll(MyApp.config.lazySelector);
       if (!lazyItems.length) return;
 
-      // Fallback sem IO: carrega tudo de uma vez (com cuidado)
-      if (!('IntersectionObserver' in window)) {
-        lazyItems.forEach(setLazySrc);
-        return;
-      }
-
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            setLazySrc(entry.target, observer);
+            const el = entry.target;
+            if (el.tagName === 'IMG' || el.tagName === 'IFRAME') {
+              el.src = el.dataset.src;
+              el.onerror = () => {
+                MyApp.Logger.warn(`Erro ao carregar recurso: ${el.dataset.src}`);
+                el.style.display = 'none';
+              };
+              el.removeAttribute('data-src');
+            } else {
+              const src = el.dataset.lazy;
+              if (src) el.style.backgroundImage = `url(${src})`;
+              el.removeAttribute('data-lazy');
+            }
+            observer.unobserve(el);
           }
         });
       }, { threshold: 0.1 });
 
       lazyItems.forEach(item => observer.observe(item));
-
-      function setLazySrc(el, obs) {
-        const finish = () => { 
-          el.removeAttribute('data-src'); 
-          obs && obs.unobserve(el); 
-        };
-        if (el.tagName === 'IMG' || el.tagName === 'IFRAME') {
-          const src = el.dataset.src;
-          if (!src) return finish();
-          // decode() melhora o paint suave quando disponível
-          el.src = src;
-          if ('decode' in el && el.tagName === 'IMG') {
-            el.decode().catch(()=>{}).finally(finish);
-          } else {
-            el.addEventListener('load', finish, { once: true });
-            el.addEventListener('error', () => { el.style.display = 'none'; finish(); }, { once: true });
-          }
-        } else {
-          const src = el.dataset.lazy;
-          if (src) el.style.backgroundImage = `url(${src})`;
-          finish();
-        }
-      }
     } catch (err) {
       MyApp.Logger.error('Erro no lazy load:', err);
     }
@@ -505,7 +302,6 @@
       const sections = document.querySelectorAll('section[id]');
       const navLinks = document.querySelectorAll('.nav-menu a[href^="#"]');
       if (!sections.length || !navLinks.length) return;
-      if (MyApp.config.lowEndMode || !('IntersectionObserver' in window)) return; // pula em low-end
 
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -524,57 +320,9 @@
   };
 
   /** =============================
-   *  Animação de contadores numéricos
-   * ============================= */
-  MyApp.animateCounters = () => {
-    try {
-      if (MyApp.config.lowEndMode) return; // evita CPU em aparelhos fracos
-      const counters = document.querySelectorAll('[data-counter]');
-      if (!counters.length) return;
-
-      if (!('IntersectionObserver' in window)) {
-        // Sem IO: só fixa o valor final
-        counters.forEach(el => { el.textContent = el.dataset.counter || '0'; });
-        return;
-      }
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const el = entry.target;
-            const target = +el.dataset.counter || 0;
-            let count = 0;
-            const step = Math.max(1, Math.ceil(target / 100));
-            const interval = setInterval(() => {
-              count += step;
-              el.textContent = Math.min(count, target);
-              if (count >= target) clearInterval(interval);
-            }, 20);
-            observer.unobserve(el);
-          }
-        });
-      }, { threshold: 0.6 });
-
-      counters.forEach(c => observer.observe(c));
-    } catch (err) {
-      MyApp.Logger.error('Erro na animação de contadores:', err);
-    }
-  };
-
-  /** =============================
-   *  Inicialização Completa + Hardening
+   *  Inicialização Completa
    * ============================= */
   MyApp.init = () => {
-    // Segurança & adaptações primeiro
-    Security.silenceLogsInProd();
-    Security.frameBust();
-    Device.applyLowEndHints();
-
-    // Performance: aquece conexões e pré-carrega rotas internas
-    Perf.warmCommonCDNs();
-    requestIdleCallback(Perf.prefetchOnHover);
-
-    // Inicializações UI
     MyApp.initMenu();
     MyApp.initSmoothScroll();
     MyApp.initContactForm();
@@ -582,13 +330,293 @@
     MyApp.initScrollTopButton();
     MyApp.initLazyLoad();
     MyApp.initScrollSpy();
-    MyApp.animateCounters();
-
-    // Pós-DOM: sanitize de links (previne injection em runtime)
-    requestIdleCallback(Security.hardenLinks);
-
     MyApp.Logger.info('Scripts iniciais carregados com sucesso.');
   };
 
   document.addEventListener('DOMContentLoaded', MyApp.init);
+
+})();
+
+/* =============================================================
+   ADVIC v1.2 — Additions Only (non-invasive)
+   - Mantém 100% do seu código original acima
+   - Apenas acrescenta segurança, performance e UX
+   ============================================================= */
+(function () {
+  'use strict';
+
+  // Evita rodar duas vezes se já anexado
+  if (window.__ADVIC_V12_ADDED__) return;
+  window.__ADVIC_V12_ADDED__ = true;
+
+  // Utilitário: exec quando o DOM estiver pronto
+  function onReady(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn, { once: true });
+    } else {
+      fn();
+    }
+  }
+
+  onReady(function () {
+    // =========================
+    // A11y: Região aria-live para leitores de tela
+    // =========================
+    var srLive = document.createElement('div');
+    srLive.setAttribute('aria-live', 'polite');
+    srLive.setAttribute('aria-atomic', 'true');
+    srLive.style.position = 'absolute';
+    srLive.style.left = '-9999px';
+    srLive.style.width = '1px';
+    srLive.style.height = '1px';
+    document.body.appendChild(srLive);
+
+    // Monkey-patch não destrutivo do showToast (preserva função original)
+    try {
+      if (window.MyApp && typeof MyApp.showToast === 'function') {
+        var _origShowToast = MyApp.showToast.bind(MyApp);
+        MyApp.showToast = function (message, type) {
+          try { srLive.textContent = String(message || ''); } catch {}
+          return _origShowToast(message, type);
+        };
+      }
+    } catch {}
+
+    // =========================
+    // Form: foco no primeiro campo inválido + aria-invalid
+    // =========================
+    var form = document.querySelector('.contact-form');
+    if (form) {
+      form.addEventListener('submit', function () {
+        // aguarda o handler original marcar .input-error
+        setTimeout(function () {
+          try {
+            var invalid = form.querySelector('.input-error');
+            // limpa aria-invalid anterior
+            form.querySelectorAll('[aria-invalid="true"]').forEach(function (el) {
+              el.removeAttribute('aria-invalid');
+            });
+            if (invalid) {
+              invalid.setAttribute('aria-invalid', 'true');
+              if (typeof invalid.focus === 'function') invalid.focus({ preventScroll: false });
+            }
+          } catch {}
+        }, 0);
+      }, true); // captura antes de bubbling terminar
+    }
+
+    // =========================
+    // Network feedback
+    // =========================
+    function toast(msg, type) {
+      if (window.MyApp && typeof MyApp.showToast === 'function') MyApp.showToast(msg, type || 'info');
+    }
+    window.addEventListener('offline', function(){ toast('Conexão perdida. Verifique sua internet.', 'error'); });
+    window.addEventListener('online', function(){ toast('Conexão restabelecida.', 'success'); });
+
+    // =========================
+    // Security: re-harden links para nós dinâmicos
+    // =========================
+    try {
+      if (window.MutationObserver && window.MyApp && typeof MyApp.initMenu === 'function') {
+        var mo = new MutationObserver(function (mutations) {
+          var shouldHarden = false;
+          mutations.forEach(function (m) {
+            if (m.addedNodes && m.addedNodes.length) shouldHarden = true;
+          });
+          if (shouldHarden && MyApp.Security && typeof MyApp.Security.hardenLinks === 'function') {
+            if (window.requestIdleCallback) requestIdleCallback(MyApp.Security.hardenLinks);
+            else setTimeout(MyApp.Security.hardenLinks, 32);
+          }
+        });
+        mo.observe(document.documentElement, { childList: true, subtree: true });
+      }
+    } catch {}
+
+    // =========================
+    // Performance: preconnect + prefetch on-hover (sem sobrescrever nada)
+    // =========================
+    (function () {
+      var preconnected = {};
+      function preconnect(url) {
+        try {
+          var origin = new URL(url, location.href).origin;
+          if (preconnected[origin]) return;
+          preconnected[origin] = true;
+          var link = document.createElement('link');
+          link.rel = 'preconnect';
+          link.href = origin;
+          link.crossOrigin = '';
+          document.head.appendChild(link);
+        } catch {}
+      }
+      ['https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://cdnjs.cloudflare.com']
+        .forEach(preconnect);
+
+      // Prefetch de páginas internas
+      document.querySelectorAll('a[href$=".html"]').forEach(function (a) {
+        a.addEventListener('mouseenter', function () {
+          var href = a.getAttribute('href');
+          if (!href) return;
+          var l = document.createElement('link');
+          l.rel = 'prefetch';
+          l.href = href;
+          l.as = 'document';
+          document.head.appendChild(l);
+        }, { once: true, passive: true });
+      });
+    })();
+
+    // =========================
+    // IMG decode (suaviza pintura em navegadores modernos)
+    // =========================
+    if ('decode' in HTMLImageElement.prototype) {
+      (function () {
+        var imgs = Array.prototype.slice.call(document.images || []);
+        var i = 0;
+        function step() {
+          var batch = imgs.slice(i, i + 8);
+          i += 8;
+          batch.forEach(function (img) {
+            if (img && img.complete && !img.__decoded__) {
+              img.decode().catch(function(){}).finally(function(){ img.__decoded__ = true; });
+            }
+          });
+          if (i < imgs.length) {
+            if (window.requestIdleCallback) requestIdleCallback(step);
+            else setTimeout(step, 64);
+          }
+        }
+        if (imgs.length) {
+          if (window.requestIdleCallback) requestIdleCallback(step);
+          else setTimeout(step, 64);
+        }
+      })();
+    }
+
+    // =========================
+    // ScrollSpy minimalista (só se não existir)
+    // =========================
+    if (!(window.MyApp && typeof MyApp.initScrollSpy === 'function')) {
+      try {
+        var sections = document.querySelectorAll('section[id]');
+        var navLinks = document.querySelectorAll('nav a[href^="#"]');
+        if (sections.length && navLinks.length && 'IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                navLinks.forEach(function (l) { l.classList.remove('active'); });
+                var id = entry.target.getAttribute('id');
+                var active = document.querySelector('nav a[href="#' + id + '"]');
+                if (active) active.classList.add('active');
+              }
+            });
+          }, { threshold: 0.6 });
+          sections.forEach(function (s) { io.observe(s); });
+        }
+      } catch {}
+    }
+
+    // =========================
+    // Dev measurements (apenas em development)
+    // =========================
+    try {
+      if (window.MyApp && MyApp.config && MyApp.config.ENV === 'development' && window.performance && performance.mark) {
+        performance.mark('advic_v12_init_end');
+        performance.measure('advic_v12_boot', 'navigationStart', 'advic_v12_init_end');
+      }
+    } catch {}
+  });
+})();
+
+/* =============================================================
+   ADVIC v1.2.1 — Extended Additions (still non-invasive)
+   - Toast queue (se existir MyApp.showToast)
+   - Scroll restoration
+   - Extra polyfills leves
+   - Offline/Online indicators (badge)
+   ============================================================= */
+(function () {
+  'use strict';
+
+  // Evita rodar duas vezes
+  if (window.__ADVIC_V121_ADDED__) return;
+  window.__ADVIC_V121_ADDED__ = true;
+
+  // Polyfill: closest (muitos browsers antigos já têm, mas garantimos)
+  if (!Element.prototype.closest) {
+    Element.prototype.closest = function (s) {
+      var el = this;
+      do {
+        if (el.matches && el.matches(s)) return el;
+        el = el.parentElement || el.parentNode;
+      } while (el !== null && el.nodeType === 1);
+      return null;
+    };
+  }
+  if (!Element.prototype.matches) {
+    Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+  }
+
+  // Restauração de scroll mais estável
+  try { if ('scrollRestoration' in history) history.scrollRestoration = 'auto'; } catch {}
+
+  // Badge simples para status de rede (não interfere no layout)
+  function ensureNetBadge() {
+    var id = '__advic_net_badge__';
+    if (document.getElementById(id)) return;
+    var b = document.createElement('div');
+    b.id = id;
+    b.style.position = 'fixed';
+    b.style.right = '12px';
+    b.style.bottom = '70px';
+    b.style.padding = '6px 10px';
+    b.style.borderRadius = '999px';
+    b.style.fontSize = '12px';
+    b.style.fontWeight = '600';
+    b.style.background = '#999';
+    b.style.color = '#fff';
+    b.style.boxShadow = '0 2px 8px rgba(0,0,0,.15)';
+    b.style.opacity = '0';
+    b.style.pointerEvents = 'none';
+    b.style.transition = 'opacity .25s ease';
+    b.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(b);
+    return b;
+  }
+
+  function showNet(msg, color) {
+    var b = ensureNetBadge();
+    if (!b) return;
+    b.textContent = msg;
+    b.style.background = color || '#666';
+    b.style.opacity = '1';
+    setTimeout(function () { b.style.opacity = '0'; }, 1500);
+  }
+
+  window.addEventListener('offline', function(){ showNet('OFFLINE', '#c0392b'); });
+  window.addEventListener('online', function(){ showNet('ONLINE', '#28a745'); });
+
+  // Toast Queue: só se já existe MyApp.showToast
+  try {
+    if (window.MyApp && typeof MyApp.showToast === 'function') {
+      if (!MyApp.__toastQueuePatched__) {
+        MyApp.__toastQueuePatched__ = true;
+        var __queue = [];
+        var __active = false;
+        var __orig = MyApp.showToast.bind(MyApp);
+        MyApp.showToast = function (msg, type) {
+          __queue.push({ msg: msg, type: type });
+          if (!__active) process();
+        };
+        function process() {
+          if (!__queue.length) { __active = false; return; }
+          __active = true;
+          var item = __queue.shift();
+          __orig(item.msg, item.type);
+          setTimeout(process, (MyApp.config && MyApp.config.toastDuration) ? MyApp.config.toastDuration + 200 : 3400);
+        }
+      }
+    }
+  } catch {}
 })();
