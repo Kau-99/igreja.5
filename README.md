@@ -1,237 +1,165 @@
-# ADVIC — Site Institucional (HTML5 + CSS3 + JS + Bootstrap 5)
+ADVIC — Site Institucional
+HTML5 · CSS3 · JavaScript (ES6+) · Bootstrap 5
 
-Reconstrução do site institucional da **ADVIC — Assembleia de Deus de Vila de Cava**, com foco em design clean, elegante e moderno, alta performance, segurança e acessibilidade.  
-O projeto inclui as 4 páginas principais, assets, favicons e um `script.js` modular com recursos avançados de UX e otimização.
+Construção completa do site da ADVIC — Assembleia de Deus de Vila de Cava com foco em design clean, elegante e moderno, além de alta performance, segurança e acessibilidade.
+Inclui quatro páginas principais, folha de estilos global, script modular, pacote de favicons e manifesto (PWA).
 
----
+ Visão Geral
 
-## 📦 Conteúdo do Repositório
+Minimalista e profissional: espaço em branco, hierarquia clara, microinterações sutis.
 
-/
-├─ index.html
-├─ sobre.html
-├─ eventos.html
-├─ contato.html
-├─ style.css
-├─ script.js
-├─ logo-advic-512.png
-├─ favicon.ico
-├─ favicon-16x16.png
-├─ favicon-32x32.png
-├─ favicon-48x48.png
-├─ apple-touch-icon.png
-├─ android-chrome-192x192.png
-├─ android-chrome-512x512.png
-└─ site.webmanifest
+Tipografia: Lora (títulos) + Inter (corpo).
 
-markdown
-Copiar código
+Paleta: ciano/teal como cor primária (inspirada na arte de referência), fundos suaves e texto chumbo.
 
-> **Importante:** todos os ícones e o `site.webmanifest` ficam **na raiz do projeto**.
+Mobile-first com Bootstrap 5 e customizações para não “parecer template”.
 
----
+Redes sociais oficiais: Instagram, Facebook, YouTube.
 
-## 🖌️ Design & UI/UX
+🗂️ Conteúdo do Repositório
 
-- **Minimalista e elegante**: muito espaço em branco, hierarquia visual clara, tipografia refinada.
-- **Tipografia**: **Lora** (títulos) + **Inter** (corpo), via Google Fonts.
-- **Paleta**: ciano/teal como primário (inspirado na arte de referência), fundos suaves e textos em chumbo.
-- **Microinterações**: hovers sutis, transições suaves, animações on-scroll discretas.
-- **Responsividade**: **mobile-first** usando o grid do **Bootstrap 5** + customizações CSS para não parecer “template genérico”.
+index.html
 
----
+sobre.html
 
-## 🔗 Redes Sociais
+eventos.html
 
-- Instagram: `https://www.instagram.com/advic_viladecava/`  
-- Facebook : `https://www.facebook.com/advcviladecava`  
-- YouTube  : `https://youtube.com/@advicviladecava` *(ajuste o handle se for outro)*
+contato.html
 
----
+style.css
 
-## 🧠 Visão Técnica do `script.js` (Arquitetura & Engenharia)
+script.js
 
-O front-end roda encapsulado no namespace global `MyApp` (IIFE), evitando poluir o escopo.
+logo-advic-512.png
 
-**Objetivos principais**
-- **Segurança**: hardening contra XSS/tabnabbing/clickjacking; sanitização de `href`.
-- **Performance**: lazy loading de imagens/iframes/backgrounds; prefetch on hover; eventos passivos; `requestIdleCallback` (polyfill).
-- **Acessibilidade (A11y)**: navegação por teclado, `aria-*`, respeito a `prefers-reduced-motion`.
-- **Resiliência**: fallbacks para APIs modernas; detecção *low-end* para degradar com elegância.
-- **UX moderna**: menu hambúrguer acessível, smooth-scroll, animações no scroll, botão “voltar ao topo”.
+favicon.ico, favicon-16x16.png, favicon-32x32.png, favicon-48x48.png
 
-**Módulos**
-- `security`: sanitiza links, impõe `rel="noopener noreferrer"` e `target="_blank"` em externos, frame-busting, logs reduzidos em produção.
-- `perf`: eventos passivos, `preconnect` (opcional), prefetch em links internos ao pairar, lazy loader (imagens/iframes e backgrounds via `data-src` / `data-lazy`).
-- `ux`: hambúrguer mobile (com `aria-expanded`), smooth-scroll para âncoras, botão “Top”, animações via `IntersectionObserver` usando `[data-animate]` e `data-delay`.
-- `forms`: validação progressiva do formulário de contato (live + submit) com feedback acessível; honeypot anti-bot.
-- `boot`: detecção de dispositivo *low-end* (Save Data, `deviceMemory`, `hardwareConcurrency`, `prefers-reduced-motion`) e inicialização coordenada.
+apple-touch-icon.png, android-chrome-192x192.png, android-chrome-512x512.png
 
-**Sequência de inicialização (resumo)**
-```js
-document.addEventListener("DOMContentLoaded", () => {
-  MyApp.boot.detectLowEnd();
+site.webmanifest
 
-  MyApp.security.stripDangerousHrefs();
-  MyApp.security.hardenLinks();
-  MyApp.security.frameBust();
+Importante: os ícones e o arquivo site.webmanifest ficam na raiz do projeto.
 
-  MyApp.perf.setupPassiveEvents();
-  MyApp.perf.preconnectCDNs();   // opcional
-  MyApp.perf.lazyLoader();       // imagens/iframes/backgrounds
-  MyApp.perf.prefetchOnHover();  // rotas internas
+ Arquitetura do Front-End (script.js)
 
-  MyApp.ux.initHamburger();
-  MyApp.ux.smoothScroll();
-  MyApp.ux.backToTop();
-  MyApp.ux.onScrollAnimations();
+Namespace único: MyApp (IIFE) — isola o escopo global e organiza módulos.
 
-  MyApp.forms.liveValidation();
-  MyApp.forms.validateContactForm();
-});
-🔐 Segurança (Frontend)
-Sanitização de href: remove javascript:/data: ou URLs inválidas.
+Objetivos técnicos
 
-rel="noopener noreferrer" em links externos (anti-tabnabbing).
+Segurança: sanitização de href, rel="noopener noreferrer" em externos, frame-busting, menos logs em produção.
 
-Frame-busting: bloqueia renderização do site em iframes de terceiros.
+Performance: lazy de imagens/iframes/backgrounds, prefetch em hover, eventos passivos, requestIdleCallback (com polyfill).
 
-Silenciamento/controle de logs em produção.
+Acessibilidade: navegação por teclado, aria-*, respeito a prefers-reduced-motion.
 
-Servidor/Host (recomendado): CSP estrita, X-Frame-Options/frame-ancestors, Referrer-Policy, X-Content-Type-Options.
+Resiliência: fallbacks para APIs modernas; Low-End Mode para devices modestos.
 
-⚡ Performance
-Eventos passivos ({ passive:true }) para rolagem suave em mobile.
+UX moderna: menu hambúrguer acessível, smooth-scroll, animações on-scroll, botão “voltar ao topo”.
 
-requestIdleCallback com polyfill: tarefas leves fora do caminho crítico.
+Módulos
 
-Preconnect (opcional) para CDNs (Google Fonts, cdnjs).
+security → hardening de links, anti-tabnabbing, frame-busting, controle de logs.
 
-Prefetch on-hover: aquece rotas internas ao passar o mouse (dwell curto).
+perf → eventos passivos, preconnect opcional, prefetch on-hover, lazy loader (inclui backgrounds via data-lazy).
 
-Lazy loading avançado:
+ux → hambúrguer com aria-expanded, smooth-scroll, botão Top, animações via IntersectionObserver ([data-animate] e data-delay).
 
-Imagens/iframes: usar class="lazy" + data-src="..." (o script injeta src e tenta decode()).
+forms → validação progressiva no contato (live + submit), feedback acessível, honeypot anti-bot.
 
-Backgrounds: usar data-lazy="caminho/da/imagem.jpg" (aplica background-image on-view).
+boot → detecção de Low-End (Save Data, deviceMemory, hardwareConcurrency, prefers-reduced-motion) e inicialização.
 
-Low-End Mode: reduz/evita animações pesadas e prefetch agressivo.
+ Melhorias Entregues Nesta Versão
 
-🧩 Integrações HTML/CSS (snippets úteis)
-Favicons & Manifest (em TODAS as páginas):
+Favicons + site.webmanifest: pronto para atalho em iOS/Android e cor de tema.
 
-html
-Copiar código
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="48x48" href="favicon-48x48.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="manifest" href="site.webmanifest">
-<meta name="theme-color" content="#0f8c95">
-Logo (header/footer) — sem achatamento:
+Logo responsiva (sem achatamento): usar logo-advic-512.png + apenas altura no <img>; a largura fica automática (regra no CSS).
 
-html
-Copiar código
-<img src="logo-advic-512.png" alt="Logo ADVIC" class="logo-img" height="52">
-<!-- no footer, height 56 -->
-CSS da logo (já incluso no style.css):
+Menu hambúrguer acessível (mobile), com estados aria.
 
-css
-Copiar código
-.logo-img{
-  height:52px; width:auto; object-fit:contain; aspect-ratio:auto;
-  image-rendering:-webkit-optimize-contrast;
-}
-.footer-brand .logo-img{ height:56px; }
-@media (max-width:576px){
-  .logo-img{ height:44px }
-  .footer-brand .logo-img{ height:48px }
-}
-Lazy assets (HTML):
+Animações on-scroll discretas com IntersectionObserver.
 
-html
-Copiar código
-<img class="lazy" data-src="imagens/min-louvor.jpg" alt="Ministério de Louvor">
-<iframe data-src="https://www.google.com/maps/embed?..."></iframe>
-<div class="hero-bg" data-lazy="imagens/imagem-igreja.jpg"></div>
-Animações on-scroll (HTML):
+Formulário de contato com validação em tempo real e em envio.
 
-html
-Copiar código
-<div data-animate="fade-up" data-delay="160">...</div>
-💻 Rodando Localmente
-Site estático: abra index.html no navegador.
-Ou use um servidor simples para testes de rota/links:
+Smooth-scroll em âncoras internas.
 
-Python 3
+Lazy loading avançado para imagens, iframes e backgrounds.
 
-bash
-Copiar código
-python -m http.server 8080
-# http://localhost:8080
-Node (http-server)
+Prefetch de rotas internas ao pairar o mouse.
 
-bash
-Copiar código
-npm i -g http-server
-http-server -p 8080 .
-# http://localhost:8080
-🚀 Deploy no GitHub Pages
-Adicione/atualize arquivos e faça commit:
+Low-End Mode para reduzir animações/custos.
 
-bash
-Copiar código
-git checkout main
+Eventos passivos (passive: true) para rolagem fluida.
 
-git add index.html sobre.html eventos.html contato.html style.css script.js \
-        favicon.ico favicon-16x16.png favicon-32x32.png favicon-48x48.png \
-        apple-touch-icon.png android-chrome-192x192.png android-chrome-512x512.png \
-        site.webmanifest logo-advic-512.png README.md
+Hardening de links externos e sanitização de URLs.
 
-git commit -m "feat(site): favicons + webmanifest + logo responsiva (sem achatamento) + head atualizado"
-git push origin main
-Ative o Pages: no GitHub → Settings → Pages
+ Integrações HTML/CSS — O que conferir
 
-Build and deployment: Deploy from a branch
+Cabeçalho (<head>): referências aos favicons e site.webmanifest; theme-color configurada.
 
-Branch: main, Folder: /(root)
+Logo: logo-advic-512.png em header/footer com classe que define altura; largura automática para manter proporção.
 
-Salve. A URL pública será exibida nas Settings.
+Lazy assets: imagens/iframes com data-src; backgrounds com data-lazy.
 
-(Opcional) Domínio customizado:
+Animações: elementos marcados com [data-animate] e (opcional) data-delay.
 
-Configure o CNAME em Settings → Pages
+Formulário: campos obrigatórios, mensagens acessíveis e honeypot.
 
-Aponte o DNS conforme a doc do GitHub Pages e marque Enforce HTTPS.
+ Checklist Rápido de QA
 
-✅ Checklist de QA
- Páginas index/sobre/eventos/contato sem 404.
+Páginas index, sobre, eventos, contato abrem sem erros.
 
- Favicons/Manifest reconhecidos (DevTools → Application → Manifest).
+Manifesto e ícones reconhecidos no navegador (Aba Application → Manifest).
 
- Logo sem achatamento no header/rodapé.
+Logo não distorce em header/rodapé.
 
- Lazy: imagens & mapa carregam ao rolar.
+Lazy: imagens e mapa carregam só quando entram em tela.
 
- Prefetch em links internos (ver Network ao pairar).
+Prefetch: pairar em links internos aquece a navegação.
 
- Form de contato: validação live + submit, honeypot ok.
+Formulário: validação live + submit; navegação por teclado OK.
 
- Links externos com rel="noopener noreferrer".
+Links externos: rel="noopener noreferrer".
 
- Site fora de iframes de terceiros (frame-busting).
+Site não renderiza dentro de iframes de terceiros.
 
-🔧 Roadmap sugerido
+ Rodando Localmente (resumo)
+
+Abrir index.html diretamente no navegador ou
+
+Executar um servidor local simples (Python/Node) para testar rotas e prefetch.
+
+ Publicação no GitHub Pages (guia curto)
+
+Adicionar/atualizar os arquivos (incluindo favicons, site.webmanifest, logo-advic-512.png, HTMLs, style.css, script.js, README.md).
+
+Commitar com mensagem objetiva e enviar para a sua branch principal.
+
+No GitHub → Settings → Pages → Deploy from a branch → Branch main e Folder / (root) → Save.
+
+A URL do site aparece nas Settings do Pages.
+
+(Opcional) Configurar domínio customizado (CNAME) e Enforce HTTPS.
+
+ Recomendações de Segurança no Host
+
+CSP (Content Security Policy) adequada ao projeto.
+
+frame-ancestors (ou X-Frame-Options) para impedir clickjacking.
+
+Referrer-Policy e X-Content-Type-Options.
+
+🗺️ Roadmap Sugerido
+
 SEO: schema.org (Organization/Event), sitemap.xml, robots.txt.
 
 Sermões: dados em JSON + render estático/cliente.
 
-i18n: estrutura simples de traduções (pt / en).
+i18n: estrutura simples de tradução (pt/en).
 
-Form backend: Formspark/Netlify/CF Workers + e-mail transactional.
+Form backend: Formspark/Netlify/Cloudflare + e-mail transacional.
 
-CI: GitHub Actions (HTML/CSS/links lint + Lighthouse orçamento de performance).
+CI: GitHub Actions (lint de HTML/CSS/links + orçamentos Lighthouse).
 
-📜 Licença
-Uso autorizado para o site da ADVIC. Para reutilização, garanta direitos de imagens e fontes.
+📄 Licença
+
+Uso autorizado para o site da ADVIC. Em reutilizações, verifique direitos de imagens e fontes.
