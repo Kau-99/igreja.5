@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Conheça a história da Assembleia de Deus Vila de Cava, sua trajetória de fé, liderança pastoral e crescimento ao longo dos anos.">
-  <meta name="keywords" content="Assembleia de Deus, Vila de Cava, Igreja, História, Pastores, Fé, Comunidade Cristã">
-  <meta name="author" content="Assembleia de Deus Vila de Cava">
-  <meta name="robots" content="index, follow">
-  <title>Sobre Nós - Assembleia de Deus Vila de Cava</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="imagens/logo.png" type="image/png">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sobre Nós — ADVIC</title>
+  <meta name="description" content="História, crenças e liderança da Assembleia de Deus de Vila de Cava.">
 
-  <!-- Font Awesome otimizado -->
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#0f8c95">
+
+  <!-- Fonts & CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Header -->
-  <header class="site-header" role="banner">
-    <div class="container header-content">
-      <a href="index.html" class="logo" aria-label="Página inicial ADVIC">
-        <img src="imagens/logo.png" alt="Logo Assembleia de Deus Vila de Cava" width="70" height="70" loading="lazy">
-        <span class="logo-text">ADVIC</span>
+  <header class="site-header">
+    <div class="container d-flex align-items-center justify-content-between py-2">
+      <a class="logo d-flex align-items-center text-decoration-none" href="index.html" aria-label="Página inicial ADVIC">
+        <img src="logo-advic-512.png" alt="Logo ADVIC" class="logo-img me-2" height="52" loading="lazy">
+        <span class="logo-text fw-bold">ADVIC</span>
       </a>
-      <button class="nav-toggle" aria-label="Abrir Menu">
+
+      <button class="nav-toggle" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="primary-navigation">
         <span class="hamburger"></span>
       </button>
-      <nav class="nav-wrapper" aria-label="Navegação principal">
+
+      <nav id="primary-navigation" class="nav-wrapper">
         <ul class="nav-menu">
           <li><a href="index.html">Início</a></li>
-          <li><a href="sobre.html" class="active" aria-current="page">Sobre</a></li>
+          <li><a class="active" aria-current="page" href="sobre.html">Sobre</a></li>
           <li><a href="eventos.html">Eventos</a></li>
           <li><a href="contato.html">Contato</a></li>
         </ul>
@@ -37,100 +42,134 @@
     </div>
   </header>
 
-  <!-- Seção Sobre -->
   <main id="conteudo">
-    <section class="sobre container">
-      <h1>Sobre Nós</h1>
-      <p>
-        A Assembleia de Deus em Vila de Cava tem uma rica trajetória de fé, crescimento e liderança espiritual. 
-        Ao longo dos anos, muitos pastores dedicados contribuíram para edificar esta obra, guiando a igreja em amor, oração e serviço à comunidade.
-      </p>
-    </section>
-
-    <!-- Linha do Tempo -->
-    <section class="container">
-      <h2>Nossa História</h2>
-      <div class="timeline">
-
-        <div class="timeline-item color-1">
-          <div class="timeline-content">
-            <div class="timeline-photo">
-              <img src="imagens/pastor lider em 1950.jpg" alt="Pastor João Silva - Fundador da igreja">
-            </div>
-            <h3>1950 <i class="fas fa-cross timeline-icon" aria-hidden="true"></i></h3>
-            <p><strong>Pastor </strong><br>Fundação da Assembleia de Deus em Vila de Cava.</p>
-          </div>
-        </div>
-
-        <div class="timeline-item color-2">
-          <div class="timeline-content">
-            <div class="timeline-photo">
-              <img src="imagens/pastor2.jpg" alt="Pastor Carlos Mendes - Expansão regional">
-            </div>
-            <h3>1970 <i class="fas fa-church timeline-icon" aria-hidden="true"></i></h3>
-            <p><strong>Pastor </strong><br>Expansão das congregações na região.</p>
-          </div>
-        </div>
-
-        <div class="timeline-item color-1">
-          <div class="timeline-content">
-            <div class="timeline-photo">
-              <img src="imagens/pastor3.jpg" alt="Pastor Roberto Santos - Missões internacionais">
-            </div>
-            <h3>1990 <i class="fas fa-globe timeline-icon" aria-hidden="true"></i></h3>
-            <p><strong>Pastor/strong><br>Início dos trabalhos missionários.</p>
-          </div>
-        </div>
-
-        <div class="timeline-item color-2">
-          <div class="timeline-content">
-            <div class="timeline-photo">
-              <img src="imagens/pastor4.jpg" alt="Pastor Marcos Almeida - Projetos sociais">
-            </div>
-            <h3>2010 <i class="fas fa-hands-helping timeline-icon" aria-hidden="true"></i></h3>
-            <p><strong>Pastor</strong><br>Implantação de novos ministérios e projetos sociais.</p>
-          </div>
-        </div>
-
-        <div class="timeline-item color-1">
-          <div class="timeline-content">
-            <div class="timeline-photo">
-              <img src="imagens/pastor5.jpg" alt="Pastor Atual - Era digital e expansão">
-            </div>
-            <h3>2025 <i class="fas fa-bible timeline-icon" aria-hidden="true"></i></h3>
-            <p><strong>Pastor Atual</strong><br>Avanço na era digital e fortalecimento da obra do Senhor.</p>
-          </div>
-        </div>
-
+    <section class="hero hero-sm">
+      <div class="container text-center text-white py-5">
+        <h1 class="display-6 fw-bold">Quem Somos</h1>
+        <p class="lead">Uma história de fé, serviço e esperança.</p>
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="cta">
+    <section class="container py-5">
+      <div class="row g-4 align-items-center">
+        <div class="col-12 col-lg-6">
+          <p class="fs-5">A Assembleia de Deus de Vila de Cava existe para glorificar a Cristo, edificar a Igreja e servir a nossa comunidade. Buscamos viver o Evangelho com simplicidade, amor e excelência.</p>
+          <ul class="list-unstyled mt-3">
+            <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> Pregação fiel da Palavra</li>
+            <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> Discipulado e comunhão</li>
+            <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> Ação social e missão</li>
+          </ul>
+        </div>
+        <div class="col-12 col-lg-6">
+          <img class="rounded-4 shadow w-100" src="imagens/imagem-igreja.jpg" alt="Fachada da igreja" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <section class="container py-5">
+      <h2 class="section-title text-center">Nossa História</h2>
+      <div class="timeline mt-4">
+        <div class="timeline-item color-1" data-animate="fade-up">
+          <div class="timeline-content">
+            <div class="timeline-photo"><img src="imagens/pastor1.jpg" alt="Primeira liderança"></div>
+            <h3>1950 <i class="fas fa-cross timeline-icon" aria-hidden="true"></i></h3>
+            <p>Fundação da igreja e primeiros cultos na região.</p>
+          </div>
+        </div>
+        <div class="timeline-item color-2" data-animate="fade-up" data-delay="80">
+          <div class="timeline-content">
+            <div class="timeline-photo"><img src="imagens/pastor2.jpg" alt="Expansão regional"></div>
+            <h3>1970 <i class="fas fa-church timeline-icon" aria-hidden="true"></i></h3>
+            <p>Início das congregações e expansão do trabalho.</p>
+          </div>
+        </div>
+        <div class="timeline-item color-1" data-animate="fade-up" data-delay="160">
+          <div class="timeline-content">
+            <div class="timeline-photo"><img src="imagens/pastor3.jpg" alt="Missões e projetos"></div>
+            <h3>1990 <i class="fas fa-globe timeline-icon" aria-hidden="true"></i></h3>
+            <p>Projetos missionários e ação social.</p>
+          </div>
+        </div>
+        <div class="timeline-item color-2" data-animate="fade-up" data-delay="240">
+          <div class="timeline-content">
+            <div class="timeline-photo"><img src="imagens/pastor4.jpg" alt="Era digital"></div>
+            <h3>2025 <i class="fas fa-bible timeline-icon" aria-hidden="true"></i></h3>
+            <p>Transformação digital e fortalecimento da obra.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-5 bg-soft">
       <div class="container">
-        <h2>Faça parte da nossa história!</h2>
-        <p>Venha conhecer mais de perto a obra do Senhor e participe conosco.</p>
-        <a href="contato.html" class="btn btn-primary">Entre em Contato</a>
+        <h2 class="section-title text-center">Nossa Crença</h2>
+        <div class="row g-4 mt-1">
+          <div class="col-12 col-md-4">
+            <div class="belief">
+              <h3>Trindade</h3>
+              <p>Cremos em Deus Pai, Filho e Espírito Santo.</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="belief">
+              <h3>Escrituras</h3>
+              <p>A Bíblia é a nossa regra de fé e prática.</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="belief">
+              <h3>Salvação</h3>
+              <p>Somente em Jesus Cristo há redenção e vida eterna.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container py-5">
+      <h2 class="section-title text-center">Liderança</h2>
+      <div class="row g-4 mt-1">
+        <div class="col-6 col-md-3 text-center" data-animate="fade-up">
+          <img class="avatar" src="imagens/lider1.jpg" alt="Pastor Presidente">
+          <h4 class="mt-2 mb-0">Pr. Nome</h4>
+          <span class="text-muted">Pastor Presidente</span>
+        </div>
+        <div class="col-6 col-md-3 text-center" data-animate="fade-up" data-delay="80">
+          <img class="avatar" src="imagens/lider2.jpg" alt="Pastor Auxiliar">
+          <h4 class="mt-2 mb-0">Pr. Nome</h4>
+          <span class="text-muted">Pastor Auxiliar</span>
+        </div>
+        <div class="col-6 col-md-3 text-center" data-animate="fade-up" data-delay="160">
+          <img class="avatar" src="imagens/lider3.jpg" alt="Diácono">
+          <h4 class="mt-2 mb-0">Nome</h4>
+          <span class="text-muted">Diácono</span>
+        </div>
+        <div class="col-6 col-md-3 text-center" data-animate="fade-up" data-delay="240">
+          <img class="avatar" src="imagens/lider4.jpg" alt="Missionária">
+          <h4 class="mt-2 mb-0">Nome</h4>
+          <span class="text-muted">Missionária</span>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer" role="contentinfo">
+  <footer class="site-footer">
     <div class="container footer-content">
-      <div class="footer-logo">
-        <img src="imagens/logo.png" alt="Logo ADVIC" width="70" height="70" loading="lazy">
+      <div class="footer-brand">
+        <img src="logo-advic-512.png" alt="Logo ADVIC" class="logo-img" height="56" loading="lazy">
+        <p class="mb-0">&copy; 2025 ADVIC — Todos os direitos reservados</p>
       </div>
-      <p>&copy; 2025 ADVIC - Todos os direitos reservados</p>
       <nav class="social-links" aria-label="Redes sociais">
-        <a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer" aria-label="Instagram ADVIC"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer" aria-label="Facebook ADVIC"><i class="fab fa-facebook"></i></a>
-        <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube ADVIC"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+        <a href="https://youtube.com/@advicviladecava" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
       </nav>
     </div>
   </footer>
-  <div class="version-badge">v1.1</div>
 
-  <!-- Scripts -->
-  <script src="script.js" defer></script>
+  <button id="btnTop" class="btn-top" aria-label="Voltar ao topo"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="script.js"></script>
 </body>
 </html>

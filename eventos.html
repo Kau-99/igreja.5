@@ -1,138 +1,148 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eventos - Assembleia de Deus Vila de Cava</title>
-  <meta name="description" content="Confira os próximos eventos e programações especiais da Assembleia de Deus Vila de Cava. Participe e esteja conosco.">
-  <meta name="keywords" content="igreja, eventos, programação, Assembleia de Deus, Vila de Cava">
-  <meta name="author" content="Assembleia de Deus Vila de Cava">
-  <meta name="robots" content="index, follow">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Eventos — ADVIC</title>
+  <meta name="description" content="Próximos eventos e programações da ADVIC." />
 
-  <link rel="icon" href="imagens/logo.png" type="image/png">
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="imagens/favicon_io (2)/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="imagens/favicon_io (2)/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="imagens/favicon_io (2)/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="imagens/favicon_io (2)/android-chrome-512x512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="imagens/favicon_io (2)/apple-touch-icon.png">
+  <meta name="theme-color" content="#0f8c95">
 
-  <!-- Font Awesome otimizado -->
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
-
-  <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
+  <!-- Fonts & CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Header -->
-  <header class="site-header" role="banner">
-    <div class="container header-content">
-      <a href="index.html" class="logo" aria-label="Página inicial ADVIC">
-        <img src="imagens/logo.png" alt="Logo Assembleia de Deus Vila de Cava" width="70" height="70" loading="lazy">
-        <span class="logo-text">ADVIC</span>
+  <header class="site-header">
+    <div class="container d-flex align-items-center justify-content-between py-2">
+      <a class="logo d-flex align-items-center text-decoration-none" href="index.html" aria-label="Página inicial ADVIC">
+        <img src="logo-advic-512.png" alt="Logo ADVIC" class="logo-img me-2" height="52" loading="lazy">
+        <span class="logo-text fw-bold">ADVIC</span>
       </a>
-      <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
+
+      <button class="nav-toggle" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="primary-navigation">
         <span class="hamburger"></span>
       </button>
-      <nav class="nav-wrapper" aria-label="Navegação principal">
+
+      <nav id="primary-navigation" class="nav-wrapper">
         <ul class="nav-menu">
           <li><a href="index.html">Início</a></li>
           <li><a href="sobre.html">Sobre</a></li>
-          <li><a href="eventos.html" class="active" aria-current="page">Eventos</a></li>
+          <li><a class="active" aria-current="page" href="eventos.html">Eventos</a></li>
           <li><a href="contato.html">Contato</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="hero hero-eventos">
-    <div class="container">
-      <h1>Eventos da Igreja</h1>
-      <p>Fique por dentro da nossa programação e participe conosco.</p>
-    </div>
-  </section>
-
-  <!-- Lista de eventos -->
   <main id="conteudo">
-    <section class="destaques">
-      <div class="container">
-        <h2>Programação</h2>
+    <section class="hero hero-sm">
+      <div class="container text-center text-white py-5">
+        <h1 class="display-6 fw-bold">Eventos</h1>
+        <p class="lead">Fique por dentro da nossa programação.</p>
+      </div>
+    </section>
 
-        <!-- Campo de filtro -->
-        <div class="eventos-filtro">
-          <label for="filtro-eventos" class="sr-only">Filtrar eventos</label>
-          <select id="filtro-eventos" aria-label="Filtrar eventos">
+    <section class="container py-5">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <h2 class="section-title mb-0">Programação</h2>
+        <div class="d-flex gap-2 align-items-center">
+          <label class="me-2" for="filtro-eventos">Filtrar:</label>
+          <select id="filtro-eventos" class="form-select form-select-sm" style="min-width:220px">
             <option value="todos">Todos</option>
+            <option value="culto">Culto</option>
             <option value="louvor">Louvor</option>
             <option value="familia">Família</option>
             <option value="vigilia">Vigília</option>
           </select>
         </div>
+      </div>
 
-        <div class="grid">
-
-          <!-- Evento 1 -->
-          <div class="card" data-tipo="louvor" tabindex="0">
-            <img src="imagens/evento1.jpg" alt="Noite de Louvor e Adoração">
-            <h3>Noite de Louvor</h3>
-            <p><strong>Data:</strong> <time datetime="2025-09-15T19:00">15 de Novembro - 19h</time></p>
-            <p>Uma noite especial de louvor, adoração e palavra de edificação para toda a família.</p>
-            <div class="event-actions">
-              <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Noite+de+Louvor&dates=20250915T220000Z/20250916T000000Z&details=Participe+da+noite+de+louvor&location=ADVIC" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Adicionar ao Google Calendar</a>
-              <a href="https://wa.me/?text=Participe+da+Noite+de+Louvor+na+ADVIC+dia+15+de+Setembro+às+19h" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Compartilhar no WhatsApp</a>
+      <div class="row g-4 mt-1">
+        <div class="col-12 col-md-6 col-lg-4" data-evento data-tipo="louvor">
+          <article class="card-event">
+            <img class="lazy" data-src="imagens/evento1.jpg" alt="Noite de Louvor">
+            <div class="p-3">
+              <h3 class="mb-1">Noite de Louvor</h3>
+              <p class="text-muted mb-1"><strong>Data:</strong> <time datetime="2025-11-15T19:00">15 Nov • 19h</time></p>
+              <p class="mb-3">Adoração e Palavra para toda a família.</p>
+              <div class="d-flex gap-2">
+                <a class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Noite+de+Louvor&dates=20251115T220000Z/20251115T230000Z&location=ADVIC">Google Calendar</a>
+                <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer" href="https://wa.me/?text=Participe+da+Noite+de+Louvor+na+ADVIC+dia+15/11+às+19h">Compartilhar</a>
+              </div>
             </div>
-          </div>
-
-          <!-- Evento 2 -->
-          <div class="card" data-tipo="familia" tabindex="0">
-            <img src="imagens/evento2.jpg" alt="Culto da Família">
-            <h3>Culto da Família</h3>
-            <p><strong>Data:</strong> <time datetime="2025-09-22T19:00">22 de Setembro - 19h</time></p>
-            <p>Um culto dedicado às famílias, com ministrações voltadas para união e fortalecimento espiritual.</p>
-            <div class="event-actions">
-              <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Culto+da+Família&dates=20250922T220000Z/20250923T000000Z&details=Participe+do+culto+da+família&location=ADVIC" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Adicionar ao Google Calendar</a>
-              <a href="https://wa.me/?text=Venha+ao+Culto+da+Família+na+ADVIC+dia+22+de+Setembro+às+19h" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Compartilhar no WhatsApp</a>
-            </div>
-          </div>
-
-          <!-- Evento 3 -->
-          <div class="card" data-tipo="vigilia" tabindex="0">
-            <img src="imagens/evento3.jpg" alt="Vigília da Vitória">
-            <h3>Culto</h3>
-            <p><strong>Data:</strong> <time datetime="2025-09-29T23:00">29 de Setembro - 18hrs</time></p>
-            <p>Um tempo de oração e busca intensa pela presença de Deus, venha se fortalecer espiritualmente.</p>
-            <div class="event-actions">
-              <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Vigília+da+Vitória&dates=20250930T020000Z/20250930T050000Z&details=Participe+da+vigília+da+vitória&location=ADVIC" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Adicionar ao Google Calendar</a>
-              <a href="https://wa.me/?text=Participe+da+Vigília+da+Vitória+na+ADVIC+dia+29+de+Setembro+às+23h" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Compartilhar no WhatsApp</a>
-            </div>
-          </div>
-
+          </article>
         </div>
+
+        <div class="col-12 col-md-6 col-lg-4" data-evento data-tipo="familia">
+          <article class="card-event">
+            <img class="lazy" data-src="imagens/evento2.jpg" alt="Culto da Família">
+            <div class="p-3">
+              <h3 class="mb-1">Culto da Família</h3>
+              <p class="text-muted mb-1"><strong>Data:</strong> <time datetime="2025-11-22T19:00">22 Nov • 19h</time></p>
+              <p class="mb-3">Ministrações voltadas para união e fortalecimento.</p>
+              <div class="d-flex gap-2">
+                <a class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Culto+da+Família&dates=20251122T220000Z/20251122T230000Z&location=ADVIC">Google Calendar</a>
+                <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer" href="https://wa.me/?text=Culto+da+Família+na+ADVIC+dia+22/11+às+19h">Compartilhar</a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4" data-evento data-tipo="culto">
+          <article class="card-event">
+            <img class="lazy" data-src="imagens/evento3.jpg" alt="Culto de Celebração">
+            <div class="p-3">
+              <h3 class="mb-1">Culto de Celebração</h3>
+              <p class="text-muted mb-1"><strong>Data:</strong> <time datetime="2025-11-29T18:00">29 Nov • 18h</time></p>
+              <p class="mb-3">Celebração ao Senhor com toda a igreja.</p>
+              <div class="d-flex gap-2">
+                <a class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Culto+de+Celebração&dates=20251129T210000Z/20251129T220000Z&location=ADVIC">Google Calendar</a>
+                <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer" href="https://wa.me/?text=Culto+de+Celebração+na+ADVIC+dia+29/11+às+18h">Compartilhar</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container d-lg-flex align-items-center justify-content-between">
+        <div class="me-lg-3">
+          <h2 class="mb-2">Todos são bem-vindos!</h2>
+          <p class="mb-0">Veja como chegar e participe conosco.</p>
+        </div>
+        <a class="btn btn-light btn-lg mt-3 mt-lg-0" href="contato.html">Entre em contato</a>
       </div>
     </section>
   </main>
 
-  <!-- CTA -->
-  <section class="cta">
-    <div class="container">
-      <h2>Participe conosco!</h2>
-      <p>Todos são bem-vindos aos nossos cultos e eventos especiais.</p>
-      <a href="contato.html" class="btn btn-primary">Entre em contato</a>
-    </div>
-  </section>
-
-  <footer class="site-footer" role="contentinfo">
+  <footer class="site-footer">
     <div class="container footer-content">
-      <div class="footer-logo">
-        <img src="imagens/logo.png" alt="Logo ADVIC" width="70" height="70" loading="lazy">
+      <div class="footer-brand">
+        <img src="imagens/logo.png" alt="Logo ADVIC" class="logo-img" height="56" loading="lazy">
+        <p class="mb-0">&copy; 2025 ADVIC — Todos os direitos reservados</p>
       </div>
-      <p>&copy; 2025 ADVIC - Todos os direitos reservados</p>
       <nav class="social-links" aria-label="Redes sociais">
-        <a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer" aria-label="Instagram ADVIC"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer" aria-label="Facebook ADVIC"><i class="fab fa-facebook"></i></a>
-        <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube ADVIC"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+        <a href="https://youtube.com/@advicviladecava" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
       </nav>
     </div>
   </footer>
-  <div class="version-badge">v1.1</div>
 
-  <!-- Botão Voltar ao Topo -->
-  <button id="btnTop" aria-label="Voltar ao topo">↑</button>
+    <button id="btnTop" class="btn-top" aria-label="Voltar ao topo">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="script.js"></script>
 </body>
 </html>

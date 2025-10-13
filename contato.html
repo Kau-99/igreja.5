@@ -1,124 +1,129 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contato - ADVIC</title>
-  <meta name="description" content="Entre em contato com a Assembleia de Deus Vila de Cava. Envie sua mensagem e saiba como chegar.">
-  <meta name="author" content="ADVIC - Assembleia de Deus de Vila de Cava">
-  <meta name="robots" content="index, follow">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contato — ADVIC</title>
+  <meta name="description" content="Fale conosco, veja horários e localização." />
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Contato - ADVIC">
-  <meta property="og:description" content="Entre em contato com a Assembleia de Deus Vila de Cava. Envie sua mensagem e saiba como chegar.">
-  <meta property="og:image" content="imagens/og-image.jpg">
-  <meta property="og:url" content="https://seudominio.com/contato.html">
-  <meta property="og:type" content="website">
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#0f8c95">
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Contato - ADVIC">
-  <meta name="twitter:description" content="Entre em contato com a Assembleia de Deus Vila de Cava.">
-  <meta name="twitter:image" content="imagens/og-image.jpg">
-
-  <!-- CSS principal -->
-  <link rel="icon" href="imagens/logo.png" type="image/png">
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Merriweather:wght@700&display=swap" rel="stylesheet">
-
-  <!-- Font Awesome otimizado -->
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
-
-  <!-- JS principal -->
-  <script defer src="script.js"></script>
+  <!-- Fonts & CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <!-- Header -->
-  <header class="site-header" role="banner">
-    <div class="container header-content">
-      <a href="index.html" class="logo" aria-label="Página inicial ADVIC">
-        <img src="imagens/logo.png" alt="Logo ADVIC" width="80" height="80" loading="lazy">
-        <span class="logo-text" aria-hidden="true">ADVIC</span>
+  <header class="site-header">
+    <div class="container d-flex align-items-center justify-content-between py-2">
+      <a class="logo d-flex align-items-center text-decoration-none" href="index.html" aria-label="Página inicial ADVIC">
+        <img src="logo-advic-512.png" alt="Logo ADVIC" class="logo-img me-2" height="52" loading="lazy">
+        <span class="logo-text fw-bold">ADVIC</span>
       </a>
+
       <button class="nav-toggle" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="primary-navigation">
-        <span class="hamburger" aria-hidden="true"></span>
+        <span class="hamburger"></span>
       </button>
-      <nav class="nav-wrapper" id="primary-navigation" aria-label="Navegação principal">
+
+      <nav id="primary-navigation" class="nav-wrapper">
         <ul class="nav-menu">
           <li><a href="index.html">Início</a></li>
           <li><a href="sobre.html">Sobre</a></li>
           <li><a href="eventos.html">Eventos</a></li>
-          <li><a href="contato.html" class="active" aria-current="page">Contato</a></li>
+          <li><a class="active" aria-current="page" href="contato.html">Contato</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <main id="conteudo" role="main">
-    <!-- Formulário de contato -->
-    <section class="container" aria-labelledby="titulo-contato">
-      <form class="contact-form" action="" method="POST" novalidate aria-describedby="instrucoes-form">
-    <h1 id="titulo-contato">Entre em Contato</h1>
-    <p id="instrucoes-form">Preencha todos os campos obrigatórios antes de enviar.</p>
-        <label for="nome">Nome <span aria-hidden="true">*</span></label>
-        <input type="text" id="nome" name="nome" required aria-required="true">
+  <main id="conteudo">
+    <section class="container py-5">
+      <div class="row g-4">
+        <div class="col-12 col-lg-6">
+          <form class="contact-form" action="" method="POST" novalidate>
+            <h1 class="mb-2">Entre em Contato</h1>
+            <p class="text-muted mb-3">Responderemos o mais breve possível.</p>
 
-        <label for="email">E-mail <span aria-hidden="true">*</span></label>
-        <input type="email" id="email" name="email" required aria-required="true">
+            <input class="honeypot" type="text" name="website" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0">
 
-        <label for="assunto">Assunto <span aria-hidden="true">*</span></label>
-        <input type="text" id="assunto" name="assunto" required aria-required="true">
+            <label for="nome">Nome <span aria-hidden="true">*</span></label>
+            <input id="nome" name="nome" type="text" required aria-required="true" />
 
-        <label for="mensagem">Mensagem <span aria-hidden="true">*</span></label>
-        <textarea id="mensagem" name="mensagem" rows="5" required aria-required="true"></textarea>
+            <label for="email">E-mail <span aria-hidden="true">*</span></label>
+            <input id="email" name="email" type="email" required aria-required="true" autocomplete="email" />
 
-        <button type="submit" class="btn btn-primary">Enviar</button>
-        <p class="email-note">Suas informações não serão compartilhadas. Apenas membros autorizados da igreja terão acesso às mensagens.</p>
-      </form>
+            <label for="assunto">Assunto <span aria-hidden="true">*</span></label>
+            <input id="assunto" name="assunto" type="text" required aria-required="true" />
+
+            <label for="mensagem">Mensagem <span aria-hidden="true">*</span></label>
+            <textarea id="mensagem" name="mensagem" rows="5" required aria-required="true"></textarea>
+
+            <button class="btn btn-primary mt-2" type="submit">Enviar</button>
+            <p class="email-note">Seus dados não serão compartilhados.</p>
+          </form>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="card p-3 h-100">
+            <h2 class="section-title fs-4">Informações</h2>
+            <ul class="list-unstyled mb-3">
+              <li class="mb-2"><i class="fa-solid fa-location-dot me-2 text-primary"></i>R. Vítor Hugo, 76 — Vila de Cava, Nova Iguaçu — RJ</li>
+              <li class="mb-2"><i class="fa-solid fa-phone me-2 text-primary"></i>(21) 0000-0000</li>
+              <li class="mb-2"><i class="fa-solid fa-envelope me-2 text-primary"></i>contato@advic.org.br</li>
+            </ul>
+            <h3 class="fs-5">Horários de Culto</h3>
+            <ul class="list-unstyled">
+              <li>Domingo — 18h</li>
+              <li>Quinta — 19h</li>
+              <li>Terça (Doutrina) — 19h30</li>
+            </ul>
+            <div class="mapa-wrapper mt-3 rounded-3 overflow-hidden">
+              <iframe
+                data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3681.2977402202996!2d-43.44567562387386!3d-22.679957579415436!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x996900e7499671%3A0x7639e656f93e3a9b!2sR.%20V%C3%ADtor%20Hugo%2C%2076%20-%20Vila%20de%20Cava%2C%20Nova%20Igua%C3%A7u%20-%20RJ%2C%2026052-450!5e0!3m2!1spt-BR!2sbr!4v1756164387513!5m2!1spt-BR!2sbr"
+                title="Mapa: Assembleia de Deus Vila de Cava"
+                style="width:100%;aspect-ratio:16/9;border:0"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Mapa -->
-    <section class="mapa container" aria-labelledby="titulo-mapa">
-      <h2 id="titulo-mapa">Como chegar</h2>
-      <div class="mapa-wrapper" style="max-width:1200px;margin:0 auto;">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3681.2977402202996!2d-43.44567562387386!3d-22.679957579415436!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x996900e7499671%3A0x7639e656f93e3a9b!2sR.%20V%C3%ADtor%20Hugo%2C%2076%20-%20Vila%20de%20Cava%2C%20Nova%20Igua%C3%A7u%20-%20RJ%2C%2026052-450!5e0!3m2!1spt-BR!2sbr!4v1756164387513!5m2!1spt-BR!2sbr"
-          title="Mapa da localização da Assembleia de Deus Vila de Cava"
-          style="width:100%; aspect-ratio:16/9; border:0;"
-          allowfullscreen
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+    <section class="cta">
+      <div class="container d-lg-flex align-items-center justify-content-between">
+        <div class="me-lg-3">
+          <h2 class="mb-2">Será um prazer falar com você</h2>
+          <p class="mb-0">Envie sua mensagem ou nos visite nos horários acima.</p>
+        </div>
+        <a class="btn btn-light btn-lg mt-3 mt-lg-0" href="eventos.html">Ver eventos</a>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="site-footer" role="contentinfo">
+  <footer class="site-footer">
     <div class="container footer-content">
-      <div class="footer-logo">
-        <img src="imagens/logo.png" alt="Logo ADVIC" width="70" height="70" loading="lazy">
+      <div class="footer-brand">
+        <img src="logo-advic-512.png" alt="Logo ADVIC" class="logo-img" height="56" loading="lazy">
+        <p class="mb-0">&copy; 2025 ADVIC — Todos os direitos reservados</p>
       </div>
-      <p>&copy; 2025 ADVIC - Todos os direitos reservados</p>
-
       <nav class="social-links" aria-label="Redes sociais">
-        <a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer" aria-label="Instagram ADVIC"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer" aria-label="Facebook ADVIC"><i class="fab fa-facebook"></i></a>
-        <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube ADVIC"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+        <a href="https://youtube.com/@advicviladecava" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
       </nav>
     </div>
   </footer>
 
-  <div class="version-badge">v1.1</div>
+  <button id="btnTop" class="btn-top" aria-label="Voltar ao topo"><i class="fa-solid fa-arrow-up"></i></button>
 
-  <!-- Botões flutuantes -->
-  <a href="#" id="btnTop" aria-label="Voltar ao topo"><i class="fas fa-arrow-up"></i></a>
-  <a href="https://api.whatsapp.com/send?phone=SEU_NUMERO" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Fale conosco pelo WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-  </a>
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="script.js"></script>
 </body>
 </html>
