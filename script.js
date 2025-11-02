@@ -1,15 +1,4 @@
 'use strict';
-
-/* ============================================================
-   ADVIC — Front-end Core (ES6+)
-   - Namespace isolado: MyApp
-   - Segurança: hardening de links, frame-busting
-   - Performance: lazy, prefetch on hover, passive listeners
-   - UX: menu, smooth scroll, toast com fila, ScrollSpy, animação on-scroll
-   - Form: validação em tempo real + honeypot
-   (Baseada e evoluída a partir do seu script anterior.)  ── ver arquivos antigos. 
-============================================================ */
-
 (() => {
   const MyApp = (window.MyApp = window.MyApp || {});
 
