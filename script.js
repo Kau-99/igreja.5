@@ -174,41 +174,69 @@
     items.forEach((i) => io.observe(i));
   };
 
-  /* ========== Formulário de contato ========== */
+  /* ========== Formulário de contato (agora abrindo WhatsApp) ========== */
   MyApp.initContactForm = () => {
     const form = $('.contact-form');
     if (!form) return;
 
     // validação live
     ['input', 'blur'].forEach((ev) => {
-      on(form, ev, (e) => {
-        const t = e.target;
-        if (!t.matches('input, textarea')) return;
-        t.classList.toggle('input-error', !t.checkValidity() || !t.value.trim());
-      }, true);
+      on(
+        form,
+        ev,
+        (e) => {
+          const t = e.target;
+          if (!t.matches('input, textarea')) return;
+          t.classList.toggle('input-error', !t.checkValidity() || !t.value.trim());
+        },
+        true
+      );
     });
 
     on(form, 'submit', async (e) => {
-      if (/formspree|formspark|getform|staticforms/i.test(form.action)) return; // permite backend externo, se você definir
+      // Se você futuramente configurar um backend (Formspree etc.), essa verificação permite que ele funcione
+      if (/formspree|formspark|getform|staticforms/i.test(form.action)) return;
+
       e.preventDefault();
 
       const honeypot = form.querySelector('.honeypot');
       if (honeypot && honeypot.value.trim()) return; // bot
 
-      const nome = $('#nome'), email = $('#email'), assunto = $('#assunto'), msg = $('#mensagem');
+      const nome = $('#nome'),
+        email = $('#email'),
+        assunto = $('#assunto'),
+        msg = $('#mensagem');
+
       const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
-      const ok =
-        nome.value.trim() && emailOk && assunto.value.trim() && msg.value.trim();
+      const ok = nome.value.trim() && emailOk && assunto.value.trim() && msg.value.trim();
 
       [nome, email, assunto, msg].forEach((el) =>
         el.classList.toggle('input-error', !el.value.trim())
       );
       if (!emailOk) email.classList.add('input-error');
 
-      if (!ok) return MyApp.showToast('Preencha os campos corretamente.', 'error');
+      if (!ok) {
+        return MyApp.showToast('Preencha os campos corretamente.', 'error');
+      }
 
-      // Aqui você pode integrar seu endpoint axios/fetch.
-      MyApp.showToast('Mensagem enviada com sucesso!', 'success');
+      // ========= Envio via WhatsApp (sem backend) =========
+      // Troque pelo número REAL da igreja, no formato 55 + DDD + número, somente dígitos.
+      // Exemplo: 55 21 99999-0000  ->  "5521999990000"
+      const numeroIgreja = '552100000000'; // TODO: ajustar para o número oficial
+
+      const textoMensagem =
+        'Nova mensagem do site ADVIC:\n' +
+        `Nome: ${nome.value.trim()}\n` +
+        `E-mail: ${email.value.trim()}\n` +
+        `Assunto: ${assunto.value.trim()}\n` +
+        `Mensagem: ${msg.value.trim()}`;
+
+      const linkWhats = `https://wa.me/${numeroIgreja}?text=${encodeURIComponent(textoMensagem)}`;
+
+      // Abre o WhatsApp (app ou web) com a mensagem preenchida
+      window.open(linkWhats, '_blank');
+
+      MyApp.showToast('Abrindo WhatsApp com a sua mensagem…', 'success');
       form.reset();
     });
   };
