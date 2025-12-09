@@ -110,7 +110,7 @@
     }, MyApp.config.toastDuration);
   }
 
-  /* ========== Lazy Load (imgs, iframes, bg) ========== */
+  /* ========== Lazy Load ========== */
   MyApp.initLazy = () => {
     const items = $$(MyApp.config.lazySelector);
     if (!items.length || !('IntersectionObserver' in window)) return;
@@ -130,7 +130,7 @@
     items.forEach((i) => io.observe(i));
   };
 
-  /* ========== ScrollSpy (âncoras locais) ========== */
+  /* ========== ScrollSpy ========== */
   MyApp.initScrollSpy = () => {
     const sections = $$('section[id]');
     const links = $$('.nav-menu a[href^="#"]');
@@ -192,9 +192,7 @@
         true
       );
     });
-
     on(form, 'submit', async (e) => {
-      // Se você futuramente configurar um backend (Formspree etc.), essa verificação permite que ele funcione
       if (/formspree|formspark|getform|staticforms/i.test(form.action)) return;
 
       e.preventDefault();
@@ -219,10 +217,8 @@
         return MyApp.showToast('Preencha os campos corretamente.', 'error');
       }
 
-      // ========= Envio via WhatsApp (sem backend) =========
-      // Troque pelo número REAL da igreja, no formato 55 + DDD + número, somente dígitos.
-      // Exemplo: 55 21 99999-0000  ->  "5521999990000"
-      const numeroIgreja = '552100000000'; // TODO: ajustar para o número oficial
+      // ========= Envio via WhatsApp  =========
+      const numeroIgreja = '552100000000'; 
 
       const textoMensagem =
         'Nova mensagem do site ADVIC:\n' +
@@ -474,7 +470,6 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   };
-
   /* ========== Prefetch on hover ========== */
   MyApp.prefetch = () => {
     $$('a[href$=".html"]').forEach((a) => {

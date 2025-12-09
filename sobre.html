@@ -1,280 +1,446 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Sobre Nós | ADVIC</title>
-  <meta name="description" content="História, crenças e liderança da Assembleia de Deus de Vila de Cava.">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sobre Nós | ADVIC</title>
+    <meta
+      name="description"
+      content="História, crenças e liderança da Assembleia de Deus de Vila de Cava."
+    />
 
-  <!-- Favicons -->
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="48x48" href="favicon-48x48.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <!-- Fallback com a logo do projeto -->
-  <link rel="icon" type="image/png" href="imagens/logo.png">
-  <meta name="theme-color" content="#0f8c95">
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="favicon-48x48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <!-- Fallback com a logo do projeto -->
+    <link rel="icon" type="image/png" href="imagens/logo.png" />
+    <meta name="theme-color" content="#0f8c95" />
 
-  <!-- Fonts & CSS -->
-  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <!-- Fonts & CSS -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    />
 
-  <!-- Font Awesome (para ícones) -->
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"></noscript>
+    <!-- Font Awesome (para ícones) -->
+    <link
+      rel="preload"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    /></noscript>
 
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header class="site-header">
-    <div class="container d-flex align-items-center justify-content-between py-2">
-      <a class="logo d-flex align-items-center text-decoration-none" href="index.html" aria-label="Página inicial ADVIC">
-        <img src="imagens/logo.png" alt="Logo ADVIC" class="logo-img me-2" height="52" loading="lazy">
-        <span class="logo-text fw-bold">ADVIC</span>
-      </a>
-
-      <button class="nav-toggle" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="primary-navigation">
-        <span class="hamburger"></span>
-      </button>
-
-      <nav id="primary-navigation" class="nav-wrapper">
-        <ul class="nav-menu">
-          <li><a href="index.html">Início</a></li>
-          <li><a class="active" aria-current="page" href="sobre.html">Sobre</a></li>
-          <li><a href="eventos.html">Eventos</a></li>
-          <li><a href="contato.html">Contato</a></li>
-          <li><a href="privacidade.html">Privacidade & Imagem</a></li>
-          <li><a class="btn btn-sm btn-cta" href="contato.html">Seja Membro</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <main id="conteudo">
-    <section class="hero hero-sm">
-      <!-- Fundo imersivo com lazy-load reaproveitando o mesmo visual da home -->
-      <div class="hero-bg" data-lazy="imagens/imagem-igreja.jpg" role="img" aria-label="Fachada da igreja"></div>
-
-      <div class="container text-center text-white py-5">
-        <h1 class="display-6 fw-bold">Quem Somos</h1>
-        <p class="lead">Uma história de fé, serviço e esperança.</p>
-      </div>
-    </section>
-
-    <section class="container py-5">
-      <div class="row g-4 align-items-center">
-        <div class="col-12 col-lg-6">
-          <p class="fs-5">A Assembleia de Deus de Vila de Cava existe para glorificar a Cristo, edificar a Igreja e servir a nossa comunidade. Buscamos viver o Evangelho com simplicidade, amor e excelência.</p>
-          <ul class="list-unstyled mt-3">
-            <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> Pregação fiel da Palavra</li>
-            <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> Discipulado e comunhão</li>
-            <li class="mb-2"><i class="fa-solid fa-check text-primary me-2"></i> Ação social e missão</li>
-          </ul>
-        </div>
-        <div class="col-12 col-lg-6">
-          <img class="rounded-4 shadow w-100" src="imagens/imagem-igreja.jpg" alt="Fachada da igreja" loading="lazy">
-        </div>
-      </div>
-    </section>
-
-    <section class="container py-5">
-      <h2 class="section-title text-center">Nossa História</h2>
-      <div class="timeline mt-4">
-        <div class="timeline-item color-1" data-animate="fade-up">
-          <div class="timeline-content">
-            <div class="timeline-photo"><img src="imagens/primeiro pastor.jpeg" alt="Primeira liderança"></div>
-            <h3>1950 <i class="fas fa-cross timeline-icon" aria-hidden="true"></i></h3>
-            <p>Fundação da igreja e primeiros cultos na região.</p>
-          </div>
-        </div>
-        <div class="timeline-item color-2" data-animate="fade-up" data-delay="80">
-          <div class="timeline-content">
-            <div class="timeline-photo"><img src="imagens/pastor2.jpg" alt="Expansão regional"></div>
-            <h3>1970 <i class="fas fa-church timeline-icon" aria-hidden="true"></i></h3>
-            <p>Início das congregações e expansão do trabalho.</p>
-          </div>
-        </div>
-        <div class="timeline-item color-1" data-animate="fade-up" data-delay="160">
-          <div class="timeline-content">
-            <div class="timeline-photo"><img src="imagens/pastor3.jpg" alt="Missões e projetos"></div>
-            <h3>1990 <i class="fas fa-globe timeline-icon" aria-hidden="true"></i></h3>
-            <p>Projetos missionários e ação social.</p>
-          </div>
-        </div>
-        <div class="timeline-item color-2" data-animate="fade-up" data-delay="240">
-          <div class="timeline-content">
-            <div class="timeline-photo"><img src="imagens/pastor4.jpg" alt="Era digital"></div>
-            <h3>2025 <i class="fas fa-bible timeline-icon" aria-hidden="true"></i></h3>
-            <p>Transformação digital e fortalecimento da obra.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="py-5 bg-soft">
-      <div class="container">
-        <h2 class="section-title text-center">Nossa Crença</h2>
-        <div class="row g-4 mt-1">
-          <div class="col-12 col-md-4">
-            <div class="belief">
-              <h3>Trindade</h3>
-              <p>Cremos em Deus Pai, Filho e Espírito Santo.</p>
-            </div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="belief">
-              <h3>Escrituras</h3>
-              <p>A Bíblia é a nossa regra de fé e prática.</p>
-            </div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="belief">
-              <h3>Salvação</h3>
-              <p>Somente em Jesus Cristo há redenção e vida eterna.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="container py-5">
-      <h2 class="section-title text-center">Liderança</h2>
-      <div class="row g-4 mt-1">
-        <div class="col-6 col-md-3 text-center" data-animate="fade-up">
-          <img class="avatar" src="imagens/WhatsApp Image 2025-10-17 at 20.57.52.jpeg" alt="Pastor Presidente">
-          <h4 class="mt-2 mb-0">Pr. Luiz</h4>
-          <span class="text-muted">Pastor Presidente</span>
-        </div>
-        <div class="col-6 col-md-3 text-center" data-animate="fade-up" data-delay="80">
-          <img class="avatar" src="imagens/lider2.jpg" alt="Pastor Auxiliar">
-          <h4 class="mt-2 mb-0">Pr. Nome</h4>
-          <span class="text-muted">Pastor Auxiliar</span>
-        </div>
-        <div class="col-6 col-md-3 text-center" data-animate="fade-up" data-delay="160">
-          <img class="avatar" src="imagens/lider3.jpg" alt="Diácono">
-          <h4 class="mt-2 mb-0">Robson</h4>
-          <span class="text-muted">Orquestra</span>
-        </div>
-        <div class="col-6 col-md-3 text-center" data-animate="fade-up" data-delay="240">
-          <img class="avatar" src="imagens/lider4.jpg" alt="Missionária">
-          <h4 class="mt-2 mb-0">Nome</h4>
-          <span class="text-muted">Missionária</span>
-        </div>
-        <div class="col-6 col-md-3 text-center" data-animate="fade-up" data-delay="240">
-          <img class="avatar" src="imagens/lider4.jpg" alt="Missionária">
-          <h4 class="mt-2 mb-0">Nome</h4>
-          <span class="text-muted">Jovens</span>
-        </div>
-        <div class="col-6 col-md-3 text-center" data-animate="fade-up" data-delay="240">
-          <img class="avatar" src="imagens/lider4.jpg" alt="Missionária">
-          <h4 class="mt-2 mb-0">Madalena</h4>
-          <span class="text-muted">Irmãs</span>
-        </div>
-        <div class="col-6 col-md-3 text-center" data-animate="fade-up" data-delay="240">
-          <img class="avatar" src="imagens/lider4.jpg" alt="Missionária">
-          <h4 class="mt-2 mb-0">Nome</h4>
-          <span class="text-muted">Varões</span>
-        </div>
-        <div class="col-6 col-md-3 text-center" data-animate="fade-up" data-delay="240">
-          <img class="avatar" src="imagens/lider4.jpg" alt="Missionária">
-          <h4 class="mt-2 mb-0">Nome</h4>
-          <span class="text-muted">Infantil</span>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-content">
-      <div class="footer-brand">
-        <img src="imagens/logo.png" alt="Logo ADVIC" class="logo-img" height="56" loading="lazy">
-        <p class="mb-0">&copy; 2025 ADVIC — Todos os direitos reservados</p>
-      </div>
-      <nav class="social-links" aria-label="Redes sociais">
-        <a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-        <a href="https://youtube.com/@advicviladecava" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-      </nav>
-    </div>
-  </footer>
-  <!-- Botão flutuante de Acessibilidade -->
-  <button
-    id="btnA11y"
-    class="accessibility-fab"
-    aria-label="Abrir opções de acessibilidade"
-    aria-haspopup="true"
-    aria-controls="a11yPanel"
-    aria-expanded="false"
-  >
-    <i class="fa-solid fa-universal-access" aria-hidden="true"></i>
-  </button>
-
-  <!-- Painel de Acessibilidade -->
-  <section
-    id="a11yPanel"
-    class="accessibility-panel"
-    aria-label="Ferramentas de acessibilidade"
-    aria-hidden="true"
-    role="dialog"
-  >
-    <header class="a11y-panel-header">
-      <span>Acessibilidade</span>
-      <button
-        type="button"
-        class="a11y-close"
-        data-a11y-close
-        aria-label="Fechar painel de acessibilidade"
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div
+        class="container d-flex align-items-center justify-content-between py-2"
       >
-        &times;
-      </button>
+        <a
+          class="logo d-flex align-items-center text-decoration-none"
+          href="index.html"
+          aria-label="Página inicial ADVIC"
+        >
+          <img
+            src="imagens/logo.png"
+            alt="Logo ADVIC"
+            class="logo-img me-2"
+            height="52"
+            loading="lazy"
+          />
+          <span class="logo-text fw-bold">ADVIC</span>
+        </a>
+
+        <button
+          class="nav-toggle"
+          aria-label="Abrir menu de navegação"
+          aria-expanded="false"
+          aria-controls="primary-navigation"
+        >
+          <span class="hamburger"></span>
+        </button>
+
+        <nav id="primary-navigation" class="nav-wrapper">
+          <ul class="nav-menu">
+            <li><a href="index.html">Início</a></li>
+            <li>
+              <a class="active" aria-current="page" href="sobre.html">Sobre</a>
+            </li>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="contato.html">Contato</a></li>
+            <li><a href="privacidade.html">Privacidade & Imagem</a></li>
+            <li>
+              <a class="btn btn-sm btn-cta" href="contato.html">Seja Membro</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-    <div class="a11y-panel-body">
-      <button type="button" class="a11y-btn" data-a11y-action="font-inc">
-        Aumentar fonte
-        <span>Ctrl + +</span>
-      </button>
+    <main id="conteudo">
+      <section class="hero hero-sm">
+        <!-- Fundo imersivo com lazy-load reaproveitando o mesmo visual da home -->
+        <div
+          class="hero-bg"
+          data-lazy="imagens/imagem-igreja.jpg"
+          role="img"
+          aria-label="Fachada da igreja"
+        ></div>
 
-      <button type="button" class="a11y-btn" data-a11y-action="font-dec">
-        Diminuir fonte
-        <span>Ctrl + -</span>
-      </button>
+        <div class="container text-center text-white py-5">
+          <h1 class="display-6 fw-bold">Quem Somos</h1>
+          <p class="lead">Uma história de fé, serviço e esperança.</p>
+        </div>
+      </section>
 
-      <button type="button" class="a11y-btn" data-a11y-action="toggle-contrast">
-        Alto contraste
-        <span>Alt + 2</span>
-      </button>
+      <section class="container py-5">
+        <div class="row g-4 align-items-center">
+          <div class="col-12 col-lg-6">
+            <p class="fs-5">
+              A Assembleia de Deus de Vila de Cava existe para glorificar a
+              Cristo, edificar a Igreja e servir a nossa comunidade. Buscamos
+              viver o Evangelho com simplicidade, amor e excelência.
+            </p>
+            <ul class="list-unstyled mt-3">
+              <li class="mb-2">
+                <i class="fa-solid fa-check text-primary me-2"></i> Pregação
+                fiel da Palavra
+              </li>
+              <li class="mb-2">
+                <i class="fa-solid fa-check text-primary me-2"></i> Discipulado
+                e comunhão
+              </li>
+              <li class="mb-2">
+                <i class="fa-solid fa-check text-primary me-2"></i> Ação social
+                e missão
+              </li>
+            </ul>
+          </div>
+          <div class="col-12 col-lg-6">
+            <img
+              class="rounded-4 shadow w-100"
+              src="imagens/imagem-igreja.jpg"
+              alt="Fachada da igreja"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
 
-      <button type="button" class="a11y-btn" data-a11y-action="toggle-motion">
-        Reduzir animações
-        <span>Alt + 3</span>
-      </button>
+      <section class="container py-5">
+        <h2 class="section-title text-center">Nossa História</h2>
+        <div class="timeline mt-4">
+          <div class="timeline-item color-1" data-animate="fade-up">
+            <div class="timeline-content">
+              <div class="timeline-photo">
+                <img
+                  src="imagens/primeiro pastor.jpeg"
+                  alt="Primeira liderança"
+                />
+              </div>
+              <h3>
+                1950
+                <i class="fas fa-cross timeline-icon" aria-hidden="true"></i>
+              </h3>
+              <p>Fundação da igreja e primeiros cultos na região.</p>
+            </div>
+          </div>
+          <div
+            class="timeline-item color-2"
+            data-animate="fade-up"
+            data-delay="80"
+          >
+            <div class="timeline-content">
+              <div class="timeline-photo">
+                <img src="imagens/pastor2.jpg" alt="Expansão regional" />
+              </div>
+              <h3>
+                1970
+                <i class="fas fa-church timeline-icon" aria-hidden="true"></i>
+              </h3>
+              <p>Início das congregações e expansão do trabalho.</p>
+            </div>
+          </div>
+          <div
+            class="timeline-item color-1"
+            data-animate="fade-up"
+            data-delay="160"
+          >
+            <div class="timeline-content">
+              <div class="timeline-photo">
+                <img src="imagens/pastor3.jpg" alt="Missões e projetos" />
+              </div>
+              <h3>
+                1990
+                <i class="fas fa-globe timeline-icon" aria-hidden="true"></i>
+              </h3>
+              <p>Projetos missionários e ação social.</p>
+            </div>
+          </div>
+          <div
+            class="timeline-item color-2"
+            data-animate="fade-up"
+            data-delay="240"
+          >
+            <div class="timeline-content">
+              <div class="timeline-photo">
+                <img src="imagens/pastor4.jpg" alt="Era digital" />
+              </div>
+              <h3>
+                2025
+                <i class="fas fa-bible timeline-icon" aria-hidden="true"></i>
+              </h3>
+              <p>Transformação digital e fortalecimento da obra.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <button type="button" class="a11y-btn" data-a11y-action="read-page">
-        Leitura da página
-        <span>Alt + 4</span>
-      </button>
+      <section class="py-5 bg-soft">
+        <div class="container">
+          <h2 class="section-title text-center">Nossa Crença</h2>
+          <div class="row g-4 mt-1">
+            <div class="col-12 col-md-4">
+              <div class="belief">
+                <h3>Trindade</h3>
+                <p>Cremos em Deus Pai, Filho e Espírito Santo.</p>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="belief">
+                <h3>Escrituras</h3>
+                <p>A Bíblia é a nossa regra de fé e prática.</p>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="belief">
+                <h3>Salvação</h3>
+                <p>Somente em Jesus Cristo há redenção e vida eterna.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <button type="button" class="a11y-btn" data-a11y-action="reset">
-        Resetar acessibilidade
-        <span>Alt + 0</span>
-      </button>
-    </div>
+      <section class="container py-5">
+        <h2 class="section-title text-center">Liderança</h2>
+        <div class="row g-4 mt-1">
+          <div class="col-6 col-md-3 text-center" data-animate="fade-up">
+            <img
+              class="avatar"
+              src="imagens/WhatsApp Image 2025-10-17 at 20.57.52.jpeg"
+              alt="Pastor Presidente"
+            />
+            <h4 class="mt-2 mb-0">Pr. Luiz</h4>
+            <span class="text-muted">Pastor Presidente</span>
+          </div>
+          <div
+            class="col-6 col-md-3 text-center"
+            data-animate="fade-up"
+            data-delay="80"
+          >
+            <img
+              class="avatar"
+              src="imagens/lider2.jpg"
+              alt="Pastor Auxiliar"
+            />
+            <h4 class="mt-2 mb-0">Pr. Nome</h4>
+            <span class="text-muted">Pastor Auxiliar</span>
+          </div>
+          <div
+            class="col-6 col-md-3 text-center"
+            data-animate="fade-up"
+            data-delay="160"
+          >
+            <img class="avatar" src="imagens/lider3.jpg" alt="Diácono" />
+            <h4 class="mt-2 mb-0">Robson</h4>
+            <span class="text-muted">Orquestra</span>
+          </div>
+          <div
+            class="col-6 col-md-3 text-center"
+            data-animate="fade-up"
+            data-delay="240"
+          >
+            <img class="avatar" src="imagens/lider4.jpg" alt="Missionária" />
+            <h4 class="mt-2 mb-0">Nome</h4>
+            <span class="text-muted">Missionária</span>
+          </div>
+          <div
+            class="col-6 col-md-3 text-center"
+            data-animate="fade-up"
+            data-delay="240"
+          >
+            <img class="avatar" src="imagens/lider4.jpg" alt="Missionária" />
+            <h4 class="mt-2 mb-0">Nome</h4>
+            <span class="text-muted">Jovens</span>
+          </div>
+          <div
+            class="col-6 col-md-3 text-center"
+            data-animate="fade-up"
+            data-delay="240"
+          >
+            <img class="avatar" src="imagens/lider4.jpg" alt="Missionária" />
+            <h4 class="mt-2 mb-0">Madalena</h4>
+            <span class="text-muted">Irmãs</span>
+          </div>
+          <div
+            class="col-6 col-md-3 text-center"
+            data-animate="fade-up"
+            data-delay="240"
+          >
+            <img class="avatar" src="imagens/lider4.jpg" alt="Missionária" />
+            <h4 class="mt-2 mb-0">Nome</h4>
+            <span class="text-muted">Varões</span>
+          </div>
+          <div
+            class="col-6 col-md-3 text-center"
+            data-animate="fade-up"
+            data-delay="240"
+          >
+            <img class="avatar" src="imagens/lider4.jpg" alt="Missionária" />
+            <h4 class="mt-2 mb-0">Nome</h4>
+            <span class="text-muted">Infantil</span>
+          </div>
+        </div>
+      </section>
+    </main>
 
-    <p class="a11y-note">
-      Dica: use o atalho <strong>Alt + 1</strong> para abrir este painel.
-    </p>
-  </section>
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <div class="footer-brand">
+          <img
+            src="imagens/logo.png"
+            alt="Logo ADVIC"
+            class="logo-img"
+            height="56"
+            loading="lazy"
+          />
+          <p class="mb-0">&copy; 2025 ADVIC — Todos os direitos reservados</p>
+        </div>
+        <nav class="social-links" aria-label="Redes sociais">
+          <a
+            href="https://www.instagram.com/advic_viladecava/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            ><i class="fab fa-instagram"></i
+          ></a>
+          <a
+            href="https://www.facebook.com/advcviladecava"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            ><i class="fab fa-facebook"></i
+          ></a>
+          <a
+            href="https://youtube.com/@advicviladecava"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="YouTube"
+            ><i class="fab fa-youtube"></i
+          ></a>
+        </nav>
+      </div>
+    </footer>
+    <!-- Botão flutuante de Acessibilidade -->
+    <button
+      id="btnA11y"
+      class="accessibility-fab"
+      aria-label="Abrir opções de acessibilidade"
+      aria-haspopup="true"
+      aria-controls="a11yPanel"
+      aria-expanded="false"
+    >
+      <i class="fa-solid fa-universal-access" aria-hidden="true"></i>
+    </button>
 
-  <!-- Botão Voltar ao topo (já existia) -->
-  <button id="btnTop" class="btn-top" aria-label="Voltar ao topo">
-    <i class="fa-solid fa-arrow-up"></i>
-  </button>
+    <!-- Painel de Acessibilidade -->
+    <section
+      id="a11yPanel"
+      class="accessibility-panel"
+      aria-label="Ferramentas de acessibilidade"
+      aria-hidden="true"
+      role="dialog"
+    >
+      <header class="a11y-panel-header">
+        <span>Acessibilidade</span>
+        <button
+          type="button"
+          class="a11y-close"
+          data-a11y-close
+          aria-label="Fechar painel de acessibilidade"
+        >
+          &times;
+        </button>
+      </header>
 
-  <button id="btnTop" class="btn-top" aria-label="Voltar ao topo"><i class="fa-solid fa-arrow-up"></i></button>
+      <div class="a11y-panel-body">
+        <button type="button" class="a11y-btn" data-a11y-action="font-inc">
+          Aumentar fonte
+          <span>Ctrl + +</span>
+        </button>
 
-  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script defer src="script.js"></script>
-</body>
+        <button type="button" class="a11y-btn" data-a11y-action="font-dec">
+          Diminuir fonte
+          <span>Ctrl + -</span>
+        </button>
+
+        <button
+          type="button"
+          class="a11y-btn"
+          data-a11y-action="toggle-contrast"
+        >
+          Alto contraste
+          <span>Alt + 2</span>
+        </button>
+
+        <button type="button" class="a11y-btn" data-a11y-action="toggle-motion">
+          Reduzir animações
+          <span>Alt + 3</span>
+        </button>
+
+        <button type="button" class="a11y-btn" data-a11y-action="read-page">
+          Leitura da página
+          <span>Alt + 4</span>
+        </button>
+
+        <button type="button" class="a11y-btn" data-a11y-action="reset">
+          Resetar acessibilidade
+          <span>Alt + 0</span>
+        </button>
+      </div>
+
+      <p class="a11y-note">
+        Dica: use o atalho <strong>Alt + 1</strong> para abrir este painel.
+      </p>
+    </section>
+
+    <!-- Botão Voltar ao topo (já existia) -->
+    <button id="btnTop" class="btn-top" aria-label="Voltar ao topo">
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <button id="btnTop" class="btn-top" aria-label="Voltar ao topo">
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+    <script defer src="script.js"></script>
+  </body>
 </html>
