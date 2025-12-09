@@ -240,6 +240,212 @@
       form.reset();
     });
   };
+  /* ========== Acessibilidade Global (botão flutuante) ========== */
+  MyApp.initAccessibility = () => {
+    const btn = $('#btnA11y');
+    const panel = $('#a11yPanel');
+    if (!btn || !panel) return;
+
+    const STORAGE_KEY = 'advic-a11y';
+    const closeBtn = panel.querySelector('[data-a11y-close]');
+    const actions = panel.querySelectorAll('[data-a11y-action]');
+    let lastFocus = null;
+
+    const baseState = { fontScale: 1, highContrast: false, reduceMotion: false };
+
+    const loadState = () => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { ...baseState };
+        const parsed = JSON.parse(raw);
+        return { ...baseState, ...parsed };
+      } catch {
+        return { ...baseState };
+      }
+    };
+
+    const state = loadState();
+
+    const saveState = () => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch {
+        // ignore
+      }
+    };
+
+    const applyState = () => {
+      const pct = Math.round(state.fontScale * 100);
+      document.body.style.fontSize = `${pct}%`;
+      document.body.classList.toggle('a11y-high-contrast', state.highContrast);
+      document.body.classList.toggle('a11y-reduce-motion', state.reduceMotion);
+    };
+
+    applyState();
+
+    const openPanel = () => {
+      panel.classList.add('open');
+      panel.setAttribute('aria-hidden', 'false');
+      btn.setAttribute('aria-expanded', 'true');
+      lastFocus = document.activeElement;
+      const focusable = panel.querySelector(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      (focusable || panel).focus();
+    };
+
+    const closePanel = () => {
+      panel.classList.remove('open');
+      panel.setAttribute('aria-hidden', 'true');
+      btn.setAttribute('aria-expanded', 'false');
+      if (lastFocus && typeof lastFocus.focus === 'function') {
+        lastFocus.focus();
+      }
+    };
+
+    // Leitura em voz alta (Web Speech API)
+    const synth = 'speechSynthesis' in window ? window.speechSynthesis : null;
+    let utterance = null;
+
+    const cancelSpeech = () => {
+      if (synth && synth.speaking) {
+        synth.cancel();
+      }
+    };
+
+    const readPage = () => {
+      if (!synth) {
+        MyApp.showToast('Leitura de tela não suportada neste navegador.', 'error');
+        return;
+      }
+
+      if (synth.speaking) {
+        cancelSpeech();
+        MyApp.showToast('Leitura interrompida.', 'info');
+        return;
+      }
+
+      const main = $('#conteudo') || document.querySelector('main') || document.body;
+      const text = (main.innerText || '').trim().replace(/\s+/g, ' ');
+      if (!text) return;
+
+      utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'pt-BR';
+      utterance.rate = 1;
+      synth.speak(utterance);
+      MyApp.showToast('Lendo o conteúdo da página…', 'info');
+    };
+
+    const handleAction = (action) => {
+      switch (action) {
+        case 'font-inc':
+          state.fontScale = Math.min(state.fontScale + 0.1, 1.4);
+          applyState();
+          saveState();
+          MyApp.showToast('Fonte aumentada.', 'success');
+          break;
+        case 'font-dec':
+          state.fontScale = Math.max(state.fontScale - 0.1, 0.9);
+          applyState();
+          saveState();
+          MyApp.showToast('Fonte reduzida.', 'success');
+          break;
+        case 'toggle-contrast':
+          state.highContrast = !state.highContrast;
+          applyState();
+          saveState();
+          MyApp.showToast(
+            state.highContrast ? 'Alto contraste ativado.' : 'Alto contraste desativado.',
+            'info'
+          );
+          break;
+        case 'toggle-motion':
+          state.reduceMotion = !state.reduceMotion;
+          applyState();
+          saveState();
+          MyApp.showToast(
+            state.reduceMotion ? 'Animações reduzidas.' : 'Animações restauradas.',
+            'info'
+          );
+          break;
+        case 'read-page':
+          readPage();
+          break;
+        case 'reset':
+          cancelSpeech();
+          state.fontScale = 1;
+          state.highContrast = false;
+          state.reduceMotion = false;
+          applyState();
+          saveState();
+          MyApp.showToast('Configurações de acessibilidade resetadas.', 'info');
+          break;
+        default:
+          break;
+      }
+    };
+
+    // Clique no botão flutuante
+    on(btn, 'click', (e) => {
+      e.preventDefault();
+      if (panel.classList.contains('open')) {
+        closePanel();
+      } else {
+        openPanel();
+      }
+    });
+
+    // Fechar pelo X
+    if (closeBtn) {
+      on(closeBtn, 'click', (e) => {
+        e.preventDefault();
+        closePanel();
+      });
+    }
+
+    // Ações dos botões do painel
+    actions.forEach((btnAction) => {
+      const action = btnAction.dataset.a11yAction;
+      if (!action) return;
+      on(btnAction, 'click', () => handleAction(action));
+    });
+
+    // Atalhos de teclado globais
+    on(document, 'keydown', (e) => {
+      // Alt+1 abre painel / foco
+      if (e.altKey && !e.shiftKey && !e.ctrlKey) {
+        switch (e.key) {
+          case '1':
+            e.preventDefault();
+            openPanel();
+            break;
+          case '2':
+            e.preventDefault();
+            handleAction('toggle-contrast');
+            break;
+          case '3':
+            e.preventDefault();
+            handleAction('toggle-motion');
+            break;
+          case '4':
+            e.preventDefault();
+            handleAction('read-page');
+            break;
+          case '0':
+            e.preventDefault();
+            handleAction('reset');
+            break;
+          default:
+            break;
+        }
+      }
+
+      // ESC fecha painel
+      if (e.key === 'Escape' && panel.classList.contains('open')) {
+        closePanel();
+      }
+    });
+  };
 
   /* ========== Filtro de eventos (eventos.html) ========== */
   MyApp.initEventos = () => {
@@ -300,6 +506,7 @@
     MyApp.initContactForm();
     MyApp.initEventos();
     MyApp.initTop();
+    MyApp.initAccessibility();
     MyApp.prefetch();
 
     // Lazy-iframe do mapa

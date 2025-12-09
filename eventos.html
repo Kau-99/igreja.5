@@ -145,6 +145,79 @@
       </nav>
     </div>
   </footer>
+  <!-- Botão flutuante de Acessibilidade -->
+  <button
+    id="btnA11y"
+    class="accessibility-fab"
+    aria-label="Abrir opções de acessibilidade"
+    aria-haspopup="true"
+    aria-controls="a11yPanel"
+    aria-expanded="false"
+  >
+    <i class="fa-solid fa-universal-access" aria-hidden="true"></i>
+  </button>
+
+  <!-- Painel de Acessibilidade -->
+  <section
+    id="a11yPanel"
+    class="accessibility-panel"
+    aria-label="Ferramentas de acessibilidade"
+    aria-hidden="true"
+    role="dialog"
+  >
+    <header class="a11y-panel-header">
+      <span>Acessibilidade</span>
+      <button
+        type="button"
+        class="a11y-close"
+        data-a11y-close
+        aria-label="Fechar painel de acessibilidade"
+      >
+        &times;
+      </button>
+    </header>
+
+    <div class="a11y-panel-body">
+      <button type="button" class="a11y-btn" data-a11y-action="font-inc">
+        Aumentar fonte
+        <span>Ctrl + +</span>
+      </button>
+
+      <button type="button" class="a11y-btn" data-a11y-action="font-dec">
+        Diminuir fonte
+        <span>Ctrl + -</span>
+      </button>
+
+      <button type="button" class="a11y-btn" data-a11y-action="toggle-contrast">
+        Alto contraste
+        <span>Alt + 2</span>
+      </button>
+
+      <button type="button" class="a11y-btn" data-a11y-action="toggle-motion">
+        Reduzir animações
+        <span>Alt + 3</span>
+      </button>
+
+      <button type="button" class="a11y-btn" data-a11y-action="read-page">
+        Leitura da página
+        <span>Alt + 4</span>
+      </button>
+
+      <button type="button" class="a11y-btn" data-a11y-action="reset">
+        Resetar acessibilidade
+        <span>Alt + 0</span>
+      </button>
+    </div>
+
+    <p class="a11y-note">
+      Dica: use o atalho <strong>Alt + 1</strong> para abrir este painel.
+    </p>
+  </section>
+
+  <!-- Botão Voltar ao topo (já existia) -->
+  <button id="btnTop" class="btn-top" aria-label="Voltar ao topo">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
 
   <button id="btnTop" class="btn-top" aria-label="Voltar ao topo">
     <i class="fa-solid fa-arrow-up"></i>
