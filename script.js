@@ -11,7 +11,8 @@
   };
 
   /* Logger enxuto */
-  MyApp.log = (...a) => (MyApp.config.ENV === 'development' ? console.log('[ADVIC]', ...a) : 0);
+  MyApp.log = (...a) =>
+    MyApp.config.ENV === 'development' ? console.log('[ADVIC]', ...a) : 0;
 
   /* Util */
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
@@ -20,25 +21,151 @@
 
   /* ========== Segurança ========== */
   MyApp.Security = {
+    /* Links mais rígidos */
     hardenLinks() {
       $$('a[href]').forEach((a) => {
-        const href = (a.getAttribute('href') || '').trim();
-        if (/^\s*javascript:/i.test(href) || /^\s*data:/i.test(href)) {
+        const raw = (a.getAttribute('href') || '').trim();
+        if (!raw) return;
+
+        if (/^\s*(javascript|data):/i.test(raw)) {
           a.removeAttribute('href');
           a.setAttribute('role', 'link');
+          a.dataset.blockedHref = 'blocked';
+          return;
         }
-        const isExternal = /^https?:\/\//i.test(href) && !href.includes(location.host);
+        if (
+          raw.startsWith('#') ||
+          raw.toLowerCase().startsWith('mailto:') ||
+          raw.toLowerCase().startsWith('tel:')
+        ) {
+          return;
+        }
+
+        let url;
+        try {
+          url = new URL(raw, window.location.origin);
+        } catch {
+          return;
+        }
+
+        const isExternal = url.origin !== window.location.origin;
         if (isExternal) {
           a.setAttribute('target', '_blank');
-          a.setAttribute('rel', 'noopener noreferrer');
+          const rel = (a.getAttribute('rel') || '').split(/\s+/);
+          if (!rel.includes('noopener')) rel.push('noopener');
+          if (!rel.includes('noreferrer')) rel.push('noreferrer');
+          a.setAttribute('rel', rel.join(' ').trim());
         }
       });
     },
+
     frameBusting() {
       try {
-        if (window.top !== window.self) window.top.location = window.location;
-      } catch {}
+        if (
+          window.top !== window.self &&
+          !document.body.classList.contains('allow-embed')
+        ) {
+          window.top.location = window.location;
+        }
+      } catch {
+        // ignore
+      }
+    },
+
+    enforceHTTPS() {
+      if (
+        window.location.protocol === 'http:' &&
+        !/^localhost$/i.test(window.location.hostname) &&
+        !/^127\.0\.0\.1$/i.test(window.location.hostname)
+      ) {
+        const httpsURL =
+          'https://' +
+          window.location.host +
+          window.location.pathname +
+          window.location.search +
+          window.location.hash;
+
+        window.location.replace(httpsURL);
+      }
+    },
+
+    /* Evita exposição de informações no console em produção */
+    lockConsole() {
+      if (MyApp.config.ENV !== 'production') return;
+      const noop = () => {};
+      ['log', 'debug', 'info', 'trace'].forEach((m) => {
+        try {
+          console[m] = noop;
+        } catch {
+          // ignore
+        }
+      });
+    },
+
+    warnInlineHandlers() {
+      const hasInline = [];
+      $$('*').forEach((el) => {
+        for (const attr of el.attributes) {
+          if (/^on/i.test(attr.name)) {
+            hasInline.push({ el, attr: attr.name });
+          }
+        }
+      });
+
+      if (hasInline.length && MyApp.config.ENV === 'development') {
+        MyApp.log(
+          'Elementos com handlers inline encontrados (ex: onclick). Evite isso por segurança.',
+          hasInline
+        );
+      }
     }
+  };
+
+  /* ========== Preloader do Site ========== */
+  MyApp.initPreloader = () => {
+    const preloader = $('#preloader');
+    if (!preloader) return;
+
+    const MIN_TIME = 600; // tempo mínimo de exibição (ms)
+    const MAX_TIME = 8000; // failsafe: se algo travar, some em até 8s
+
+    const now = () =>
+      window.performance && performance.now
+        ? performance.now()
+        : Date.now();
+    const start = now();
+
+    document.body.classList.add('preloader-active');
+
+    const hidePreloader = () => {
+      const elapsed = now() - start;
+      const remaining = Math.max(0, MIN_TIME - elapsed);
+
+      setTimeout(() => {
+        preloader.classList.add('preloader--hidden');
+        document.body.classList.remove('preloader-active');
+
+        // Remove do DOM depois da animação de fade-out
+        setTimeout(() => {
+          if (preloader && preloader.parentNode) {
+            preloader.parentNode.removeChild(preloader);
+          }
+        }, 600);
+      }, remaining);
+    };
+
+    let alreadyHidden = false;
+    const safeHide = () => {
+      if (alreadyHidden) return;
+      alreadyHidden = true;
+      hidePreloader();
+    };
+
+    // Quando tudo terminar de carregar (imagens, CSS, etc.)
+    window.addEventListener('load', safeHide);
+
+    // Se a conexão da pessoa for muito ruim, não deixa ficar preso pra sempre
+    setTimeout(safeHide, MAX_TIME);
   };
 
   /* ========== Menu Responsivo ========== */
@@ -54,7 +181,10 @@
       const isOpen = toggle.classList.toggle('open');
       nav.classList.toggle('open', isOpen);
       toggle.setAttribute('aria-expanded', String(isOpen));
-      toggle.setAttribute('aria-label', isOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
+      toggle.setAttribute(
+        'aria-label',
+        isOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação'
+      );
     });
 
     on(document, 'keydown', (e) => {
@@ -114,19 +244,34 @@
   MyApp.initLazy = () => {
     const items = $$(MyApp.config.lazySelector);
     if (!items.length || !('IntersectionObserver' in window)) return;
-    const io = new IntersectionObserver((entries, obs) => {
-      entries.forEach((en) => {
-        if (!en.isIntersecting) return;
-        const el = en.target;
-        const src = el.dataset.src || el.dataset.lazy;
-        if (!src) return obs.unobserve(el);
-        if (el.tagName === 'IMG' || el.tagName === 'IFRAME') el.src = src;
-        else el.style.backgroundImage = `url(${src})`;
-        el.removeAttribute('data-src');
-        el.removeAttribute('data-lazy');
-        obs.unobserve(el);
-      });
-    }, { threshold: 0.12 });
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          const el = en.target;
+          const src = el.dataset.src || el.dataset.lazy;
+          if (!src) {
+            return obs.unobserve(el);
+          }
+
+          // Bloqueia javascript: por garantia
+          if (/^\s*javascript:/i.test(src)) {
+            obs.unobserve(el);
+            return;
+          }
+
+          if (el.tagName === 'IMG' || el.tagName === 'IFRAME') {
+            el.src = src;
+          } else {
+            el.style.backgroundImage = `url(${src})`;
+          }
+          el.removeAttribute('data-src');
+          el.removeAttribute('data-lazy');
+          obs.unobserve(el);
+        });
+      },
+      { threshold: 0.12 }
+    );
     items.forEach((i) => io.observe(i));
   };
 
@@ -134,16 +279,20 @@
   MyApp.initScrollSpy = () => {
     const sections = $$('section[id]');
     const links = $$('.nav-menu a[href^="#"]');
-    if (!sections.length || !links.length || !('IntersectionObserver' in window)) return;
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((en) => {
-        if (en.isIntersecting) {
-          links.forEach((l) => l.classList.remove('active'));
-          const act = $(`.nav-menu a[href="#${en.target.id}"]`);
-          if (act) act.classList.add('active');
-        }
-      });
-    }, { threshold: 0.6 });
+    if (!sections.length || !links.length || !('IntersectionObserver' in window))
+      return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          if (en.isIntersecting) {
+            links.forEach((l) => l.classList.remove('active'));
+            const act = $(`.nav-menu a[href="#${en.target.id}"]`);
+            if (act) act.classList.add('active');
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
     sections.forEach((s) => io.observe(s));
   };
 
@@ -151,14 +300,17 @@
   MyApp.initReveal = () => {
     const els = $$('[data-animate]');
     if (!els.length || !('IntersectionObserver' in window)) return;
-    const io = new IntersectionObserver((entries, obs) => {
-      entries.forEach((en) => {
-        if (!en.isIntersecting) return;
-        const delay = parseInt(en.target.dataset.delay || '0', 10);
-        setTimeout(() => en.target.classList.add('in'), delay);
-        obs.unobserve(en.target);
-      });
-    }, { threshold: 0.18 });
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          const delay = parseInt(en.target.dataset.delay || '0', 10);
+          setTimeout(() => en.target.classList.add('in'), delay);
+          obs.unobserve(en.target);
+        });
+      },
+      { threshold: 0.18 }
+    );
     els.forEach((el) => io.observe(el));
   };
 
@@ -166,11 +318,14 @@
   MyApp.initTimeline = () => {
     const items = $$('.timeline .timeline-item');
     if (!items.length || !('IntersectionObserver' in window)) return;
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((en) => {
-        if (en.isIntersecting) en.target.classList.add('show');
-      });
-    }, { threshold: 0.4 });
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          if (en.isIntersecting) en.target.classList.add('show');
+        });
+      },
+      { threshold: 0.4 }
+    );
     items.forEach((i) => io.observe(i));
   };
 
@@ -187,7 +342,10 @@
         (e) => {
           const t = e.target;
           if (!t.matches('input, textarea')) return;
-          t.classList.toggle('input-error', !t.checkValidity() || !t.value.trim());
+          t.classList.toggle(
+            'input-error',
+            !t.checkValidity() || !t.value.trim()
+          );
         },
         true
       );
@@ -206,7 +364,11 @@
         msg = $('#mensagem');
 
       const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
-      const ok = nome.value.trim() && emailOk && assunto.value.trim() && msg.value.trim();
+      const ok =
+        nome.value.trim() &&
+        emailOk &&
+        assunto.value.trim() &&
+        msg.value.trim();
 
       [nome, email, assunto, msg].forEach((el) =>
         el.classList.toggle('input-error', !el.value.trim())
@@ -218,7 +380,7 @@
       }
 
       // ========= Envio via WhatsApp  =========
-      const numeroIgreja = '552100000000'; 
+      const numeroIgreja = '552100000000';
 
       const textoMensagem =
         'Nova mensagem do site ADVIC:\n' +
@@ -227,7 +389,9 @@
         `Assunto: ${assunto.value.trim()}\n` +
         `Mensagem: ${msg.value.trim()}`;
 
-      const linkWhats = `https://wa.me/${numeroIgreja}?text=${encodeURIComponent(textoMensagem)}`;
+      const linkWhats = `https://wa.me/${numeroIgreja}?text=${encodeURIComponent(
+        textoMensagem
+      )}`;
 
       // Abre o WhatsApp (app ou web) com a mensagem preenchida
       window.open(linkWhats, '_blank');
@@ -236,6 +400,7 @@
       form.reset();
     });
   };
+
   /* ========== Acessibilidade Global (botão flutuante) ========== */
   MyApp.initAccessibility = () => {
     const btn = $('#btnA11y');
@@ -247,7 +412,11 @@
     const actions = panel.querySelectorAll('[data-a11y-action]');
     let lastFocus = null;
 
-    const baseState = { fontScale: 1, highContrast: false, reduceMotion: false };
+    const baseState = {
+      fontScale: 1,
+      highContrast: false,
+      reduceMotion: false
+    };
 
     const loadState = () => {
       try {
@@ -274,7 +443,10 @@
       const pct = Math.round(state.fontScale * 100);
       document.body.style.fontSize = `${pct}%`;
       document.body.classList.toggle('a11y-high-contrast', state.highContrast);
-      document.body.classList.toggle('a11y-reduce-motion', state.reduceMotion);
+      document.body.classList.toggle(
+        'a11y-reduce-motion',
+        state.reduceMotion
+      );
     };
 
     applyState();
@@ -300,7 +472,8 @@
     };
 
     // Leitura em voz alta (Web Speech API)
-    const synth = 'speechSynthesis' in window ? window.speechSynthesis : null;
+    const synth =
+      'speechSynthesis' in window ? window.speechSynthesis : null;
     let utterance = null;
 
     const cancelSpeech = () => {
@@ -311,7 +484,10 @@
 
     const readPage = () => {
       if (!synth) {
-        MyApp.showToast('Leitura de tela não suportada neste navegador.', 'error');
+        MyApp.showToast(
+          'Leitura de tela não suportada neste navegador.',
+          'error'
+        );
         return;
       }
 
@@ -321,8 +497,11 @@
         return;
       }
 
-      const main = $('#conteudo') || document.querySelector('main') || document.body;
-      const text = (main.innerText || '').trim().replace(/\s+/g, ' ');
+      const main =
+        $('#conteudo') || document.querySelector('main') || document.body;
+      const text = (main.innerText || '')
+        .trim()
+        .replace(/\s+/g, ' ');
       if (!text) return;
 
       utterance = new SpeechSynthesisUtterance(text);
@@ -351,7 +530,9 @@
           applyState();
           saveState();
           MyApp.showToast(
-            state.highContrast ? 'Alto contraste ativado.' : 'Alto contraste desativado.',
+            state.highContrast
+              ? 'Alto contraste ativado.'
+              : 'Alto contraste desativado.',
             'info'
           );
           break;
@@ -360,7 +541,9 @@
           applyState();
           saveState();
           MyApp.showToast(
-            state.reduceMotion ? 'Animações reduzidas.' : 'Animações restauradas.',
+            state.reduceMotion
+              ? 'Animações reduzidas.'
+              : 'Animações restauradas.',
             'info'
           );
           break;
@@ -374,7 +557,10 @@
           state.reduceMotion = false;
           applyState();
           saveState();
-          MyApp.showToast('Configurações de acessibilidade resetadas.', 'info');
+          MyApp.showToast(
+            'Configurações de acessibilidade resetadas.',
+            'info'
+          );
           break;
         default:
           break;
@@ -462,7 +648,10 @@
     const btn = $('#btnTop');
     if (!btn) return;
     const toggle = () =>
-      btn.classList.toggle('show', window.scrollY > MyApp.config.scrollTopThreshold);
+      btn.classList.toggle(
+        'show',
+        window.scrollY > MyApp.config.scrollTopThreshold
+      );
     on(window, 'scroll', toggle, { passive: true });
     toggle();
     on(btn, 'click', (e) => {
@@ -470,6 +659,7 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   };
+
   /* ========== Prefetch on hover ========== */
   MyApp.prefetch = () => {
     $$('a[href$=".html"]').forEach((a) => {
@@ -489,9 +679,17 @@
 
   /* Init */
   document.addEventListener('DOMContentLoaded', () => {
+    // 🔥 Ativa o preloader (resolve o carregamento infinito)
+    MyApp.initPreloader();
+
+    // Segurança
+    MyApp.Security.enforceHTTPS();
     MyApp.Security.hardenLinks();
     MyApp.Security.frameBusting();
+    MyApp.Security.lockConsole();
+    MyApp.Security.warnInlineHandlers();
 
+    // UI/UX
     MyApp.initMenu();
     MyApp.initSmoothScroll();
     MyApp.initLazy();
