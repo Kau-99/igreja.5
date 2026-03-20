@@ -86,6 +86,7 @@
 
   MyApp.initSmoothScroll = () => {
     $$('a[href^="#"]').forEach((link) => {
+      if(link.classList.contains('open-ministry-modal')) return; // ignora as modais
       on(link, 'click', (e) => {
         const target = $(link.getAttribute('href'));
         if (!target) return;
@@ -178,6 +179,67 @@
     });
   };
 
+  /* ========== MODAL DINÂMICA (MINISTÉRIOS) ========== */
+  MyApp.initMinistryModals = () => {
+    const cards = $$('.card-min');
+    if (!cards.length) return; // Se não houver cards, nem cria o código
+
+    // 1. Constrói o HTML da Modal e injeta no Body
+    const overlay = document.createElement('div');
+    overlay.className = 'min-modal-overlay';
+    overlay.innerHTML = `
+      <div class="min-modal-content" role="dialog" aria-modal="true" aria-labelledby="min-modal-title">
+        <div class="min-modal-header">
+          <img id="min-modal-img" src="" alt="Imagem do Ministério" />
+          <button class="min-modal-close" aria-label="Fechar janela"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="min-modal-body">
+          <h3 id="min-modal-title">Título</h3>
+          <p id="min-modal-text">Texto</p>
+          <div class="text-end mt-4">
+            <button class="btn btn-primary btn-cta min-modal-btn-close">Fechar Aba</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    // 2. Seleciona as partes por ID para preenchimento rápido
+    const img = $('#min-modal-img', overlay);
+    const title = $('#min-modal-title', overlay);
+    const text = $('#min-modal-text', overlay);
+    const closeBtns = $$('.min-modal-close, .min-modal-btn-close', overlay);
+
+    // 3. Lógica de Fechar
+    const closeModal = () => {
+      overlay.classList.remove('open');
+      document.body.style.overflow = ''; // Volta o scroll do site
+    };
+
+    // 4. Lógica de Abrir
+    cards.forEach(card => {
+      const btn = $('.open-ministry-modal', card);
+      if (btn) {
+        on(btn, 'click', (e) => {
+          e.preventDefault();
+          // Pega os dados escondidos no Card HTML
+          title.textContent = card.dataset.title;
+          text.textContent = card.dataset.text;
+          img.src = card.dataset.img;
+          
+          // Mostra a tela
+          overlay.classList.add('open');
+          document.body.style.overflow = 'hidden'; // Trava o fundo
+        });
+      }
+    });
+
+    // Eventos para fechar (Clica no X, no botão inferior, fora da caixa ou tecla ESC)
+    closeBtns.forEach(btn => on(btn, 'click', closeModal));
+    on(overlay, 'click', (e) => { if (e.target === overlay) closeModal(); });
+    on(document, 'keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal(); });
+  };
+
   /* ========== Sistema Dinâmico de Eventos (JSON) ========== */
   MyApp.initEventos = async () => {
     const grid = $('#eventos-grid');
@@ -235,7 +297,7 @@
   /* ========== Sistema Dinâmico de Sermões (JSON) ========== */
   MyApp.initSermoes = async () => {
     const grid = $('#sermoes-grid');
-    if (!grid) return; // Só executa na página inicial
+    if (!grid) return; 
 
     try {
       const resposta = await fetch('sermoes.json');
@@ -251,7 +313,6 @@
       sermoes.forEach((sermao, index) => {
         const delay = (index % 3) * 120;
         
-        // Regra do Botão de Áudio
         const btnAudio = sermao.audioDisponivel
           ? `<a class="btn btn-outline-primary btn-sm" href="${sermao.linkAudio}" target="_blank" rel="noopener noreferrer">Ouvir áudio</a>`
           : `<a class="btn btn-outline-primary btn-sm" href="#" aria-disabled="true" style="pointer-events:none;">Ouvir (em breve)</a>`;
@@ -330,8 +391,9 @@
     MyApp.initReveal(); 
     MyApp.initTimeline(); 
     MyApp.initContactForm(); 
+    MyApp.initMinistryModals(); // <--- INICIA AS JANELAS FLUTUANTES AQUI
     MyApp.initEventos(); 
-    MyApp.initSermoes(); // <--- CHAMA OS SERMÕES AQUI
+    MyApp.initSermoes(); 
     MyApp.initTop(); 
     MyApp.initAccessibility(); 
     MyApp.prefetch();
