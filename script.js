@@ -86,7 +86,7 @@
 
   MyApp.initSmoothScroll = () => {
     $$('a[href^="#"]').forEach((link) => {
-      if(link.classList.contains('open-ministry-modal')) return; // ignora as modais
+      if(link.classList.contains('open-ministry-modal')) return;
       on(link, 'click', (e) => {
         const target = $(link.getAttribute('href'));
         if (!target) return;
@@ -179,12 +179,10 @@
     });
   };
 
-  /* ========== MODAL DINÂMICA (MINISTÉRIOS) ========== */
   MyApp.initMinistryModals = () => {
     const cards = $$('.card-min');
-    if (!cards.length) return; // Se não houver cards, nem cria o código
+    if (!cards.length) return; 
 
-    // 1. Constrói o HTML da Modal e injeta no Body
     const overlay = document.createElement('div');
     overlay.className = 'min-modal-overlay';
     overlay.innerHTML = `
@@ -204,43 +202,36 @@
     `;
     document.body.appendChild(overlay);
 
-    // 2. Seleciona as partes por ID para preenchimento rápido
     const img = $('#min-modal-img', overlay);
     const title = $('#min-modal-title', overlay);
     const text = $('#min-modal-text', overlay);
     const closeBtns = $$('.min-modal-close, .min-modal-btn-close', overlay);
 
-    // 3. Lógica de Fechar
     const closeModal = () => {
       overlay.classList.remove('open');
-      document.body.style.overflow = ''; // Volta o scroll do site
+      document.body.style.overflow = ''; 
     };
 
-    // 4. Lógica de Abrir
     cards.forEach(card => {
       const btn = $('.open-ministry-modal', card);
       if (btn) {
         on(btn, 'click', (e) => {
           e.preventDefault();
-          // Pega os dados escondidos no Card HTML
           title.textContent = card.dataset.title;
           text.textContent = card.dataset.text;
           img.src = card.dataset.img;
           
-          // Mostra a tela
           overlay.classList.add('open');
-          document.body.style.overflow = 'hidden'; // Trava o fundo
+          document.body.style.overflow = 'hidden'; 
         });
       }
     });
 
-    // Eventos para fechar (Clica no X, no botão inferior, fora da caixa ou tecla ESC)
     closeBtns.forEach(btn => on(btn, 'click', closeModal));
     on(overlay, 'click', (e) => { if (e.target === overlay) closeModal(); });
     on(document, 'keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal(); });
   };
 
-  /* ========== Sistema Dinâmico de Eventos (JSON) ========== */
   MyApp.initEventos = async () => {
     const grid = $('#eventos-grid');
     const select = $('#filtro-eventos');
@@ -294,7 +285,6 @@
     }
   };
 
-  /* ========== Sistema Dinâmico de Sermões (JSON) ========== */
   MyApp.initSermoes = async () => {
     const grid = $('#sermoes-grid');
     if (!grid) return; 
@@ -337,6 +327,28 @@
     } catch (erro) {
       MyApp.log('Erro ao buscar JSON de sermões:', erro);
       grid.innerHTML = '<div class="col-12 text-center py-4 text-danger">Não foi possível carregar os sermões.</div>';
+    }
+  };
+
+  /* ========== AVISO INTELIGENTE DE CULTO EM DIRETO ========== */
+  MyApp.initLiveBanner = () => {
+    const agora = new Date();
+    const diaDaSemana = agora.getDay();
+    const horaAtual = agora.getHours();
+
+    if (diaDaSemana === 4 && horaAtual >= 21 && horaAtual < 22) {
+      const banner = document.createElement('a');
+      banner.href = "https://www.youtube.com/@advicof"; 
+      banner.target = "_blank";
+      banner.rel = "noopener noreferrer";
+      banner.className = "live-banner";
+      
+      banner.innerHTML = `
+        <span class="live-dot"></span>
+        <span><strong>ESTAMOS EM LIVE:</strong> Clique aqui para assistir ao culto de hoje!</span>
+      `;
+      
+      document.body.insertBefore(banner, document.body.firstChild);
     }
   };
 
@@ -391,9 +403,10 @@
     MyApp.initReveal(); 
     MyApp.initTimeline(); 
     MyApp.initContactForm(); 
-    MyApp.initMinistryModals(); // <--- INICIA AS JANELAS FLUTUANTES AQUI
+    MyApp.initMinistryModals(); 
     MyApp.initEventos(); 
     MyApp.initSermoes(); 
+    MyApp.initLiveBanner(); // <--- INICIA O BANNER INTELIGENTE AQUI
     MyApp.initTop(); 
     MyApp.initAccessibility(); 
     MyApp.prefetch();
@@ -404,7 +417,7 @@
     // Registra o Service Worker (PWA)
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
-        .then(() => MyApp.log('Service Worker registrado com sucesso!'))
+        .then(() => MyApp.log('Service Worker registado com sucesso!'))
         .catch((err) => MyApp.log('Erro no Service Worker:', err));
     }
   });
