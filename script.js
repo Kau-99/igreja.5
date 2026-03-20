@@ -287,6 +287,11 @@
   MyApp.prefetch = () => { $$('a[href$=".html"]').forEach((a) => { a.addEventListener('mouseenter', () => { const l = document.createElement('link'); l.rel = 'prefetch'; l.as = 'document'; l.href = a.getAttribute('href'); document.head.appendChild(l); }, { once: true, passive: true }); }); };
 
   document.addEventListener('DOMContentLoaded', () => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => MyApp.log('Service Worker registrado com sucesso!'))
+        .catch((err) => MyApp.log('Erro no Service Worker:', err));
+    }
     MyApp.initPreloader(); MyApp.Security.enforceHTTPS(); MyApp.Security.hardenLinks(); MyApp.Security.frameBusting(); MyApp.Security.lockConsole(); MyApp.Security.warnInlineHandlers();
     MyApp.initMenu(); MyApp.initSmoothScroll(); MyApp.initLazy(); MyApp.initScrollSpy(); MyApp.initReveal(); MyApp.initTimeline(); MyApp.initContactForm(); MyApp.initEventos(); MyApp.initTop(); MyApp.initAccessibility(); MyApp.prefetch();
     const map = document.querySelector('.mapa-wrapper iframe[data-src]'); if (map) { const io = new IntersectionObserver((entries, obs) => { entries.forEach((en) => { if (!en.isIntersecting) return; map.src = map.dataset.src; map.removeAttribute('data-src'); obs.unobserve(map); }); }); io.observe(map); }
