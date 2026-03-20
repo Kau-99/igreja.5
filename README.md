@@ -1,165 +1,62 @@
 ADVIC — Site Institucional
-HTML5 · CSS3 · JavaScript (ES6+) · Bootstrap 5
+Stack: HTML5 · CSS3 · Vanilla JavaScript (ES6+) · Bootstrap 5 · PWA (Service Workers)
 
-Construção completa do site da ADVIC — Assembleia de Deus de Vila de Cava com foco em design clean, elegante e moderno, além de alta performance, segurança e acessibilidade.
-Inclui quatro páginas principais, folha de estilos global, script modular, pacote de favicons e manifesto (PWA).
+Construção completa do site da ADVIC (Assembleia de Deus de Vila de Cava). Este projeto foi desenvolvido com foco em alta performance, acessibilidade nativa, segurança e facilidade de manutenção.
 
- Visão Geral
+A arquitetura do projeto evoluiu para um modelo dinâmico (Headless-lite), permitindo que a equipe da igreja atualize conteúdos frequentemente (eventos e pregações) através de arquivos JSON, sem necessidade de alterar o código HTML ou possuir um banco de dados complexo.
 
-Minimalista e profissional: espaço em branco, hierarquia clara, microinterações sutis.
+Visão Geral e Arquitetura
+O front-end foi projetado para ser leve e não depender de frameworks JavaScript pesados (como React ou Angular), utilizando apenas Vanilla JS modularizado.
 
-Tipografia: Lora (títulos) + Inter (corpo).
+Dinamismo via Fetch API: As páginas de Início e Eventos consomem dados estruturados de sermoes.json e eventos.json. O JavaScript renderiza os componentes na tela dinamicamente.
 
-Paleta: ciano/teal como cor primária (inspirada na arte de referência), fundos suaves e texto chumbo.
 
-Mobile-first com Bootstrap 5 e customizações para não “parecer template”.
+Progressive Web App (PWA): Implementação de Service Worker (sw.js) e site.webmanifest. O site faz cache de assets (HTML, CSS, JS, imagens), permitindo carregamento quase instantâneo e navegação offline básica, além de poder ser "instalado" em dispositivos móveis.
 
-Redes sociais oficiais: Instagram, Facebook, YouTube.
+Tipografia Fluida e UI Moderna: Utilização da função clamp() no CSS para escalonamento perfeito de fontes em qualquer resolução. O header conta com efeito Glassmorphism (backdrop-filter) para uma interface mais sofisticada.
 
-🗂️ Conteúdo do Repositório
+SEO Avançado: Implementação de marcação de dados estruturados (JSON-LD / Schema.org) do tipo Church, facilitando a indexação inteligente pelo motor de busca do Google.
 
-index.html
+Funcionalidades Técnicas (script.js)
+O arquivo principal de script opera sob um namespace único (MyApp) para isolamento de escopo e está dividido em módulos funcionais:
 
-sobre.html
+Segurança: Hardening de links externos (rel="noopener noreferrer" forçado em runtime), frame-busting (proteção contra clickjacking), sanitização de URLs e bloqueio do console em ambiente de produção.
 
-eventos.html
+Performance (Lazy Load & Prefetch): Uso extensivo da API IntersectionObserver para adiar o carregamento de imagens (data-src), iframes (como o mapa do Google) e background-images (data-lazy). Links internos recebem prefetch no evento de mouseenter.
 
-contato.html
+Formulários Assíncronos: O formulário de contato foi integrado ao Formspree via AJAX (Fetch API). Possui validação progressiva nativa, feedback visual de envio e proteção Honeypot contra bots, eliminando o recarregamento da página.
 
-style.css
+Acessibilidade (a11y): Painel de acessibilidade customizado controlado via teclado ou mouse. Inclui controle de contraste, escala de fonte, desativação de animações (prefers-reduced-motion) e integração com a Web Speech API para leitura de tela nativa. O estado é persistido no localStorage.
 
-script.js
+Estrutura do Repositório
+index.html: Home page dinâmica com consumo de sermões recentes via JSON.
 
-logo-advic-512.png
+sobre.html: História, linha do tempo (timeline on-scroll) e liderança.
 
-favicon.ico, favicon-16x16.png, favicon-32x32.png, favicon-48x48.png
+eventos.html: Listagem de eventos gerada via JSON com filtro interativo de categorias.
 
-apple-touch-icon.png, android-chrome-192x192.png, android-chrome-512x512.png
+contato.html: Formulário integrado ao Formspree e mapa embutido.
 
-site.webmanifest
+privacidade.html: Política de dados e LGPD.
 
-Importante: os ícones e o arquivo site.webmanifest ficam na raiz do projeto.
+style.css: Tokens de design (variáveis CSS), tipografia fluida e utilitários.
 
- Arquitetura do Front-End (script.js)
+script.js: Core da aplicação (PWA, segurança, lazy load, renderização JSON).
 
-Namespace único: MyApp (IIFE) — isola o escopo global e organiza módulos.
+sw.js: Service Worker responsável pelo cache e funcionamento offline.
 
-Objetivos técnicos
+eventos.json / sermoes.json: "Bancos de dados" locais para fácil atualização de conteúdo.
 
-Segurança: sanitização de href, rel="noopener noreferrer" em externos, frame-busting, menos logs em produção.
 
-Performance: lazy de imagens/iframes/backgrounds, prefetch em hover, eventos passivos, requestIdleCallback (com polyfill).
+site.webmanifest e pacotes de ícones (favicon, apple-touch-icon, etc): Configurações para instalação como app mobile.
 
-Acessibilidade: navegação por teclado, aria-*, respeito a prefers-reduced-motion.
+Fluxo de Atualização de Conteúdo
+Para a equipe de mídia/secretaria atualizar o site, não é necessário conhecimento em HTML:
 
-Resiliência: fallbacks para APIs modernas; Low-End Mode para devices modestos.
+Novos Eventos: Editar o arquivo eventos.json, adicionando um novo bloco com título, data, imagem e link do calendário. O JavaScript cuidará da montagem do card e da paginação/filtro.
 
-UX moderna: menu hambúrguer acessível, smooth-scroll, animações on-scroll, botão “voltar ao topo”.
+Novos Sermões: Editar o arquivo sermoes.json adicionando o link do YouTube e do áudio (se houver). O sistema identificará automaticamente a disponibilidade de mídia para renderizar o botão correto.
 
-Módulos
-
-security → hardening de links, anti-tabnabbing, frame-busting, controle de logs.
-
-perf → eventos passivos, preconnect opcional, prefetch on-hover, lazy loader (inclui backgrounds via data-lazy).
-
-ux → hambúrguer com aria-expanded, smooth-scroll, botão Top, animações via IntersectionObserver ([data-animate] e data-delay).
-
-forms → validação progressiva no contato (live + submit), feedback acessível, honeypot anti-bot.
-
-boot → detecção de Low-End (Save Data, deviceMemory, hardwareConcurrency, prefers-reduced-motion) e inicialização.
-
- Melhorias Entregues Nesta Versão
-
-Favicons + site.webmanifest: pronto para atalho em iOS/Android e cor de tema.
-
-Logo responsiva (sem achatamento): usar logo-advic-512.png + apenas altura no <img>; a largura fica automática (regra no CSS).
-
-Menu hambúrguer acessível (mobile), com estados aria.
-
-Animações on-scroll discretas com IntersectionObserver.
-
-Formulário de contato com validação em tempo real e em envio.
-
-Smooth-scroll em âncoras internas.
-
-Lazy loading avançado para imagens, iframes e backgrounds.
-
-Prefetch de rotas internas ao pairar o mouse.
-
-Low-End Mode para reduzir animações/custos.
-
-Eventos passivos (passive: true) para rolagem fluida.
-
-Hardening de links externos e sanitização de URLs.
-
- Integrações HTML/CSS — O que conferir
-
-Cabeçalho (<head>): referências aos favicons e site.webmanifest; theme-color configurada.
-
-Logo: logo-advic-512.png em header/footer com classe que define altura; largura automática para manter proporção.
-
-Lazy assets: imagens/iframes com data-src; backgrounds com data-lazy.
-
-Animações: elementos marcados com [data-animate] e (opcional) data-delay.
-
-Formulário: campos obrigatórios, mensagens acessíveis e honeypot.
-
- Checklist Rápido de QA
-
-Páginas index, sobre, eventos, contato abrem sem erros.
-
-Manifesto e ícones reconhecidos no navegador (Aba Application → Manifest).
-
-Logo não distorce em header/rodapé.
-
-Lazy: imagens e mapa carregam só quando entram em tela.
-
-Prefetch: pairar em links internos aquece a navegação.
-
-Formulário: validação live + submit; navegação por teclado OK.
-
-Links externos: rel="noopener noreferrer".
-
-Site não renderiza dentro de iframes de terceiros.
-
- Rodando Localmente (resumo)
-
-Abrir index.html diretamente no navegador ou
-
-Executar um servidor local simples (Python/Node) para testar rotas e prefetch.
-
- Publicação no GitHub Pages (guia curto)
-
-Adicionar/atualizar os arquivos (incluindo favicons, site.webmanifest, logo-advic-512.png, HTMLs, style.css, script.js, README.md).
-
-Commitar com mensagem objetiva e enviar para a sua branch principal.
-
-No GitHub → Settings → Pages → Deploy from a branch → Branch main e Folder / (root) → Save.
-
-A URL do site aparece nas Settings do Pages.
-
-(Opcional) Configurar domínio customizado (CNAME) e Enforce HTTPS.
-
- Recomendações de Segurança no Host
-
-CSP (Content Security Policy) adequada ao projeto.
-
-frame-ancestors (ou X-Frame-Options) para impedir clickjacking.
-
-Referrer-Policy e X-Content-Type-Options.
-
-🗺️ Roadmap Sugerido
-
-SEO: schema.org (Organization/Event), sitemap.xml, robots.txt.
-
-Sermões: dados em JSON + render estático/cliente.
-
-i18n: estrutura simples de tradução (pt/en).
-
-Form backend: Formspark/Netlify/Cloudflare + e-mail transacional.
-
-CI: GitHub Actions (lint de HTML/CSS/links + orçamentos Lighthouse).
-
-📄 Licença
-
-Uso autorizado para o site da ADVIC. Em reutilizações, verifique direitos de imagens e fontes.
+Deploy e Configuração Local
+Execução Local:
+Devido às requisições da Fetch API (arquivos JSON) e do Service Worker, o projeto precisa rodar sob um servidor local (ex: extensão Live Server do VS Code, ou python -m http.server). Abrir o arquivo HTML diretamente (file:///) causará bloqueio de CORS na leitura dos dados.

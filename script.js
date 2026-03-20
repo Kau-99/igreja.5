@@ -182,37 +182,28 @@
   MyApp.initEventos = async () => {
     const grid = $('#eventos-grid');
     const select = $('#filtro-eventos');
-    if (!grid) return; // Só executa na página eventos.html
+    if (!grid) return; 
 
     try {
       const resposta = await fetch('eventos.json');
       if (!resposta.ok) throw new Error('Falha ao carregar eventos');
       const eventos = await resposta.json();
-
-      // Limpa o "Carregando..."
       grid.innerHTML = '';
 
-      // Se não tiver evento
       if (eventos.length === 0) {
         grid.innerHTML = '<div class="col-12 text-center py-5 text-muted">Nenhum evento programado no momento.</div>';
         return;
       }
 
-      // Monta o HTML para cada evento do JSON
       eventos.forEach((evento, index) => {
-        // Aplica um pequeno delay para a animação em cascata
         const delay = (index % 3) * 80;
-
         const htmlEvento = `
           <div class="col-12 col-md-6 col-lg-4 evento-item" data-animate="fade-up" data-delay="${delay}" data-tipo="${evento.tipo}">
             <article class="card-event h-100 d-flex flex-column">
               <img class="lazy" data-src="${evento.imagem}" alt="${evento.titulo}" />
               <div class="p-3 d-flex flex-column flex-grow-1">
                 <h3 class="mb-1">${evento.titulo}</h3>
-                <p class="text-muted mb-1">
-                  <strong>Data:</strong>
-                  <time datetime="${evento.dataISO}">${evento.dataExibicao}</time>
-                </p>
+                <p class="text-muted mb-1"><strong>Data:</strong> <time datetime="${evento.dataISO}">${evento.dataExibicao}</time></p>
                 <p class="mb-3 flex-grow-1">${evento.descricao}</p>
                 <div class="d-flex gap-2 mt-auto">
                   <a class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer" href="${evento.linkCalendario}">Google Calendar</a>
@@ -225,26 +216,66 @@
         grid.insertAdjacentHTML('beforeend', htmlEvento);
       });
 
-      // Refaz o Lazy Load e as Animações para os novos elementos que acabaram de ser injetados!
       MyApp.initLazy();
       MyApp.initReveal();
 
-      // Lógica do filtro "Todos, Louvor, Família, etc."
       if (select) {
         on(select, 'change', () => {
           const filtro = select.value;
           const cards = $$('.evento-item', grid);
-          cards.forEach((card) => {
-            const match = filtro === 'todos' || card.dataset.tipo === filtro;
-            // Se combinou mostra, se não oculta
-            card.style.display = match ? '' : 'none';
-          });
+          cards.forEach((card) => { card.style.display = (filtro === 'todos' || card.dataset.tipo === filtro) ? '' : 'none'; });
         });
       }
-
     } catch (erro) {
       MyApp.log('Erro ao buscar JSON:', erro);
-      grid.innerHTML = '<div class="col-12 text-center py-5 text-danger"><i class="fa-solid fa-triangle-exclamation fs-1 mb-3"></i><br/>Não foi possível carregar a programação.<br/>Tente recarregar a página.</div>';
+      grid.innerHTML = '<div class="col-12 text-center py-5 text-danger">Não foi possível carregar a programação.</div>';
+    }
+  };
+
+  /* ========== Sistema Dinâmico de Sermões (JSON) ========== */
+  MyApp.initSermoes = async () => {
+    const grid = $('#sermoes-grid');
+    if (!grid) return; // Só executa na página inicial
+
+    try {
+      const resposta = await fetch('sermoes.json');
+      if (!resposta.ok) throw new Error('Falha ao carregar sermões');
+      const sermoes = await resposta.json();
+      grid.innerHTML = '';
+
+      if (sermoes.length === 0) {
+        grid.innerHTML = '<div class="col-12 text-center py-4 text-muted">Nenhum sermão recente disponível.</div>';
+        return;
+      }
+
+      sermoes.forEach((sermao, index) => {
+        const delay = (index % 3) * 120;
+        
+        // Regra do Botão de Áudio
+        const btnAudio = sermao.audioDisponivel
+          ? `<a class="btn btn-outline-primary btn-sm" href="${sermao.linkAudio}" target="_blank" rel="noopener noreferrer">Ouvir áudio</a>`
+          : `<a class="btn btn-outline-primary btn-sm" href="#" aria-disabled="true" style="pointer-events:none;">Ouvir (em breve)</a>`;
+
+        const htmlSermao = `
+          <div class="col-12 col-md-4" data-animate="fade-up" data-delay="${delay}">
+            <article class="sermon h-100 d-flex flex-column">
+              <h3 class="mb-2">${sermao.titulo}</h3>
+              <p class="text-muted mb-3 flex-grow-1">${sermao.pregadorData}</p>
+              <div class="d-flex gap-2 mt-auto">
+                <a class="btn btn-primary btn-sm" href="${sermao.linkVideo}" target="_blank" rel="noopener noreferrer">Assistir</a>
+                ${btnAudio}
+              </div>
+            </article>
+          </div>
+        `;
+        grid.insertAdjacentHTML('beforeend', htmlSermao);
+      });
+
+      MyApp.initReveal();
+
+    } catch (erro) {
+      MyApp.log('Erro ao buscar JSON de sermões:', erro);
+      grid.innerHTML = '<div class="col-12 text-center py-4 text-danger">Não foi possível carregar os sermões.</div>';
     }
   };
 
@@ -286,14 +317,33 @@
 
   MyApp.prefetch = () => { $$('a[href$=".html"]').forEach((a) => { a.addEventListener('mouseenter', () => { const l = document.createElement('link'); l.rel = 'prefetch'; l.as = 'document'; l.href = a.getAttribute('href'); document.head.appendChild(l); }, { once: true, passive: true }); }); };
 
+  /* Init */
   document.addEventListener('DOMContentLoaded', () => {
+    MyApp.initPreloader(); 
+    MyApp.Security.enforceHTTPS(); MyApp.Security.hardenLinks(); MyApp.Security.frameBusting(); MyApp.Security.lockConsole(); MyApp.Security.warnInlineHandlers();
+    
+    // Inicia Funções
+    MyApp.initMenu(); 
+    MyApp.initSmoothScroll(); 
+    MyApp.initLazy(); 
+    MyApp.initScrollSpy(); 
+    MyApp.initReveal(); 
+    MyApp.initTimeline(); 
+    MyApp.initContactForm(); 
+    MyApp.initEventos(); 
+    MyApp.initSermoes(); // <--- CHAMA OS SERMÕES AQUI
+    MyApp.initTop(); 
+    MyApp.initAccessibility(); 
+    MyApp.prefetch();
+    
+    // Iframe Mapa
+    const map = document.querySelector('.mapa-wrapper iframe[data-src]'); if (map) { const io = new IntersectionObserver((entries, obs) => { entries.forEach((en) => { if (!en.isIntersecting) return; map.src = map.dataset.src; map.removeAttribute('data-src'); obs.unobserve(map); }); }); io.observe(map); }
+
+    // Registra o Service Worker (PWA)
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
         .then(() => MyApp.log('Service Worker registrado com sucesso!'))
         .catch((err) => MyApp.log('Erro no Service Worker:', err));
     }
-    MyApp.initPreloader(); MyApp.Security.enforceHTTPS(); MyApp.Security.hardenLinks(); MyApp.Security.frameBusting(); MyApp.Security.lockConsole(); MyApp.Security.warnInlineHandlers();
-    MyApp.initMenu(); MyApp.initSmoothScroll(); MyApp.initLazy(); MyApp.initScrollSpy(); MyApp.initReveal(); MyApp.initTimeline(); MyApp.initContactForm(); MyApp.initEventos(); MyApp.initTop(); MyApp.initAccessibility(); MyApp.prefetch();
-    const map = document.querySelector('.mapa-wrapper iframe[data-src]'); if (map) { const io = new IntersectionObserver((entries, obs) => { entries.forEach((en) => { if (!en.isIntersecting) return; map.src = map.dataset.src; map.removeAttribute('data-src'); obs.unobserve(map); }); }); io.observe(map); }
   });
 })();

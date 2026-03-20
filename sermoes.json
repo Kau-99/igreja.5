@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "titulo": "Esperança que Não Falha",
+    "pregadorData": "Pr. Convidado — 12/09",
+    "linkVideo": "https://youtube.com/@advicviladecava",
+    "linkAudio": "#",
+    "audioDisponivel": false
+  },
+  {
+    "id": "2",
+    "titulo": "Vivendo em Comunhão",
+    "pregadorData": "Pr. Local — 05/09",
+    "linkVideo": "https://youtube.com/@advicviladecava",
+    "linkAudio": "#",
+    "audioDisponivel": false
+  },
+  {
+    "id": "3",
+    "titulo": "Servir com Excelência",
+    "pregadorData": "Miss. Madalena — 29/08",
+    "linkVideo": "https://youtube.com/@advicviladecava",
+    "linkAudio": "https://spotify.com/...",
+    "audioDisponivel": true
+  }
+]
