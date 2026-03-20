@@ -330,13 +330,12 @@
     }
   };
 
-  /* ========== AVISO INTELIGENTE DE CULTO EM DIRETO ========== */
   MyApp.initLiveBanner = () => {
     const agora = new Date();
-    const diaDaSemana = agora.getDay();
+    const diaDaSemana = agora.getDay(); 
     const horaAtual = agora.getHours();
 
-    if (diaDaSemana === 4 && horaAtual >= 21 && horaAtual < 22) {
+    if (diaDaSemana === 0 && horaAtual >= 18 && horaAtual < 20) {
       const banner = document.createElement('a');
       banner.href = "https://www.youtube.com/@advicof"; 
       banner.target = "_blank";
@@ -345,11 +344,47 @@
       
       banner.innerHTML = `
         <span class="live-dot"></span>
-        <span><strong>ESTAMOS EM LIVE:</strong> Clique aqui para assistir ao culto de hoje!</span>
+        <span><strong>ESTAMOS EM DIRETO:</strong> Clique aqui para assistir ao culto de hoje!</span>
       `;
       
       document.body.insertBefore(banner, document.body.firstChild);
     }
+  };
+
+  /* ========== NOVO: VERSÍCULO DA SEMANA ========== */
+  MyApp.initVersiculoDaSemana = () => {
+    const verseText = $('#verse-text');
+    const verseRef = $('#verse-ref');
+    
+    // Só executa se estiver na página inicial (onde existem esses IDs)
+    if (!verseText || !verseRef) return;
+
+    // Lista de versículos de meditação
+    const versiculos = [
+      { texto: "O Senhor é o meu pastor; nada me faltará.", ref: "Salmos 23:1" },
+      { texto: "Entregue o seu caminho ao Senhor; confie nele, e ele agirá.", ref: "Salmos 37:5" },
+      { texto: "Tudo posso naquele que me fortalece.", ref: "Filipenses 4:13" },
+      { texto: "Deixo-vos a paz, a minha paz vos dou; não vo-la dou como o mundo a dá.", ref: "João 14:27" },
+      { texto: "Porque sou eu que conheço os planos que tenho para vocês, diz o Senhor, planos de fazê-los prosperar.", ref: "Jeremias 29:11" },
+      { texto: "Mas os que esperam no Senhor renovarão as suas forças; subirão com asas como águias.", ref: "Isaías 40:31" },
+      { texto: "O Senhor é a minha luz e a minha salvação; de quem terei medo?", ref: "Salmos 27:1" },
+      { texto: "Vinde a mim, todos os que estais cansados e oprimidos, e eu vos aliviarei.", ref: "Mateus 11:28" },
+      { texto: "Lâmpada para os meus pés é tua palavra, e luz para o meu caminho.", ref: "Salmos 119:105" },
+      { texto: "Sejam fortes e corajosos. Não tenham medo nem fiquem apavorados... pois o Senhor os acompanhará.", ref: "Deuteronômio 31:6" }
+    ];
+
+    // Lógica para saber a semana atual do ano
+    const agora = new Date();
+    const inicioAno = new Date(agora.getFullYear(), 0, 1);
+    const diasPassados = Math.floor((agora - inicioAno) / (24 * 60 * 60 * 1000));
+    const semanaDoAno = Math.ceil((agora.getDay() + 1 + diasPassados) / 7);
+
+    // O resto da divisão determina o índice na lista (muda a cada 7 dias)
+    const indexSorteado = semanaDoAno % versiculos.length;
+
+    // Injeta na tela
+    verseText.textContent = `"${versiculos[indexSorteado].texto}"`;
+    verseRef.textContent = versiculos[indexSorteado].ref;
   };
 
   MyApp.initAccessibility = () => {
@@ -406,7 +441,8 @@
     MyApp.initMinistryModals(); 
     MyApp.initEventos(); 
     MyApp.initSermoes(); 
-    MyApp.initLiveBanner(); // <--- INICIA O BANNER INTELIGENTE AQUI
+    MyApp.initLiveBanner();
+    MyApp.initVersiculoDaSemana(); // <--- INICIA O VERSÍCULO DA SEMANA AQUI
     MyApp.initTop(); 
     MyApp.initAccessibility(); 
     MyApp.prefetch();
