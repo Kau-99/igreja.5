@@ -344,22 +344,20 @@
       
       banner.innerHTML = `
         <span class="live-dot"></span>
-        <span><strong>ESTAMOS EM DIRETO:</strong> Clique aqui para assistir ao culto de hoje!</span>
+        <span><strong>ESTAMOS EM LIVE:</strong> Clique aqui para assistir ao culto de hoje!</span>
       `;
       
       document.body.insertBefore(banner, document.body.firstChild);
     }
   };
 
-  /* ========== NOVO: VERSÍCULO DA SEMANA ========== */
+  /* ==========  VERSÍCULO DA SEMANA ========== */
   MyApp.initVersiculoDaSemana = () => {
     const verseText = $('#verse-text');
     const verseRef = $('#verse-ref');
     
-    // Só executa se estiver na página inicial (onde existem esses IDs)
     if (!verseText || !verseRef) return;
 
-    // Lista de versículos de meditação
     const versiculos = [
       { texto: "O Senhor é o meu pastor; nada me faltará.", ref: "Salmos 23:1" },
       { texto: "Entregue o seu caminho ao Senhor; confie nele, e ele agirá.", ref: "Salmos 37:5" },
@@ -387,33 +385,143 @@
     verseRef.textContent = versiculos[indexSorteado].ref;
   };
 
-  MyApp.initAccessibility = () => {
-    const btn = $('#btnA11y'), panel = $('#a11yPanel'); if (!btn || !panel) return;
-    const STORAGE_KEY = 'advic-a11y', closeBtn = panel.querySelector('[data-a11y-close]'), actions = panel.querySelectorAll('[data-a11y-action]');
-    let lastFocus = null; const baseState = { fontScale: 1, highContrast: false, reduceMotion: false };
-    const loadState = () => { try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? { ...baseState, ...JSON.parse(raw) } : { ...baseState }; } catch { return { ...baseState }; } };
-    const state = loadState(); const saveState = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {} };
-    const applyState = () => { document.body.style.fontSize = `${Math.round(state.fontScale * 100)}%`; document.body.classList.toggle('a11y-high-contrast', state.highContrast); document.body.classList.toggle('a11y-reduce-motion', state.reduceMotion); };
+ MyApp.initAccessibility = () => {
+    const btn = $('#btnA11y'), panel = $('#a11yPanel'); 
+    if (!btn || !panel) return;
+
+    const STORAGE_KEY = 'advic-a11y';
+    const closeBtn = panel.querySelector('[data-a11y-close]');
+    const actions = panel.querySelectorAll('[data-a11y-action]');
+    let lastFocus = null; 
+
+    // Novo estado base com as funções profissionais
+    const baseState = { 
+      fontScale: 1, 
+      highContrast: false, 
+      highlightLinks: false,
+      letterSpacing: false,
+      dyslexiaFont: false,
+      largeCursor: false,
+      reduceMotion: false 
+    };
+
+    const loadState = () => { 
+      try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? { ...baseState, ...JSON.parse(raw) } : { ...baseState }; } 
+      catch { return { ...baseState }; } 
+    };
+    
+    const state = loadState(); 
+    
+    const saveState = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {} };
+
+    // Aplica as classes no BODY e atualiza visualmente os botões
+    const applyState = () => { 
+      document.body.style.fontSize = `${Math.round(state.fontScale * 100)}%`; 
+      document.body.classList.toggle('a11y-high-contrast', state.highContrast); 
+      document.body.classList.toggle('a11y-highlight-links', state.highlightLinks); 
+      document.body.classList.toggle('a11y-letter-spacing', state.letterSpacing); 
+      document.body.classList.toggle('a11y-dyslexia', state.dyslexiaFont); 
+      document.body.classList.toggle('a11y-large-cursor', state.largeCursor); 
+      document.body.classList.toggle('a11y-reduce-motion', state.reduceMotion); 
+
+      // Feedback visual nos botões do painel
+      const toggleClass = (id, condition) => {
+        const el = $(id);
+        if(el) el.classList.toggle('active', condition);
+      };
+
+      toggleClass('#btn-a11y-contrast', state.highContrast);
+      toggleClass('#btn-a11y-links', state.highlightLinks);
+      toggleClass('#btn-a11y-spacing', state.letterSpacing);
+      toggleClass('#btn-a11y-dyslexia', state.dyslexiaFont);
+      toggleClass('#btn-a11y-cursor', state.largeCursor);
+    };
+
     applyState();
-    const openPanel = () => { panel.classList.add('open'); panel.setAttribute('aria-hidden', 'false'); btn.setAttribute('aria-expanded', 'true'); lastFocus = document.activeElement; const focusable = panel.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'); (focusable || panel).focus(); };
-    const closePanel = () => { panel.classList.remove('open'); panel.setAttribute('aria-hidden', 'true'); btn.setAttribute('aria-expanded', 'false'); if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus(); };
-    const synth = 'speechSynthesis' in window ? window.speechSynthesis : null; let utterance = null;
-    const cancelSpeech = () => { if (synth && synth.speaking) synth.cancel(); };
-    const readPage = () => { if (!synth) return MyApp.showToast('Leitura não suportada.', 'error'); if (synth.speaking) { cancelSpeech(); return MyApp.showToast('Leitura interrompida.', 'info'); } const text = (($('#conteudo') || document.body).innerText || '').trim().replace(/\s+/g, ' '); if (!text) return; utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'pt-BR'; synth.speak(utterance); MyApp.showToast('Lendo conteúdo…', 'info'); };
+
+    const openPanel = () => { 
+      panel.classList.add('open'); 
+      panel.setAttribute('aria-hidden', 'false'); 
+      btn.setAttribute('aria-expanded', 'true'); 
+      lastFocus = document.activeElement; 
+      const focusable = panel.querySelector('button'); 
+      if(focusable) focusable.focus(); 
+    };
+
+    const closePanel = () => { 
+      panel.classList.remove('open'); 
+      panel.setAttribute('aria-hidden', 'true'); 
+      btn.setAttribute('aria-expanded', 'false'); 
+      if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus(); 
+    };
+
+    const synth = 'speechSynthesis' in window ? window.speechSynthesis : null; 
+    let utterance = null;
+    const btnRead = $('#btn-a11y-read');
+
+    const cancelSpeech = () => { 
+      if (synth && synth.speaking) synth.cancel(); 
+      if (btnRead) btnRead.classList.remove('active');
+    };
+
+    const readPage = () => { 
+      if (!synth) return MyApp.showToast('Leitura não suportada no seu navegador.', 'error'); 
+      
+      if (synth.speaking) { 
+        cancelSpeech(); 
+        return MyApp.showToast('Leitura interrompida.', 'info'); 
+      } 
+      
+      const text = (($('#conteudo') || document.body).innerText || '').trim().replace(/\s+/g, ' '); 
+      if (!text) return; 
+      
+      utterance = new SpeechSynthesisUtterance(text); 
+      utterance.lang = 'pt-BR'; 
+      utterance.onend = () => { if(btnRead) btnRead.classList.remove('active'); };
+
+      if(btnRead) btnRead.classList.add('active');
+      synth.speak(utterance); 
+      MyApp.showToast('Lendo conteúdo em voz alta...', 'info'); 
+    };
+
     const handleAction = (action) => {
       switch (action) {
-        case 'font-inc': state.fontScale = Math.min(state.fontScale + 0.1, 1.4); applyState(); saveState(); break;
-        case 'font-dec': state.fontScale = Math.max(state.fontScale - 0.1, 0.9); applyState(); saveState(); break;
-        case 'toggle-contrast': state.highContrast = !state.highContrast; applyState(); saveState(); break;
-        case 'toggle-motion': state.reduceMotion = !state.reduceMotion; applyState(); saveState(); break;
-        case 'read-page': readPage(); break;
-        case 'reset': cancelSpeech(); state.fontScale = 1; state.highContrast = false; state.reduceMotion = false; applyState(); saveState(); break;
+        case 'font-inc': state.fontScale = Math.min(state.fontScale + 0.1, 1.5); break;
+        case 'font-dec': state.fontScale = Math.max(state.fontScale - 0.1, 0.9); break;
+        case 'toggle-contrast': state.highContrast = !state.highContrast; break;
+        case 'toggle-links': state.highlightLinks = !state.highlightLinks; break;
+        case 'toggle-spacing': state.letterSpacing = !state.letterSpacing; break;
+        case 'toggle-dyslexia': state.dyslexiaFont = !state.dyslexiaFont; break;
+        case 'toggle-cursor': state.largeCursor = !state.largeCursor; break;
+        case 'read-page': readPage(); return; // Sai para não disparar saveState à toa
+        case 'reset': 
+          cancelSpeech(); 
+          Object.assign(state, baseState); // Reseta tudo para os valores base
+          MyApp.showToast('Configurações redefinidas.', 'success');
+          break;
       }
+      applyState(); 
+      saveState(); 
     };
+
     on(btn, 'click', (e) => { e.preventDefault(); panel.classList.contains('open') ? closePanel() : openPanel(); });
     if (closeBtn) on(closeBtn, 'click', (e) => { e.preventDefault(); closePanel(); });
-    actions.forEach((btnAction) => { const a = btnAction.dataset.a11yAction; if (a) on(btnAction, 'click', () => handleAction(a)); });
-    on(document, 'keydown', (e) => { if (e.altKey && !e.shiftKey && !e.ctrlKey) { if (e.key === '1') { e.preventDefault(); openPanel(); } else if (e.key === '2') { e.preventDefault(); handleAction('toggle-contrast'); } else if (e.key === '3') { e.preventDefault(); handleAction('toggle-motion'); } else if (e.key === '4') { e.preventDefault(); handleAction('read-page'); } else if (e.key === '0') { e.preventDefault(); handleAction('reset'); } } if (e.key === 'Escape' && panel.classList.contains('open')) closePanel(); });
+    
+    actions.forEach((btnAction) => { 
+      const a = btnAction.dataset.a11yAction; 
+      if (a) on(btnAction, 'click', () => handleAction(a)); 
+    });
+
+    // Fechar ao clicar fora ou apertar ESC
+    on(document, 'click', (e) => {
+      if (panel.classList.contains('open') && !panel.contains(e.target) && !btn.contains(e.target)) {
+        closePanel();
+      }
+    });
+
+    on(document, 'keydown', (e) => { 
+      if (e.key === 'Escape' && panel.classList.contains('open')) closePanel(); 
+    });
   };
 
   MyApp.initTop = () => {

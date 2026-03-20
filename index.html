@@ -237,14 +237,40 @@
 
     <button id="btnA11y" class="accessibility-fab" aria-label="Abrir opções de acessibilidade" aria-haspopup="true" aria-controls="a11yPanel" aria-expanded="false"><i class="fa-solid fa-universal-access" aria-hidden="true"></i></button>
     <section id="a11yPanel" class="accessibility-panel" aria-label="Ferramentas de acessibilidade" aria-hidden="true" role="dialog">
-      <header class="a11y-panel-header"><span>Acessibilidade</span><button type="button" class="a11y-close" data-a11y-close aria-label="Fechar painel de acessibilidade">×</button></header>
+      <header class="a11y-panel-header">
+        <span><i class="fa-solid fa-universal-access me-2 text-primary"></i> Acessibilidade</span>
+        <button type="button" class="a11y-close" data-a11y-close aria-label="Fechar painel">×</button>
+      </header>
       <div class="a11y-panel-body">
-        <button type="button" class="a11y-btn" data-a11y-action="font-inc">Aumentar fonte<span>Ctrl + +</span></button>
-        <button type="button" class="a11y-btn" data-a11y-action="font-dec">Diminuir fonte<span>Ctrl + -</span></button>
-        <button type="button" class="a11y-btn" data-a11y-action="toggle-contrast">Alto contraste<span>Alt + 2</span></button>
-        <button type="button" class="a11y-btn" data-a11y-action="toggle-motion">Reduzir animações<span>Alt + 3</span></button>
-        <button type="button" class="a11y-btn" data-a11y-action="read-page">Leitura da página<span>Alt + 4</span></button>
-        <button type="button" class="a11y-btn" data-a11y-action="reset">Resetar acessibilidade<span>Alt + 0</span></button>
+        <div class="a11y-grid">
+          <button type="button" class="a11y-tool" data-a11y-action="font-inc" title="Aumentar texto">
+            <i class="fa-solid fa-magnifying-glass-plus"></i>Texto +
+          </button>
+          <button type="button" class="a11y-tool" data-a11y-action="font-dec" title="Diminuir texto">
+            <i class="fa-solid fa-magnifying-glass-minus"></i>Texto -
+          </button>
+          <button type="button" class="a11y-tool" data-a11y-action="toggle-contrast" id="btn-a11y-contrast">
+            <i class="fa-solid fa-circle-half-stroke"></i>Contraste
+          </button>
+          <button type="button" class="a11y-tool" data-a11y-action="toggle-links" id="btn-a11y-links">
+            <i class="fa-solid fa-link"></i>Destacar Links
+          </button>
+          <button type="button" class="a11y-tool" data-a11y-action="toggle-spacing" id="btn-a11y-spacing">
+            <i class="fa-solid fa-text-width"></i>Espaçamento
+          </button>
+          <button type="button" class="a11y-tool" data-a11y-action="toggle-dyslexia" id="btn-a11y-dyslexia">
+            <i class="fa-solid fa-font"></i>Dislexia
+          </button>
+          <button type="button" class="a11y-tool" data-a11y-action="toggle-cursor" id="btn-a11y-cursor">
+            <i class="fa-solid fa-arrow-pointer"></i>Cursor Maior
+          </button>
+          <button type="button" class="a11y-tool" data-a11y-action="read-page" id="btn-a11y-read">
+            <i class="fa-solid fa-volume-high"></i>Ler Página
+          </button>
+        </div>
+        <button type="button" class="a11y-reset-btn" data-a11y-action="reset">
+          <i class="fa-solid fa-rotate-right me-2"></i>Redefinir Configurações
+        </button>
       </div>
     </section>
 
