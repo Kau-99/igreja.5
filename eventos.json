@@ -1,0 +1,35 @@
+[
+  {
+    "id": "1",
+    "titulo": "Culto dos Jovens",
+    "tipo": "louvor",
+    "dataISO": "2026-11-15T19:00",
+    "dataExibicao": "15 Nov • 19h",
+    "descricao": "Adoração e Palavra para toda a família.",
+    "imagem": "imagens/evento1.jpg",
+    "linkCalendario": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Culto+dos+Jovens&dates=20261115T220000Z/20261115T230000Z&location=ADVIC",
+    "linkWhats": "https://wa.me/?text=Participe+do+Culto+dos+Jovens+na+ADVIC+dia+15/11+às+19h"
+  },
+  {
+    "id": "2",
+    "titulo": "Culto da Família",
+    "tipo": "familia",
+    "dataISO": "2026-11-22T19:00",
+    "dataExibicao": "22 Nov • 19h",
+    "descricao": "Ministrações voltadas para união e fortalecimento.",
+    "imagem": "imagens/evento2.jpg",
+    "linkCalendario": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Culto+da+Família&dates=20261122T220000Z/20261122T230000Z&location=ADVIC",
+    "linkWhats": "https://wa.me/?text=Culto+da+Família+na+ADVIC+dia+22/11+às+19h"
+  },
+  {
+    "id": "3",
+    "titulo": "Culto dos Varões",
+    "tipo": "culto",
+    "dataISO": "2026-11-29T18:00",
+    "dataExibicao": "29 Nov • 18h",
+    "descricao": "Celebração ao Senhor com toda a igreja.",
+    "imagem": "imagens/evento3.jpg",
+    "linkCalendario": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Culto+dos+Varões&dates=20261129T210000Z/20261129T220000Z&location=ADVIC",
+    "linkWhats": "https://wa.me/?text=Culto+dos+Varões+na+ADVIC+dia+29/11+às+18h"
+  }
+]
