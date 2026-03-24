@@ -1,273 +1,235 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Sobre Nós | ADVIC</title>
-    <meta name="description" content="História, crenças e liderança da Assembleia de Deus de Vila de Cava." />
 
-    <link rel="icon" type="image/x-icon" href="imagens/logo.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="imagens/logo.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="imagens/logo.png" />
-    <link rel="icon" type="image/png" sizes="48x48" href="imagens/logo.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="imagens/logo.png" />
-    <meta name="theme-color" content="#0f8c95" />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sobre Nós | ADVIC</title>
+  <meta name="description" content="História, crenças e liderança da Assembleia de Deus de Vila de Cava." />
 
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" /></noscript>
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" /></noscript>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  
-  <body>
-    <div id="preloader" class="preloader" aria-hidden="true">
-      <div class="preloader-inner" role="status" aria-live="polite">
-        <img src="imagens/logo.png" alt="Assembleia de Deus em Vila de Cava" class="preloader-logo" />
-        <div class="preloader-spinner"></div>
-        <p class="preloader-text">Carregando o site…</p>
-      </div>
+  <link rel="icon" type="image/x-icon" href="imagens/logo.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="imagens/logo.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="imagens/logo.png" />
+  <link rel="icon" type="image/png" sizes="48x48" href="imagens/logo.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="imagens/logo.png" />
+  <link rel="manifest" href="site.webmanifest" />
+  <meta name="theme-color" content="#0f8c95" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" as="style"
+    onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  </noscript>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" as="style"
+    onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  </noscript>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="preloader" class="preloader" aria-hidden="true">
+    <div class="preloader-inner" role="status" aria-live="polite">
+      <img src="imagens/logo.png" alt="Assembleia de Deus em Vila de Cava" class="preloader-logo" />
+      <div class="preloader-spinner"></div>
+      <p class="preloader-text">Carregando o site…</p>
     </div>
+  </div>
 
-    <header class="site-header" role="banner">
-      <div class="container d-flex align-items-center justify-content-between py-2">
-        <a class="logo d-flex align-items-center text-decoration-none" href="index.html" aria-label="Página inicial ADVIC">
-          <img src="imagens/logo.png" alt="Logo ADVIC" class="logo-img me-2" height="52" loading="lazy" />
-          <span class="logo-text fw-bold">ADVIC</span>
-        </a>
+  <header class="site-header" role="banner">
+    <div class="container d-flex align-items-center justify-content-between py-2">
+      <a class="logo d-flex align-items-center text-decoration-none" href="index.html"
+        aria-label="Página inicial ADVIC">
+        <img src="imagens/logo.png" alt="Logo ADVIC" class="logo-img me-2" height="52" loading="lazy" />
+        <span class="logo-text fw-bold">ADVIC</span>
+      </a>
+      <button class="nav-toggle" aria-label="Abrir menu de navegação" aria-expanded="false"
+        aria-controls="primary-navigation">
+        <span class="hamburger"></span>
+      </button>
+      <nav id="primary-navigation" class="nav-wrapper">
+        <ul class="nav-menu">
+          <li><a href="index.html">Início</a></li>
+          <li><a class="active" aria-current="page" href="sobre.html">Sobre</a></li>
+          <li><a href="eventos.html">Eventos</a></li>
+          <li><a href="contato.html">Contato</a></li>
+          <li><a href="privacidade.html">Privacidade & Imagem</a></li>
+          <li><a class="btn btn-sm btn-cta" href="contato.html">Seja Membro</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-        <button class="nav-toggle" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="primary-navigation">
-          <span class="hamburger"></span>
-        </button>
-
-        <nav id="primary-navigation" class="nav-wrapper">
-          <ul class="nav-menu">
-            <li><a href="index.html">Início</a></li>
-            <li><a class="active" aria-current="page" href="sobre.html">Sobre</a></li>
-            <li><a href="eventos.html">Eventos</a></li>
-            <li><a href="contato.html">Contato</a></li>
-            <li><a href="privacidade.html">Privacidade & Imagem</a></li>
-            <li><a class="btn btn-sm btn-cta" href="contato.html">Seja Membro</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-
-    <main id="conteudo">
-      <section class="hero hero-sm position-relative text-center text-white">
-        <div class="hero-bg" data-lazy="imagens/imagem-igreja.jpg" role="img" aria-label="Interior da igreja"></div>
-        <div class="container position-relative py-5">
-          <h1 class="display-6 fw-bold">Nossa História</h1>
-          <p class="lead">Conheça as raízes, os propósitos e as pessoas que formam a ADVIC.</p>
-        </div>
-      </section>
-
-      <section class="container py-5">
-        <div class="row align-items-center g-5">
-          <div class="col-12 col-lg-6" data-animate="fade-up">
-            <h2 class="section-title mb-3">Uma Igreja Família</h2>
-            <p>
-              A Assembleia de Deus de Vila de Cava (ADVIC) nasceu do desejo de espalhar 
-              o amor de Cristo na nossa região. Desde o primeiro culto, nosso foco tem sido 
-              acolher famílias, restaurar vidas e ensinar a Palavra com integridade.
-            </p>
-            <p>
-              Cremos que a igreja não é feita de tijolos, mas de pessoas que servem umas às 
-              outras. Aqui, cada membro encontra um ambiente de crescimento, comunhão e 
-              propósito.
-            </p>
-          </div>
-          <div class="col-12 col-lg-6" data-animate="slide-up" data-delay="150">
-            <img class="lazy rounded-4 shadow" data-src="imagens/imagem-igreja.jpg" alt="Fachada da ADVIC" />
-          </div>
-        </div>
-      </section>
-
-      <section id="historia" class="py-5 bg-soft">
-        <div class="container">
-          <h2 class="section-title text-center mb-5">Nossa Caminhada</h2>
-          <div class="timeline">
-            
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-content">
-                <span class="timeline-date">Anos 80</span>
-                <h3>O Início do Sonho</h3>
-                <p>Nossos primeiros cultos aconteceram em lares e pequenos salões. Foi um tempo de muita oração, sacrifício e visitas constantes aos moradores do bairro.</p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-content">
-                <span class="timeline-date">1995</span>
-                <h3>O Primeiro Templo</h3>
-                <p>Com a graça de Deus e a união dos irmãos, inauguramos o nosso primeiro templo físico, que logo se tornou um ponto de luz em Vila de Cava.</p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-content">
-                <span class="timeline-date">2010</span>
-                <h3>Expansão da Visão</h3>
-                <p>Nossos ministérios de jovens e ação social cresceram exponencialmente. A igreja começou a realizar trabalhos assistenciais que impactaram centenas de famílias.</p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-content">
-                <span class="timeline-date">Dias Atuais</span>
-                <h3>Vivendo o Extraordinário</h3>
-                <p>Hoje, a ADVIC é uma igreja vibrante e estruturada, pronta para o futuro, sem jamais esquecer os pilares da Palavra e da oração que nos trouxeram até aqui.</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <section id="lideranca" class="py-5">
-        <div class="container">
-          <h2 class="section-title text-center mb-5">Nossa Liderança</h2>
-          <div class="row g-4 justify-content-center">
-            
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-animate="fade-up">
-              <div class="leader-card">
-                <div class="leader-img-wrapper">
-                  <img data-src="imagens/WhatsApp Image 2025-10-17 at 20.57.52.jpeg" alt="Pr. Presidente" class="lazy" />
-                  <div class="leader-social">
-                    <a href="#" aria-label="Instagram do Pastor"><i class="fab fa-instagram"></i></a>
-                    <a href="#" aria-label="Facebook do Pastor"><i class="fab fa-facebook"></i></a>
-                  </div>
-                </div>
-                <div class="leader-info">
-                  <h3>Pr. Luiz Paes leme</h3>
-                  <span>Pastor Presidente</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-animate="fade-up" data-delay="100">
-              <div class="leader-card">
-                <div class="leader-img-wrapper">
-                  <img data-src="imagens/pastor2.jpg" alt="Pr. Vice-Presidente" class="lazy" />
-                  <div class="leader-social">
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                  </div>
-                </div>
-                <div class="leader-info">
-                  <h3>Pr. Roberto Alves</h3>
-                  <span>Vice-Presidente</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-animate="fade-up" data-delay="200">
-              <div class="leader-card">
-                <div class="leader-img-wrapper">
-                  <img data-src="imagens/pastor lider em 1950.jpg" alt="Líder de Jovens" class="lazy" />
-                  <div class="leader-social">
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                  </div>
-                </div>
-                <div class="leader-info">
-                  <h3>Lucas Martins</h3>
-                  <span>Líder de Jovens</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-animate="fade-up" data-delay="300">
-              <div class="leader-card">
-                <div class="leader-img-wrapper">
-                  <img data-src="imagens/pastor4.jpg" alt="Líder Infantil" class="lazy" />
-                  <div class="leader-social">
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                  </div>
-                </div>
-                <div class="leader-info">
-                  <h3>Miss. Ana Júlia</h3>
-                  <span>Coord. Infantil</span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <section class="cta">
-        <div class="container d-lg-flex align-items-center justify-content-between">
-          <div class="me-lg-3">
-            <h2 class="mb-2">Venha fazer parte dessa história!</h2>
-            <p class="mb-0">Participe dos nossos cultos e sinta a presença de Deus.</p>
-          </div>
-          <a class="btn btn-light btn-lg mt-3 mt-lg-0" href="contato.html">Ver Horários</a>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container footer-content">
-        <div class="footer-brand">
-          <img src="imagens/logo.png" alt="Logo ADVIC" class="logo-img" height="56" loading="lazy" />
-          <p class="mb-0">&copy; 2025 ADVIC — Todos os direitos reservados</p>
-        </div>
-        <nav class="social-links" aria-label="Redes sociais">
-          <a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          <a href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-          <a href="https://youtube.com/@advicviladecava" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-        </nav>
-      </div>
-    </footer>
-
-    <button id="btnA11y" class="accessibility-fab" aria-label="Abrir opções de acessibilidade" aria-haspopup="true" aria-controls="a11yPanel" aria-expanded="false"><i class="fa-solid fa-universal-access" aria-hidden="true"></i></button>
-    <section id="a11yPanel" class="accessibility-panel" aria-label="Ferramentas de acessibilidade" aria-hidden="true" role="dialog">
-      <header class="a11y-panel-header">
-        <span><i class="fa-solid fa-universal-access me-2 text-primary"></i> Acessibilidade</span>
-        <button type="button" class="a11y-close" data-a11y-close aria-label="Fechar painel">×</button>
-      </header>
-      <div class="a11y-panel-body">
-        <div class="a11y-grid">
-          <button type="button" class="a11y-tool" data-a11y-action="font-inc" title="Aumentar texto">
-            <i class="fa-solid fa-magnifying-glass-plus"></i>Texto +
-          </button>
-          <button type="button" class="a11y-tool" data-a11y-action="font-dec" title="Diminuir texto">
-            <i class="fa-solid fa-magnifying-glass-minus"></i>Texto -
-          </button>
-          <button type="button" class="a11y-tool" data-a11y-action="toggle-contrast" id="btn-a11y-contrast">
-            <i class="fa-solid fa-circle-half-stroke"></i>Contraste
-          </button>
-          <button type="button" class="a11y-tool" data-a11y-action="toggle-links" id="btn-a11y-links">
-            <i class="fa-solid fa-link"></i>Destacar Links
-          </button>
-          <button type="button" class="a11y-tool" data-a11y-action="toggle-spacing" id="btn-a11y-spacing">
-            <i class="fa-solid fa-text-width"></i>Espaçamento
-          </button>
-          <button type="button" class="a11y-tool" data-a11y-action="toggle-dyslexia" id="btn-a11y-dyslexia">
-            <i class="fa-solid fa-font"></i>Dislexia
-          </button>
-          <button type="button" class="a11y-tool" data-a11y-action="toggle-cursor" id="btn-a11y-cursor">
-            <i class="fa-solid fa-arrow-pointer"></i>Cursor Maior
-          </button>
-          <button type="button" class="a11y-tool" data-a11y-action="read-page" id="btn-a11y-read">
-            <i class="fa-solid fa-volume-high"></i>Ler Página
-          </button>
-        </div>
-        <button type="button" class="a11y-reset-btn" data-a11y-action="reset">
-          <i class="fa-solid fa-rotate-right me-2"></i>Redefinir Configurações
-        </button>
+  <main id="conteudo">
+    <section class="hero hero-sm position-relative text-center text-white">
+      <div class="hero-bg" data-lazy="imagens/imagem-igreja.jpg" role="img" aria-label="Interior da igreja"></div>
+      <div class="container position-relative py-5">
+        <h1 class="display-6 fw-bold">Nossa História</h1>
+        <p class="lead">Conheça as raízes, os propósitos e as pessoas que formam a ADVIC.</p>
       </div>
     </section>
 
-    <button id="btnTop" class="btn-top" aria-label="Voltar ao topo">
-      <i class="fa-solid fa-arrow-up"></i>
-    </button>
+    <section class="container py-5">
+      <div class="row align-items-center g-5">
+        <div class="col-12 col-lg-6" data-animate="fade-up">
+          <h2 class="section-title mb-3">Uma Igreja Família</h2>
+          <p>A Assembleia de Deus de Vila de Cava (ADVIC) nasceu do desejo de espalhar o amor de Cristo na nossa região.
+            Desde o primeiro culto, nosso foco tem sido acolher famílias, restaurar vidas e ensinar a Palavra com
+            integridade.</p>
+          <p>Cremos que a igreja não é feita de tijolos, mas de pessoas que servem umas às outras. Aqui, cada membro
+            encontra um ambiente de crescimento, comunhão e propósito.</p>
+        </div>
+        <div class="col-12 col-lg-6" data-animate="slide-up" data-delay="150">
+          <img class="lazy rounded-4 shadow" data-src="imagens/imagem-igreja.jpg" alt="Fachada da ADVIC" />
+        </div>
+      </div>
+    </section>
 
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script defer src="script.js"></script>
-  </body>
+    <section id="historia" class="py-5 bg-soft">
+      <div class="container">
+        <h2 class="section-title text-center mb-5">Nossa Caminhada</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content"><span class="timeline-date">Anos 80</span>
+              <h3>O Início do Sonho</h3>
+              <p>Nossos primeiros cultos aconteceram em lares e pequenos salões. Um tempo de oração e sacrifício.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content"><span class="timeline-date">1995</span>
+              <h3>O Primeiro Templo</h3>
+              <p>Com a graça de Deus inauguramos nosso primeiro templo físico, um ponto de luz em Vila de Cava.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content"><span class="timeline-date">2010</span>
+              <h3>Expansão da Visão</h3>
+              <p>Nossos ministérios de jovens e ação social cresceram e começamos trabalhos assistenciais intensos.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content"><span class="timeline-date">Dias Atuais</span>
+              <h3>Vivendo o Extraordinário</h3>
+              <p>Hoje somos uma igreja vibrante e estruturada, pronta para o futuro, firmada na Palavra.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="lideranca" class="py-5">
+      <div class="container">
+        <h2 class="section-title text-center mb-5">Nossa Liderança</h2>
+        <div class="row g-4 justify-content-center">
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-animate="fade-up">
+            <div class="leader-card">
+              <div class="leader-img-wrapper"><img data-src="imagens/WhatsApp Image 2025-10-17 at 20.57.52.jpeg"
+                  alt="Pr. Presidente" class="lazy" />
+                <div class="leader-social"><a href="#"><i class="fab fa-instagram"></i></a></div>
+              </div>
+              <div class="leader-info">
+                <h3>Pr. Luiz Paes leme</h3><span>Pastor Presidente</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-animate="fade-up" data-delay="100">
+            <div class="leader-card">
+              <div class="leader-img-wrapper"><img data-src="imagens/pastor2.jpg" alt="Pr. Vice-Presidente"
+                  class="lazy" />
+                <div class="leader-social"><a href="#"><i class="fab fa-instagram"></i></a></div>
+              </div>
+              <div class="leader-info">
+                <h3>Pr. Roberto Alves</h3><span>Vice-Presidente</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-animate="fade-up" data-delay="200">
+            <div class="leader-card">
+              <div class="leader-img-wrapper"><img data-src="imagens/pastor lider em 1950.jpg" alt="Líder de Jovens"
+                  class="lazy" />
+                <div class="leader-social"><a href="#"><i class="fab fa-instagram"></i></a></div>
+              </div>
+              <div class="leader-info">
+                <h3>Lucas Martins</h3><span>Líder de Jovens</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-animate="fade-up" data-delay="300">
+            <div class="leader-card">
+              <div class="leader-img-wrapper"><img data-src="imagens/pastor4.jpg" alt="Líder Infantil" class="lazy" />
+                <div class="leader-social"><a href="#"><i class="fab fa-instagram"></i></a></div>
+              </div>
+              <div class="leader-info">
+                <h3>Miss. Ana Júlia</h3><span>Coord. Infantil</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container d-lg-flex align-items-center justify-content-between">
+        <div class="me-lg-3">
+          <h2 class="mb-2">Venha fazer parte dessa história!</h2>
+          <p class="mb-0">Participe dos nossos cultos e sinta a presença de Deus.</p>
+        </div>
+        <a class="btn btn-light btn-lg mt-3 mt-lg-0" href="contato.html">Ver Horários</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-content">
+      <div class="footer-brand"><img src="imagens/logo.png" alt="Logo ADVIC" class="logo-img" height="56"
+          loading="lazy" />
+        <p class="mb-0">© 2025 ADVIC — Todos os direitos reservados</p>
+      </div>
+      <nav class="social-links" aria-label="Redes sociais"><a href="https://www.instagram.com/advic_viladecava/"
+          target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a><a
+          href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer"><i
+            class="fab fa-facebook"></i></a><a href="https://www.youtube.com/@advicof" target="_blank"
+          rel="noopener noreferrer"><i class="fab fa-youtube"></i></a></nav>
+    </div>
+  </footer>
+
+  <button id="btnA11y" class="accessibility-fab" aria-label="Abrir opções de acessibilidade" aria-haspopup="true"
+    aria-controls="a11yPanel" aria-expanded="false"><i class="fa-solid fa-universal-access"
+      aria-hidden="true"></i></button>
+  <section id="a11yPanel" class="accessibility-panel" aria-label="Ferramentas de acessibilidade" aria-hidden="true"
+    role="dialog">
+    <header class="a11y-panel-header"><span><i class="fa-solid fa-universal-access me-2 text-primary"></i>
+        Acessibilidade</span><button type="button" class="a11y-close" data-a11y-close
+        aria-label="Fechar painel">×</button></header>
+    <div class="a11y-panel-body">
+      <div class="a11y-grid"><button type="button" class="a11y-tool" data-a11y-action="font-inc"
+          title="Aumentar texto"><i class="fa-solid fa-magnifying-glass-plus"></i>Texto +</button><button type="button"
+          class="a11y-tool" data-a11y-action="font-dec" title="Diminuir texto"><i
+            class="fa-solid fa-magnifying-glass-minus"></i>Texto -</button><button type="button" class="a11y-tool"
+          data-a11y-action="toggle-contrast" id="btn-a11y-contrast"><i
+            class="fa-solid fa-circle-half-stroke"></i>Contraste</button><button type="button" class="a11y-tool"
+          data-a11y-action="toggle-links" id="btn-a11y-links"><i class="fa-solid fa-link"></i>Destacar
+          Links</button><button type="button" class="a11y-tool" data-a11y-action="toggle-spacing"
+          id="btn-a11y-spacing"><i class="fa-solid fa-text-width"></i>Espaçamento</button><button type="button"
+          class="a11y-tool" data-a11y-action="toggle-dyslexia" id="btn-a11y-dyslexia"><i
+            class="fa-solid fa-font"></i>Dislexia</button><button type="button" class="a11y-tool"
+          data-a11y-action="toggle-cursor" id="btn-a11y-cursor"><i class="fa-solid fa-arrow-pointer"></i>Cursor
+          Maior</button><button type="button" class="a11y-tool" data-a11y-action="read-page" id="btn-a11y-read"><i
+            class="fa-solid fa-volume-high"></i>Ler Página</button></div><button type="button" class="a11y-reset-btn"
+        data-a11y-action="reset"><i class="fa-solid fa-rotate-right me-2"></i>Redefinir Configurações</button>
+    </div>
+  </section>
+  <button id="btnTop" class="btn-top" aria-label="Voltar ao topo"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="script.js"></script>
+</body>
+
 </html>
