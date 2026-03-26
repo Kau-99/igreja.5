@@ -545,6 +545,40 @@
     }
   };
 
+MyApp.initPaginaInicial = async () => {
+    const heroTitulo = $("#hero-titulo");
+    const heroSubtitulo = $("#hero-subtitulo");
+    const heroBg = $("#hero-bg");
+
+    // Só roda se os elementos existirem (ou seja, se estivermos na index.html)
+    if (!heroTitulo || !heroSubtitulo || !heroBg) return;
+
+    try {
+      const resposta = await fetch("inicio.json");
+      if (!resposta.ok) throw new Error("Arquivo inicio.json não encontrado");
+      
+      const dados = await resposta.json();
+      
+      if (dados.hero) {
+        // Atualiza os textos
+        heroTitulo.textContent = dados.hero.titulo;
+        heroSubtitulo.textContent = dados.hero.subtitulo;
+        
+        // Atualiza a imagem de fundo
+        if (heroBg.classList.contains("lazy")) {
+          // Se o lazy load ainda não rodou
+          heroBg.dataset.lazy = dados.hero.imagem;
+        } else {
+          // Se a imagem já carregou, troca direto no CSS
+          heroBg.style.backgroundImage = `url(${dados.hero.imagem})`;
+        }
+      }
+    } catch (erro) {
+      MyApp.log("Usando textos padrão do HTML. Erro ao carregar inicio.json:", erro);
+    }
+  };
+
+
   MyApp.initLiveBanner = () => {
     const agora = new Date();
     const diaDaSemana = agora.getDay(),
@@ -841,6 +875,7 @@
     MyApp.initMinistryModals();
     MyApp.initEventos();
     MyApp.initSermoes();
+    MyApp.initPaginaInicial()
     MyApp.initLiveBanner();
     MyApp.initVersiculoDaSemana();
     MyApp.initTop();
