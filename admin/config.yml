@@ -1,0 +1,43 @@
+backend:
+  name: git-gateway
+  branch: main # Mude para 'master' se for o nome da sua branch principal no GitHub
+
+media_folder: "imagens"
+public_folder: "imagens"
+
+collections:
+  - name: "gerenciar_conteudo"
+    label: "Conteúdo do Site"
+    files:
+      - label: "Agenda de Eventos"
+        name: "eventos"
+        file: "eventos.json"
+        fields:
+          - label: "Lista de Eventos"
+            name: "eventos"
+            widget: "list"
+            fields:
+              - {label: "ID", name: "id", widget: "string"}
+              - {label: "Título", name: "titulo", widget: "string"}
+              - {label: "Tipo", name: "tipo", widget: "select", options: ["culto", "louvor", "familia", "vigilia"]}
+              - {label: "Data ISO (Formato do sistema)", name: "dataISO", widget: "datetime", format: "YYYY-MM-DDTHH:mm"}
+              - {label: "Data Exibição (Ex: 15 Nov • 19h)", name: "dataExibicao", widget: "string"}
+              - {label: "Descrição", name: "descricao", widget: "text"}
+              - {label: "Imagem do Evento", name: "imagem", widget: "image"}
+              - {label: "Link do Calendário", name: "linkCalendario", widget: "string", required: false}
+              - {label: "Link do WhatsApp", name: "linkWhats", widget: "string", required: false}
+
+      - label: "Sermões e Pregações"
+        name: "sermoes"
+        file: "sermoes.json"
+        fields:
+          - label: "Lista de Sermões"
+            name: "sermoes"
+            widget: "list"
+            fields:
+              - {label: "ID", name: "id", widget: "string"}
+              - {label: "Título", name: "titulo", widget: "string"}
+              - {label: "Pregador e Data", name: "pregadorData", widget: "string"}
+              - {label: "Link do Vídeo (YouTube)", name: "linkVideo", widget: "string"}
+              - {label: "Link do Áudio (Spotify/Drive)", name: "linkAudio", widget: "string", required: false}
+              - {label: "Áudio Disponível?", name: "audioDisponivel", widget: "boolean", default: false}

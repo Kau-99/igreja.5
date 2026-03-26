@@ -450,7 +450,11 @@
     try {
       const resposta = await fetch("eventos.json");
       if (!resposta.ok) throw new Error("Falha ao carregar eventos");
-      const eventos = await resposta.json();
+
+      // NOVA ESTRUTURA PARA LER DO CMS
+      const dados = await resposta.json();
+      const eventos = dados.eventos || [];
+
       grid.innerHTML = "";
       if (eventos.length === 0) {
         grid.innerHTML =
@@ -502,7 +506,11 @@
     try {
       const resposta = await fetch("sermoes.json");
       if (!resposta.ok) throw new Error("Falha ao carregar sermões");
-      const sermoes = await resposta.json();
+
+      // NOVA ESTRUTURA PARA LER DO CMS
+      const dados = await resposta.json();
+      const sermoes = dados.sermoes || [];
+
       grid.innerHTML = "";
       if (sermoes.length === 0) {
         grid.innerHTML =
