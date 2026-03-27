@@ -55,7 +55,7 @@
           !document.body.classList.contains("allow-embed")
         )
           window.top.location = window.location;
-      } catch {}
+      } catch { }
     },
     enforceHTTPS() {
       if (
@@ -65,10 +65,10 @@
       ) {
         window.location.replace(
           "https://" +
-            window.location.host +
-            window.location.pathname +
-            window.location.search +
-            window.location.hash,
+          window.location.host +
+          window.location.pathname +
+          window.location.search +
+          window.location.hash,
         );
       }
     },
@@ -76,8 +76,8 @@
       if (MyApp.config.ENV !== "production") return;
       ["log", "debug", "info", "trace"].forEach((m) => {
         try {
-          console[m] = () => {};
-        } catch {}
+          console[m] = () => { };
+        } catch { }
       });
     },
     warnInlineHandlers() {
@@ -131,9 +131,7 @@
 
     if (!toggle || !nav) return;
 
-    // Função principal que controla o abrir/fechar
     const toggleMenu = (forceState) => {
-      // Se forceState for passado, usa ele. Se não, inverte o estado atual.
       const isOpen =
         typeof forceState === "boolean"
           ? forceState
@@ -149,18 +147,15 @@
       );
     };
 
-    // 1. Clicar no botão hambúrguer
     on(toggle, "click", (e) => {
-      e.stopPropagation(); // Impede que o clique seja pego pelo "document" logo abaixo
+      e.stopPropagation();
       toggleMenu();
     });
 
-    // 2. Fechar o menu ao clicar num link (para não ficar atrapalhando a tela após navegar)
     links.forEach((link) => {
       on(link, "click", () => toggleMenu(false));
     });
 
-    // 3. Fechar o menu se o usuário apertar a tecla ESC no teclado
     on(document, "keydown", (e) => {
       if (e.key === "Escape" && toggle.classList.contains("open")) {
         toggleMenu(false);
@@ -168,7 +163,6 @@
       }
     });
 
-    // 4. Fechar o menu ao clicar em qualquer lugar fora dele
     on(document, "click", (e) => {
       if (
         toggle.classList.contains("open") &&
@@ -450,8 +444,6 @@
     try {
       const resposta = await fetch("eventos.json");
       if (!resposta.ok) throw new Error("Falha ao carregar eventos");
-
-      // NOVA ESTRUTURA PARA LER DO CMS
       const dados = await resposta.json();
       const eventos = dados.eventos || [];
 
@@ -506,8 +498,6 @@
     try {
       const resposta = await fetch("sermoes.json");
       if (!resposta.ok) throw new Error("Falha ao carregar sermões");
-
-      // NOVA ESTRUTURA PARA LER DO CMS
       const dados = await resposta.json();
       const sermoes = dados.sermoes || [];
 
@@ -545,45 +535,74 @@
     }
   };
 
-MyApp.initPaginaInicial = async () => {
+  // NOVA FUNÇÃO: PÁGINA INICIAL
+  MyApp.initPaginaInicial = async () => {
     const heroTitulo = $("#hero-titulo");
     const heroSubtitulo = $("#hero-subtitulo");
     const heroBg = $("#hero-bg");
 
-    // Só roda se os elementos existirem (ou seja, se estivermos na index.html)
     if (!heroTitulo || !heroSubtitulo || !heroBg) return;
 
     try {
       const resposta = await fetch("inicio.json");
       if (!resposta.ok) throw new Error("Arquivo inicio.json não encontrado");
-      
       const dados = await resposta.json();
-      
+
       if (dados.hero) {
-        // Atualiza os textos
         heroTitulo.textContent = dados.hero.titulo;
         heroSubtitulo.textContent = dados.hero.subtitulo;
-        
-        // Atualiza a imagem de fundo
         if (heroBg.classList.contains("lazy")) {
-          // Se o lazy load ainda não rodou
           heroBg.dataset.lazy = dados.hero.imagem;
         } else {
-          // Se a imagem já carregou, troca direto no CSS
           heroBg.style.backgroundImage = `url(${dados.hero.imagem})`;
         }
       }
     } catch (erro) {
-      MyApp.log("Usando textos padrão do HTML. Erro ao carregar inicio.json:", erro);
+      MyApp.log("Usando textos padrão do HTML para a Página Inicial.");
     }
   };
 
+  // NOVA FUNÇÃO: CONTATOS GLOBAIS
+  MyApp.initContatos = async () => {
+    try {
+      const resposta = await fetch("contatos.json");
+      if (!resposta.ok) throw new Error("Arquivo contatos.json não encontrado");
+      const dados = await resposta.json();
+
+      // Atualiza Redes Sociais automaticamente onde tiver o link
+      if (dados.instagram) {
+        $$('a[href*="instagram.com"]').forEach((a) => a.href = dados.instagram);
+      }
+      if (dados.facebook) {
+        $$('a[href*="facebook.com"]').forEach((a) => a.href = dados.facebook);
+      }
+      if (dados.youtube) {
+        $$('a[href*="youtube.com"]').forEach((a) => a.href = dados.youtube);
+      }
+
+      // Atualiza os dados na página de Contato (se existirem na tela)
+      const elTelefone = $("#info-telefone");
+      const elEmail = $("#info-email");
+      const elEndereco = $("#info-endereco");
+
+      if (elTelefone && dados.telefone) {
+        elTelefone.innerHTML = `<i class="fa-solid fa-phone me-2 text-primary"></i>${dados.telefone}`;
+      }
+      if (elEmail && dados.email) {
+        elEmail.innerHTML = `<i class="fa-solid fa-envelope me-2 text-primary"></i>${dados.email}`;
+      }
+      if (elEndereco && dados.endereco) {
+        elEndereco.innerHTML = `<i class="fa-solid fa-location-dot me-2 text-primary"></i>${dados.endereco}`;
+      }
+    } catch (erro) {
+      MyApp.log("Usando contatos padrão do HTML.");
+    }
+  };
 
   MyApp.initLiveBanner = () => {
     const agora = new Date();
     const diaDaSemana = agora.getDay(),
       horaAtual = agora.getHours();
-    // Domingo entre as 18h e 19h59
     if (diaDaSemana === 0 && horaAtual >= 18 && horaAtual < 20) {
       const banner = document.createElement("a");
       banner.href = "https://www.youtube.com/@advicof";
@@ -685,7 +704,7 @@ MyApp.initPaginaInicial = async () => {
     const saveState = () => {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      } catch {}
+      } catch { }
     };
 
     const applyState = () => {
@@ -873,9 +892,12 @@ MyApp.initPaginaInicial = async () => {
     MyApp.initTimeline();
     MyApp.initContactForm();
     MyApp.initMinistryModals();
+
+    MyApp.initPaginaInicial(); 
+    MyApp.initContatos(); 
     MyApp.initEventos();
     MyApp.initSermoes();
-    MyApp.initPaginaInicial()
+
     MyApp.initLiveBanner();
     MyApp.initVersiculoDaSemana();
     MyApp.initTop();
