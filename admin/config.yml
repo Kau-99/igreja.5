@@ -1,10 +1,11 @@
-local_backend: true
+
 backend:
   name: git-gateway
   branch: main
 
+# Configurações Globais do Painel
 locale: "pt"
-logo_url: "https://advic.org.br/imagens/logo.png" 
+logo_url: "https://advic.org.br/imagens/logo.png"
 
 media_folder: "imagens"
 public_folder: "imagens"
@@ -14,10 +15,10 @@ collections:
   # 1. PÁGINAS FIXAS
   # ----------------------------------------------------
   - name: "paginas"
-    label: "Páginas do Site"
+    label: "📄 Páginas do Site"
     description: "Edite os textos e imagens das páginas estáticas"
     files:
-      - label: "Página Inicial (Início)"
+      - label: " Página Inicial (Início)"
         name: "inicio"
         file: "inicio.json"
         fields:
@@ -25,11 +26,21 @@ collections:
             name: "hero"
             widget: "object"
             fields:
-              - {label: "Imagem de Fundo", name: "imagem", widget: "image", hint: "Resolução ideal: 1920x1080px (Paisagem)"}
-              - {label: "Título Principal", name: "titulo", widget: "string"}
-              - {label: "Subtítulo", name: "subtitulo", widget: "text", hint: "Frase de apoio abaixo do título"}
+              - {
+                  label: "Imagem de Fundo",
+                  name: "imagem",
+                  widget: "image",
+                  hint: "Resolução ideal: 1920x1080px (Paisagem)",
+                }
+              - { label: "Título Principal", name: "titulo", widget: "string" }
+              - {
+                  label: "Subtítulo",
+                  name: "subtitulo",
+                  widget: "text",
+                  hint: "Frase de apoio abaixo do título",
+                }
 
-      - label: "Página Sobre Nós"
+      - label: " Página Sobre Nós"
         name: "sobre"
         file: "sobre.json"
         fields:
@@ -37,75 +48,221 @@ collections:
             name: "hero"
             widget: "object"
             fields:
-              - {label: "Imagem de Fundo", name: "imagem", widget: "image"}
-              - {label: "Título", name: "titulo", widget: "string", default: "Nossa História"}
-              - {label: "Subtítulo", name: "subtitulo", widget: "text"}
+              - { label: "Imagem de Fundo", name: "imagem", widget: "image" }
+              - {
+                  label: "Título",
+                  name: "titulo",
+                  widget: "string",
+                  default: "Nossa História",
+                }
+              - { label: "Subtítulo", name: "subtitulo", widget: "text" }
           - label: "Texto Principal da História"
             name: "historia"
             widget: "object"
             fields:
-              - {label: "Título da Seção", name: "titulo", widget: "string", default: "Uma Igreja Família"}
-              - {label: "Parágrafo 1", name: "paragrafo1", widget: "text"}
-              - {label: "Parágrafo 2", name: "paragrafo2", widget: "text"}
-              - {label: "Imagem de Destaque", name: "imagem", widget: "image"}
+              - {
+                  label: "Título da Seção",
+                  name: "titulo",
+                  widget: "string",
+                  default: "Uma Igreja Família",
+                }
+              - { label: "Parágrafo 1", name: "paragrafo1", widget: "text" }
+              - { label: "Parágrafo 2", name: "paragrafo2", widget: "text" }
+              - { label: "Imagem de Destaque", name: "imagem", widget: "image" }
+          - label: "Nossa Caminhada (Linha do Tempo)"
+            name: "timeline"
+            widget: "list"
+            collapsed: true
+            summary: "{{fields.data}}: {{fields.titulo}}"
+            fields:
+              - {
+                  label: "Data / Ano",
+                  name: "data",
+                  widget: "string",
+                  hint: "Ex: Anos 80, 1995, Dias Atuais",
+                }
+              - { label: "Título", name: "titulo", widget: "string" }
+              - { label: "Descrição", name: "descricao", widget: "text" }
+          - label: "Liderança (Pastores e Líderes)"
+            name: "lideranca"
+            widget: "list"
+            collapsed: true
+            summary: "{{fields.nome}} — {{fields.cargo}}"
+            fields:
+              - {
+                  label: "Foto",
+                  name: "imagem",
+                  widget: "image",
+                  hint: "Proporção recomendada: 1:1 (Quadrada)",
+                }
+              - { label: "Nome", name: "nome", widget: "string" }
+              - { label: "Cargo / Função", name: "cargo", widget: "string" }
+              - {
+                  label: "Link do Instagram",
+                  name: "instagram",
+                  widget: "string",
+                  required: false,
+                  pattern:
+                    [
+                      "^https?://.*",
+                      "Deve ser um link completo iniciando com https://",
+                    ],
+                }
 
   # ----------------------------------------------------
-  # 2. CONTEÚDO DINÂMICO (LISTAS)
+  # 2. CONTEÚDO DINÂMICO 
   # ----------------------------------------------------
   - name: "conteudo"
-    label: "Agenda e Mensagens"
+    label: "🗓️ Agenda e Mensagens"
     description: "Adicione ou edite os cultos, eventos e sermões da igreja"
     files:
-      - label: "Agenda de Eventos"
+      - label: " Agenda de Eventos"
         name: "eventos"
         file: "eventos.json"
         fields:
           - label: "Lista de Eventos"
             name: "eventos"
             widget: "list"
-            summary: '{{fields.dataExibicao}} — {{fields.titulo}}' 
-            collapsed: false
+            summary: "{{fields.dataExibicao}} — {{fields.titulo}}"
+            collapsed: true
             fields:
-              - {label: "ID de Controle", name: "id", widget: "string", hint: "Apenas um número de controle sequencial (ex: 4, 5, 6)"}
-              - {label: "Título do Evento", name: "titulo", widget: "string"}
-              - {label: "Categoria", name: "tipo", widget: "select", options: ["culto", "louvor", "familia", "vigilia"]}
-              - {label: "Data do Sistema (Para filtros)", name: "dataISO", widget: "datetime", format: "YYYY-MM-DDTHH:mm", hint: "Selecione no calendário"}
-              - {label: "Data no Card (Visual)", name: "dataExibicao", widget: "string", hint: "Como o usuário vai ler. Ex: 15 Nov • 19h"}
-              - {label: "Breve Descrição", name: "descricao", widget: "text", hint: "Máximo recomendado de 2 linhas."}
-              - {label: "Arte / Imagem", name: "imagem", widget: "image", hint: "Proporção recomendada: Quadrada ou Retrato"}
-              - {label: "Link do Calendário (Google)", name: "linkCalendario", widget: "string", required: false}
-              - {label: "Link do WhatsApp (Compartilhar)", name: "linkWhats", widget: "string", required: false}
+              - {
+                  label: "ID de Controle",
+                  name: "id",
+                  widget: "string",
+                  hint: "Número de controle sequencial (ex: 4, 5, 6)",
+                }
+              - { label: "Título do Evento", name: "titulo", widget: "string" }
+              - {
+                  label: "Categoria",
+                  name: "tipo",
+                  widget: "select",
+                  options: ["culto", "louvor", "familia", "vigilia"],
+                }
+              - {
+                  label: "Data do Sistema (Para filtros)",
+                  name: "dataISO",
+                  widget: "datetime",
+                  format: "YYYY-MM-DDTHH:mm",
+                  hint: "Selecione no calendário",
+                }
+              - {
+                  label: "Data no Card (Visual)",
+                  name: "dataExibicao",
+                  widget: "string",
+                  hint: "Como o usuário vai ler. Ex: 15 Nov • 19h",
+                }
+              - {
+                  label: "Breve Descrição",
+                  name: "descricao",
+                  widget: "text",
+                  hint: "Máximo recomendado de 2 linhas.",
+                }
+              - { label: "Arte / Imagem", name: "imagem", widget: "image" }
+              - {
+                  label: "Link do Calendário (Google)",
+                  name: "linkCalendario",
+                  widget: "string",
+                  required: false,
+                  pattern: ["^https?://.*", "Deve iniciar com https://"],
+                }
+              - {
+                  label: "Link do WhatsApp (Compartilhar)",
+                  name: "linkWhats",
+                  widget: "string",
+                  required: false,
+                  pattern: ["^https?://.*", "Deve iniciar com https://"],
+                }
 
-      - label: "Sermões e Pregações"
+      - label: " Sermões e Pregações"
         name: "sermoes"
         file: "sermoes.json"
         fields:
           - label: "Lista de Sermões"
             name: "sermoes"
             widget: "list"
-            summary: '{{fields.titulo}} ({{fields.pregadorData}})'
+            summary: "{{fields.titulo}} ({{fields.pregadorData}})"
+            collapsed: true
             fields:
-              - {label: "ID de Controle", name: "id", widget: "string"}
-              - {label: "Título da Mensagem", name: "titulo", widget: "string"}
-              - {label: "Pregador e Data", name: "pregadorData", widget: "string", hint: "Ex: Pr. Luiz — 12/09"}
-              - {label: "Link do Vídeo (YouTube)", name: "linkVideo", widget: "string"}
-              - {label: "Possui Áudio/Podcast?", name: "audioDisponivel", widget: "boolean", default: false}
-              - {label: "Link do Áudio (Spotify/Drive)", name: "linkAudio", widget: "string", required: false, hint: "Preencha apenas se a opção acima estiver ativada"}
+              - { label: "ID de Controle", name: "id", widget: "string" }
+              - {
+                  label: "Título da Mensagem",
+                  name: "titulo",
+                  widget: "string",
+                }
+              - {
+                  label: "Pregador e Data",
+                  name: "pregadorData",
+                  widget: "string",
+                  hint: "Ex: Pr. Luiz — 12/09",
+                }
+              - {
+                  label: "Link do Vídeo (YouTube)",
+                  name: "linkVideo",
+                  widget: "string",
+                  pattern: ["^https?://.*", "Deve iniciar com https://"],
+                }
+              - {
+                  label: "Possui Áudio/Podcast?",
+                  name: "audioDisponivel",
+                  widget: "boolean",
+                  default: false,
+                }
+              - {
+                  label: "Link do Áudio (Spotify/Drive)",
+                  name: "linkAudio",
+                  widget: "string",
+                  required: false,
+                  hint: "Preencha apenas se a opção acima estiver ativada",
+                  pattern: ["^https?://.*", "Deve iniciar com https://"],
+                }
 
   # ----------------------------------------------------
   # 3. CONFIGURAÇÕES GLOBAIS
   # ----------------------------------------------------
   - name: "configuracoes"
-    label: "Configurações Globais"
+    label: "⚙️ Configurações Globais"
     description: "Ajuste contatos e links das redes sociais"
     files:
-      - label: "Contatos e Redes Sociais"
+      - label: " Contatos e Redes Sociais"
         name: "contatos"
         file: "contatos.json"
         fields:
-          - {label: "Link do Instagram", name: "instagram", widget: "string", required: false}
-          - {label: "Link do Facebook", name: "facebook", widget: "string", required: false}
-          - {label: "Link do YouTube", name: "youtube", widget: "string", required: false}
-          - {label: "Telefone Principal", name: "telefone", widget: "string", hint: "Ex: (21) 0000-0000"}
-          - {label: "E-mail de Contato", name: "email", widget: "string"}
-          - {label: "Endereço Completo", name: "endereco", widget: "text"}
+          - {
+              label: "Link do Instagram",
+              name: "instagram",
+              widget: "string",
+              required: false,
+              pattern: ["^https?://.*", "Deve iniciar com https://"],
+            }
+          - {
+              label: "Link do Facebook",
+              name: "facebook",
+              widget: "string",
+              required: false,
+              pattern: ["^https?://.*", "Deve iniciar com https://"],
+            }
+          - {
+              label: "Link do YouTube",
+              name: "youtube",
+              widget: "string",
+              required: false,
+              pattern: ["^https?://.*", "Deve iniciar com https://"],
+            }
+          - {
+              label: "Telefone Principal",
+              name: "telefone",
+              widget: "string",
+              hint: "Ex: (21) 0000-0000",
+            }
+          - {
+              label: "E-mail de Contato",
+              name: "email",
+              widget: "string",
+              pattern:
+                [
+                  '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                  "Digite um endereço de e-mail válido",
+                ],
+            }
+          - { label: "Endereço Completo", name: "endereco", widget: "text" }
