@@ -375,54 +375,48 @@
     });
   };
 
-  // NOVO: Função para o Formulário de Oração
+  // NOVA FUNÇÃO: Formulário de Oração Atualizado
   MyApp.initOracaoForm = () => {
     const form = $(".oracao-form");
     if (!form) return;
 
     on(form, "submit", async (e) => {
       e.preventDefault();
-
+      
       const pedido = $("#oracao-pedido");
       if (!pedido.value.trim()) {
         pedido.classList.add("input-error");
-        return MyApp.showToast(
-          "Por favor, escreva o seu pedido de oração.",
-          "error",
-        );
+        return MyApp.showToast("Por favor, escreva o seu pedido de oração.", "error");
       }
 
       const btn = $('button[type="submit"]', form);
       const originalText = btn.innerHTML;
-      btn.innerHTML =
-        '<i class="fa-solid fa-spinner fa-spin me-2"></i>Enviando...';
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Enviando...';
       btn.disabled = true;
 
       try {
+        // Mudança aqui: Enviando os dados de forma mais pura para o Netlify
         const res = await fetch("/", {
           method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams(new FormData(form)).toString(),
+          headers: { "Accept": "application/json" },
+          body: new FormData(form)
         });
-
+        
         if (res.ok) {
-          MyApp.showToast(
-            "Seu pedido foi recebido! Estaremos orando por você.",
-            "success",
-          );
+          MyApp.showToast("Seu pedido foi recebido! Estaremos orando por você.", "success");
           form.reset();
         } else {
-          throw new Error("Falha ao enviar para o Netlify");
+          throw new Error("O servidor do Netlify recusou o envio.");
         }
-      } catch {
-        MyApp.showToast("Erro de conexão. Verifique sua internet.", "error");
+      } catch (erro) {
+        MyApp.log(erro);
+        MyApp.showToast("Erro ao enviar. Tente novamente.", "error");
       } finally {
         btn.innerHTML = originalText;
         btn.disabled = false;
       }
     });
   };
-
   MyApp.initMinistryModals = () => {
     const cards = $$(".card-min");
     if (!cards.length) return;
