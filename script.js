@@ -13,9 +13,26 @@
   MyApp.log = (...a) =>
     MyApp.config.ENV === "development" ? console.log("[ADVIC]", ...a) : 0;
 
+  // Utilitários de Seleção de DOM
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
   const on = (el, ev, fn, opt) => el && el.addEventListener(ev, fn, opt);
+
+  // NOVO: Sanitização de Segurança (Impede injeção de código malicioso via JSON)
+  const escapeHTML = (str) => {
+    if (typeof str !== "string") return str;
+    return str.replace(
+      /[&<>'"]/g,
+      (tag) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          "'": "&#39;",
+          '"': "&quot;",
+        })[tag],
+    );
+  };
 
   MyApp.Security = {
     hardenLinks() {
@@ -53,9 +70,10 @@
         if (
           window.top !== window.self &&
           !document.body.classList.contains("allow-embed")
-        )
+        ) {
           window.top.location = window.location;
-      } catch { }
+        }
+      } catch {}
     },
     enforceHTTPS() {
       if (
@@ -64,11 +82,7 @@
         !/^127\.0\.0\.1$/i.test(window.location.hostname)
       ) {
         window.location.replace(
-          "https://" +
-          window.location.host +
-          window.location.pathname +
-          window.location.search +
-          window.location.hash,
+          `https://${window.location.host}${window.location.pathname}${window.location.search}${window.location.hash}`,
         );
       }
     },
@@ -76,17 +90,16 @@
       if (MyApp.config.ENV !== "production") return;
       ["log", "debug", "info", "trace"].forEach((m) => {
         try {
-          console[m] = () => { };
-        } catch { }
+          console[m] = () => {};
+        } catch {}
       });
     },
     warnInlineHandlers() {
-      const hasInline = [];
-      $$("*").forEach((el) => {
-        for (const attr of el.attributes)
-          if (/^on/i.test(attr.name)) hasInline.push({ el, attr: attr.name });
-      });
-      if (hasInline.length && MyApp.config.ENV === "development")
+      if (MyApp.config.ENV !== "development") return;
+      const hasInline = $$("*").filter((el) =>
+        Array.from(el.attributes).some((attr) => /^on/i.test(attr.name)),
+      );
+      if (hasInline.length)
         MyApp.log("Elementos com handlers inline encontrados.", hasInline);
     },
   };
@@ -94,34 +107,26 @@
   MyApp.initPreloader = () => {
     const preloader = $("#preloader");
     if (!preloader) return;
-    const start =
-      window.performance && performance.now ? performance.now() : Date.now();
+    const start = window.performance?.now?.() || Date.now();
     document.body.classList.add("preloader-active");
+
+    let hidden = false;
     const hidePreloader = () => {
-      const elapsed =
-        (window.performance && performance.now
-          ? performance.now()
-          : Date.now()) - start;
+      if (hidden) return;
+      hidden = true;
+      const elapsed = (window.performance?.now?.() || Date.now()) - start;
       setTimeout(
         () => {
           preloader.classList.add("preloader--hidden");
           document.body.classList.remove("preloader-active");
-          setTimeout(() => {
-            if (preloader && preloader.parentNode)
-              preloader.parentNode.removeChild(preloader);
-          }, 600);
+          setTimeout(() => preloader?.parentNode?.removeChild(preloader), 600);
         },
         Math.max(0, 600 - elapsed),
       );
     };
-    let hidden = false;
-    const safeHide = () => {
-      if (hidden) return;
-      hidden = true;
-      hidePreloader();
-    };
-    window.addEventListener("load", safeHide);
-    setTimeout(safeHide, 8000);
+
+    window.addEventListener("load", hidePreloader);
+    setTimeout(hidePreloader, 8000); // Fallback de segurança de 8s
   };
 
   MyApp.initMenu = () => {
@@ -136,25 +141,17 @@
         typeof forceState === "boolean"
           ? forceState
           : !toggle.classList.contains("open");
-
       toggle.classList.toggle("open", isOpen);
       nav.classList.toggle("open", isOpen);
-
       toggle.setAttribute("aria-expanded", String(isOpen));
-      toggle.setAttribute(
-        "aria-label",
-        isOpen ? "Fechar menu de navegação" : "Abrir menu de navegação",
-      );
+      toggle.setAttribute("aria-label", isOpen ? "Fechar menu" : "Abrir menu");
     };
 
     on(toggle, "click", (e) => {
       e.stopPropagation();
       toggleMenu();
     });
-
-    links.forEach((link) => {
-      on(link, "click", () => toggleMenu(false));
-    });
+    links.forEach((link) => on(link, "click", () => toggleMenu(false)));
 
     on(document, "keydown", (e) => {
       if (e.key === "Escape" && toggle.classList.contains("open")) {
@@ -175,39 +172,39 @@
   };
 
   MyApp.initSmoothScroll = () => {
-    $$('a[href^="#"]').forEach((link) => {
-      if (
-        link.classList.contains("open-ministry-modal") ||
-        link.classList.contains("accordion-button")
-      )
-        return;
-      on(link, "click", (e) => {
-        const target = $(link.getAttribute("href"));
-        if (!target) return;
-        e.preventDefault();
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-        target.setAttribute("tabindex", "-1");
-        target.focus({ preventScroll: true });
-      });
-    });
+    $$('a[href^="#"]:not(.open-ministry-modal):not(.accordion-button)').forEach(
+      (link) => {
+        on(link, "click", (e) => {
+          const target = $(link.getAttribute("href"));
+          if (!target) return;
+          e.preventDefault();
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          target.setAttribute("tabindex", "-1");
+          target.focus({ preventScroll: true });
+        });
+      },
+    );
   };
 
   const queue = [];
-  let active = false;
+  let activeToast = false;
   MyApp.showToast = (message = "", type = "info") => {
     queue.push({ message: String(message), type });
-    if (!active) processQueue();
+    if (!activeToast) processQueue();
   };
+
   function processQueue() {
-    if (!queue.length) return (active = false);
-    active = true;
+    if (!queue.length) return (activeToast = false);
+    activeToast = true;
     const { message, type } = queue.shift();
     const toast = document.createElement("div");
     toast.className = `toast-message ${type}`;
     toast.setAttribute("role", "status");
-    toast.textContent = message;
+    toast.textContent = message; // Seguro contra XSS
     document.body.appendChild(toast);
+
     requestAnimationFrame(() => toast.classList.add("show"));
+
     setTimeout(() => {
       toast.classList.remove("show");
       toast.addEventListener(
@@ -228,11 +225,13 @@
       (entries, obs) => {
         entries.forEach((en) => {
           if (!en.isIntersecting) return;
-          const el = en.target,
-            src = el.dataset.src || el.dataset.lazy;
+          const el = en.target;
+          const src = el.dataset.src || el.dataset.lazy;
           if (!src || /^\s*javascript:/i.test(src)) return obs.unobserve(el);
+
           if (el.tagName === "IMG" || el.tagName === "IFRAME") el.src = src;
           else el.style.backgroundImage = `url(${src})`;
+
           el.removeAttribute("data-src");
           el.removeAttribute("data-lazy");
           el.classList.remove("lazy");
@@ -245,21 +244,21 @@
   };
 
   MyApp.initScrollSpy = () => {
-    const sections = $$("section[id]"),
-      links = $$('.nav-menu a[href^="#"]');
+    const sections = $$("section[id]");
+    const links = $$('.nav-menu a[href^="#"]');
     if (
       !sections.length ||
       !links.length ||
       !("IntersectionObserver" in window)
     )
       return;
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((en) => {
           if (en.isIntersecting) {
             links.forEach((l) => l.classList.remove("active"));
-            const act = $(`.nav-menu a[href="#${en.target.id}"]`);
-            if (act) act.classList.add("active");
+            $(`.nav-menu a[href="#${en.target.id}"]`)?.classList.add("active");
           }
         });
       },
@@ -304,6 +303,7 @@
   MyApp.initContactForm = () => {
     const form = $(".contact-form");
     if (!form) return;
+
     ["input", "blur"].forEach((ev) => {
       on(
         form,
@@ -319,41 +319,40 @@
         true,
       );
     });
+
     on(form, "submit", async (e) => {
       e.preventDefault();
-      const honeypot = form.querySelector(".honeypot");
-      if (honeypot && honeypot.value.trim()) return;
-      const nome = $("#nome"),
-        email = $("#email"),
-        assunto = $("#assunto"),
-        msg = $("#mensagem");
-      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
-      const ok =
-        nome.value.trim() &&
-        emailOk &&
-        assunto.value.trim() &&
-        msg.value.trim();
-      [nome, email, assunto, msg].forEach((el) =>
-        el.classList.toggle("input-error", !el.value.trim()),
-      );
-      if (!emailOk) email.classList.add("input-error");
-      if (!ok)
+      const honeypot = $(".honeypot", form);
+      if (honeypot?.value.trim()) return; // Anti-spam
+
+      const inputs = [$("#nome"), $("#email"), $("#assunto"), $("#mensagem")];
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      let isValid = true;
+      inputs.forEach((el) => {
+        if (!el) return;
+        const val = el.value.trim();
+        const isEmailField = el.id === "email";
+        const ok = isEmailField ? emailRegex.test(val) : !!val;
+        el.classList.toggle("input-error", !ok);
+        if (!ok) isValid = false;
+      });
+
+      if (!isValid)
         return MyApp.showToast(
           "Preencha todos os campos corretamente.",
           "error",
         );
 
       const actionUrl = form.getAttribute("action");
-      if (!actionUrl || actionUrl === "")
-        return MyApp.showToast(
-          'O atributo "action" do formulário precisa ter a URL configurada.',
-          "error",
-        );
+      if (!actionUrl)
+        return MyApp.showToast("Erro de configuração do formulário.", "error");
 
-      const btn = form.querySelector('button[type="submit"]');
+      const btn = $('button[type="submit"]', form);
       const originalText = btn.innerHTML;
       btn.innerHTML = "Enviando...";
       btn.disabled = true;
+
       try {
         const res = await fetch(actionUrl, {
           method: "POST",
@@ -361,18 +360,16 @@
           headers: { Accept: "application/json" },
         });
         if (res.ok) {
-          MyApp.showToast(
-            "Mensagem enviada com sucesso! Em breve retornaremos.",
-            "success",
-          );
+          MyApp.showToast("Mensagem enviada com sucesso!", "success");
           form.reset();
-        } else
-          MyApp.showToast(
-            "Ocorreu um problema ao enviar. Tente novamente.",
-            "error",
-          );
+        } else {
+          throw new Error("Falha na resposta da rede");
+        }
       } catch {
-        MyApp.showToast("Erro de conexão. Verifique sua internet.", "error");
+        MyApp.showToast(
+          "Erro de conexão. Tente novamente mais tarde.",
+          "error",
+        );
       } finally {
         btn.innerHTML = originalText;
         btn.disabled = false;
@@ -406,7 +403,6 @@
     const img = $("#min-modal-img", overlay);
     const title = $("#min-modal-title", overlay);
     const text = $("#min-modal-text", overlay);
-    const closeBtns = $$(".min-modal-close, .min-modal-btn-close", overlay);
 
     const closeModal = () => {
       overlay.classList.remove("open");
@@ -418,16 +414,18 @@
       if (btn) {
         on(btn, "click", (e) => {
           e.preventDefault();
-          title.textContent = card.dataset.title;
-          text.textContent = card.dataset.text;
-          img.src = card.dataset.img;
+          title.textContent = card.dataset.title || "";
+          text.textContent = card.dataset.text || "";
+          img.src = card.dataset.img || "";
           overlay.classList.add("open");
           document.body.style.overflow = "hidden";
         });
       }
     });
 
-    closeBtns.forEach((btn) => on(btn, "click", closeModal));
+    $$(".min-modal-close, .min-modal-btn-close", overlay).forEach((btn) =>
+      on(btn, "click", closeModal),
+    );
     on(overlay, "click", (e) => {
       if (e.target === overlay) closeModal();
     });
@@ -438,17 +436,18 @@
   };
 
   MyApp.initEventos = async () => {
-    const grid = $("#eventos-grid"),
-      select = $("#filtro-eventos");
+    const grid = $("#eventos-grid");
+    const select = $("#filtro-eventos");
     if (!grid) return;
+
     try {
       const resposta = await fetch("eventos.json");
-      if (!resposta.ok) throw new Error("Falha ao carregar eventos");
+      if (!resposta.ok) throw new Error("Falha HTTP");
       const dados = await resposta.json();
       const eventos = dados.eventos || [];
 
       grid.innerHTML = "";
-      if (eventos.length === 0) {
+      if (!eventos.length) {
         grid.innerHTML =
           '<div class="col-12 text-center py-5 text-muted">Nenhum evento programado.</div>';
         return;
@@ -456,17 +455,26 @@
 
       eventos.forEach((evento, index) => {
         const delay = (index % 3) * 80;
+        // Validação e Escape de Dados
+        const titulo = escapeHTML(evento.titulo);
+        const descricao = escapeHTML(evento.descricao);
+        const dataExibicao = escapeHTML(evento.dataExibicao);
+        const dataISO = escapeHTML(evento.dataISO);
+        const imgUrl = encodeURI(evento.imagem || "");
+        const calendarUrl = encodeURI(evento.linkCalendario || "#");
+        const whatsUrl = encodeURI(evento.linkWhats || "#");
+
         const htmlEvento = `
-          <div class="col-12 col-md-6 col-lg-4 evento-item" data-animate="fade-up" data-delay="${delay}" data-tipo="${evento.tipo}">
+          <div class="col-12 col-md-6 col-lg-4 evento-item" data-animate="fade-up" data-delay="${delay}" data-tipo="${escapeHTML(evento.tipo)}">
             <article class="card-event h-100 d-flex flex-column">
-              <img class="lazy" data-src="${evento.imagem}" alt="${evento.titulo}" />
+              <img class="lazy" data-src="${imgUrl}" alt="${titulo}" />
               <div class="p-3 d-flex flex-column flex-grow-1">
-                <h3 class="mb-1">${evento.titulo}</h3>
-                <p class="text-muted mb-1"><strong>Data:</strong> <time datetime="${evento.dataISO}">${evento.dataExibicao}</time></p>
-                <p class="mb-3 flex-grow-1">${evento.descricao}</p>
+                <h3 class="mb-1">${titulo}</h3>
+                <p class="text-muted mb-1"><strong>Data:</strong> <time datetime="${dataISO}">${dataExibicao}</time></p>
+                <p class="mb-3 flex-grow-1">${descricao}</p>
                 <div class="d-flex gap-2 mt-auto">
-                  <a class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer" href="${evento.linkCalendario}">Calendário</a>
-                  <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer" href="${evento.linkWhats}">Compartilhar</a>
+                  <a class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer" href="${calendarUrl}">Calendário</a>
+                  <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer" href="${whatsUrl}">Compartilhar</a>
                 </div>
               </div>
             </article>
@@ -476,17 +484,17 @@
       });
       MyApp.initLazy();
       MyApp.initReveal();
+
       if (select) {
         on(select, "change", () => {
-          const filtro = select.value,
-            cards = $$(".evento-item", grid);
-          cards.forEach((card) => {
+          const filtro = select.value;
+          $$(".evento-item", grid).forEach((card) => {
             card.style.display =
               filtro === "todos" || card.dataset.tipo === filtro ? "" : "none";
           });
         });
       }
-    } catch (erro) {
+    } catch {
       grid.innerHTML =
         '<div class="col-12 text-center py-5 text-danger">Não foi possível carregar a programação.</div>';
     }
@@ -495,14 +503,15 @@
   MyApp.initSermoes = async () => {
     const grid = $("#sermoes-grid");
     if (!grid) return;
+
     try {
       const resposta = await fetch("sermoes.json");
-      if (!resposta.ok) throw new Error("Falha ao carregar sermões");
+      if (!resposta.ok) throw new Error("Falha HTTP");
       const dados = await resposta.json();
       const sermoes = dados.sermoes || [];
 
       grid.innerHTML = "";
-      if (sermoes.length === 0) {
+      if (!sermoes.length) {
         grid.innerHTML =
           '<div class="col-12 text-center py-4 text-muted">Nenhum sermão recente disponível.</div>';
         return;
@@ -510,17 +519,22 @@
 
       sermoes.forEach((sermao, index) => {
         const delay = (index % 3) * 120;
+        const titulo = escapeHTML(sermao.titulo);
+        const pregadorData = escapeHTML(sermao.pregadorData);
+        const videoUrl = encodeURI(sermao.linkVideo || "#");
+        const audioUrl = encodeURI(sermao.linkAudio || "#");
+
         const btnAudio = sermao.audioDisponivel
-          ? `<a class="btn btn-outline-primary btn-sm" href="${sermao.linkAudio}" target="_blank" rel="noopener noreferrer">Ouvir áudio</a>`
+          ? `<a class="btn btn-outline-primary btn-sm" href="${audioUrl}" target="_blank" rel="noopener noreferrer">Ouvir áudio</a>`
           : `<a class="btn btn-outline-primary btn-sm" href="#" aria-disabled="true" style="pointer-events:none;">Ouvir (em breve)</a>`;
 
         const htmlSermao = `
           <div class="col-12 col-md-4" data-animate="fade-up" data-delay="${delay}">
             <article class="sermon h-100 d-flex flex-column">
-              <h3 class="mb-2">${sermao.titulo}</h3>
-              <p class="text-muted mb-3 flex-grow-1">${sermao.pregadorData}</p>
+              <h3 class="mb-2">${titulo}</h3>
+              <p class="text-muted mb-3 flex-grow-1">${pregadorData}</p>
               <div class="d-flex gap-2 mt-auto">
-                <a class="btn btn-primary btn-sm" href="${sermao.linkVideo}" target="_blank" rel="noopener noreferrer">Assistir</a>
+                <a class="btn btn-primary btn-sm" href="${videoUrl}" target="_blank" rel="noopener noreferrer">Assistir</a>
                 ${btnAudio}
               </div>
             </article>
@@ -529,13 +543,12 @@
         grid.insertAdjacentHTML("beforeend", htmlSermao);
       });
       MyApp.initReveal();
-    } catch (erro) {
+    } catch {
       grid.innerHTML =
         '<div class="col-12 text-center py-4 text-danger">Não foi possível carregar os sermões.</div>';
     }
   };
 
-  // NOVA FUNÇÃO: PÁGINA INICIAL
   MyApp.initPaginaInicial = async () => {
     const heroTitulo = $("#hero-titulo");
     const heroSubtitulo = $("#hero-subtitulo");
@@ -545,64 +558,62 @@
 
     try {
       const resposta = await fetch("inicio.json");
-      if (!resposta.ok) throw new Error("Arquivo inicio.json não encontrado");
+      if (!resposta.ok) throw new Error("HTTP error");
       const dados = await resposta.json();
 
       if (dados.hero) {
         heroTitulo.textContent = dados.hero.titulo;
         heroSubtitulo.textContent = dados.hero.subtitulo;
-        if (heroBg.classList.contains("lazy")) {
-          heroBg.dataset.lazy = dados.hero.imagem;
-        } else {
-          heroBg.style.backgroundImage = `url(${dados.hero.imagem})`;
-        }
+
+        const imgVal = dados.hero.imagem;
+        if (heroBg.classList.contains("lazy")) heroBg.dataset.lazy = imgVal;
+        else heroBg.style.backgroundImage = `url(${encodeURI(imgVal)})`;
       }
-    } catch (erro) {
-      MyApp.log("Usando textos padrão do HTML para a Página Inicial.");
+    } catch {
+      MyApp.log("Usando textos padrão da Página Inicial.");
     }
   };
 
-  // NOVA FUNÇÃO: CONTATOS GLOBAIS
   MyApp.initContatos = async () => {
     try {
       const resposta = await fetch("contatos.json");
-      if (!resposta.ok) throw new Error("Arquivo contatos.json não encontrado");
+      if (!resposta.ok) throw new Error("HTTP error");
       const dados = await resposta.json();
 
-      // Atualiza Redes Sociais automaticamente onde tiver o link
-      if (dados.instagram) {
-        $$('a[href*="instagram.com"]').forEach((a) => a.href = dados.instagram);
-      }
-      if (dados.facebook) {
-        $$('a[href*="facebook.com"]').forEach((a) => a.href = dados.facebook);
-      }
-      if (dados.youtube) {
-        $$('a[href*="youtube.com"]').forEach((a) => a.href = dados.youtube);
-      }
+      if (dados.instagram)
+        $$('a[href*="instagram.com"]').forEach(
+          (a) => (a.href = encodeURI(dados.instagram)),
+        );
+      if (dados.facebook)
+        $$('a[href*="facebook.com"]').forEach(
+          (a) => (a.href = encodeURI(dados.facebook)),
+        );
+      if (dados.youtube)
+        $$('a[href*="youtube.com"]').forEach(
+          (a) => (a.href = encodeURI(dados.youtube)),
+        );
 
-      // Atualiza os dados na página de Contato (se existirem na tela)
       const elTelefone = $("#info-telefone");
       const elEmail = $("#info-email");
       const elEndereco = $("#info-endereco");
 
-      if (elTelefone && dados.telefone) {
-        elTelefone.innerHTML = `<i class="fa-solid fa-phone me-2 text-primary"></i>${dados.telefone}`;
-      }
-      if (elEmail && dados.email) {
-        elEmail.innerHTML = `<i class="fa-solid fa-envelope me-2 text-primary"></i>${dados.email}`;
-      }
-      if (elEndereco && dados.endereco) {
-        elEndereco.innerHTML = `<i class="fa-solid fa-location-dot me-2 text-primary"></i>${dados.endereco}`;
-      }
-    } catch (erro) {
-      MyApp.log("Usando contatos padrão do HTML.");
+      if (elTelefone && dados.telefone)
+        elTelefone.innerHTML = `<i class="fa-solid fa-phone me-2 text-primary"></i>${escapeHTML(dados.telefone)}`;
+      if (elEmail && dados.email)
+        elEmail.innerHTML = `<i class="fa-solid fa-envelope me-2 text-primary"></i>${escapeHTML(dados.email)}`;
+      if (elEndereco && dados.endereco)
+        elEndereco.innerHTML = `<i class="fa-solid fa-location-dot me-2 text-primary"></i>${escapeHTML(dados.endereco)}`;
+    } catch {
+      MyApp.log("Usando contatos padrão.");
     }
   };
 
   MyApp.initLiveBanner = () => {
     const agora = new Date();
-    const diaDaSemana = agora.getDay(),
-      horaAtual = agora.getHours();
+    const diaDaSemana = agora.getDay();
+    const horaAtual = agora.getHours();
+
+    // Mostra banner domingo (0) entre 18h e 19:59h
     if (diaDaSemana === 0 && horaAtual >= 18 && horaAtual < 20) {
       const banner = document.createElement("a");
       banner.href = "https://www.youtube.com/@advicof";
@@ -615,9 +626,10 @@
   };
 
   MyApp.initVersiculoDaSemana = () => {
-    const verseText = $("#verse-text"),
-      verseRef = $("#verse-ref");
+    const verseText = $("#verse-text");
+    const verseRef = $("#verse-ref");
     if (!verseText || !verseRef) return;
+
     const versiculos = [
       {
         texto: "O Senhor é o meu pastor; nada me faltará.",
@@ -663,8 +675,9 @@
         ref: "Deuteronômio 31:6",
       },
     ];
-    const agora = new Date(),
-      inicioAno = new Date(agora.getFullYear(), 0, 1);
+
+    const agora = new Date();
+    const inicioAno = new Date(agora.getFullYear(), 0, 1);
     const diasPassados = Math.floor(
       (agora - inicioAno) / (24 * 60 * 60 * 1000),
     );
@@ -676,13 +689,11 @@
   };
 
   MyApp.initAccessibility = () => {
-    const btn = $("#btnA11y"),
-      panel = $("#a11yPanel");
+    const btn = $("#btnA11y");
+    const panel = $("#a11yPanel");
     if (!btn || !panel) return;
-    const STORAGE_KEY = "advic-a11y",
-      closeBtn = panel.querySelector("[data-a11y-close]"),
-      actions = panel.querySelectorAll("[data-a11y-action]");
-    let lastFocus = null;
+
+    const STORAGE_KEY = "advic-a11y";
     const baseState = {
       fontScale: 1,
       highContrast: false,
@@ -692,19 +703,23 @@
       largeCursor: false,
       reduceMotion: false,
     };
+
     const loadState = () => {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? { ...baseState, ...JSON.parse(raw) } : { ...baseState };
+        return {
+          ...baseState,
+          ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"),
+        };
       } catch {
         return { ...baseState };
       }
     };
+
     const state = loadState();
     const saveState = () => {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      } catch { }
+      } catch {}
     };
 
     const applyState = () => {
@@ -726,56 +741,57 @@
         const el = $(id);
         if (el) el.classList.toggle("active", condition);
       };
+
       toggleClass("#btn-a11y-contrast", state.highContrast);
       toggleClass("#btn-a11y-links", state.highlightLinks);
       toggleClass("#btn-a11y-spacing", state.letterSpacing);
       toggleClass("#btn-a11y-dyslexia", state.dyslexiaFont);
       toggleClass("#btn-a11y-cursor", state.largeCursor);
     };
+
     applyState();
 
+    let lastFocus = null;
     const openPanel = () => {
       panel.classList.add("open");
       panel.setAttribute("aria-hidden", "false");
       btn.setAttribute("aria-expanded", "true");
       lastFocus = document.activeElement;
-      const focusable = panel.querySelector("button");
-      if (focusable) focusable.focus();
+      panel.querySelector("button")?.focus();
     };
+
     const closePanel = () => {
       panel.classList.remove("open");
       panel.setAttribute("aria-hidden", "true");
       btn.setAttribute("aria-expanded", "false");
-      if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
+      if (lastFocus?.focus) lastFocus.focus();
     };
 
     const synth = "speechSynthesis" in window ? window.speechSynthesis : null;
     let utterance = null;
     const btnRead = $("#btn-a11y-read");
+
     const cancelSpeech = () => {
-      if (synth && synth.speaking) synth.cancel();
-      if (btnRead) btnRead.classList.remove("active");
+      if (synth?.speaking) synth.cancel();
+      btnRead?.classList.remove("active");
     };
+
     const readPage = () => {
-      if (!synth)
-        return MyApp.showToast(
-          "Leitura não suportada no seu navegador.",
-          "error",
-        );
+      if (!synth) return MyApp.showToast("Leitura não suportada.", "error");
       if (synth.speaking) {
         cancelSpeech();
         return MyApp.showToast("Leitura interrompida.", "info");
       }
-      const text = (($("#conteudo") || document.body).innerText || "")
-        .trim()
+      const text = ($("#conteudo") || document.body).innerText
+        ?.trim()
         .replace(/\s+/g, " ");
       if (!text) return;
+
       utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "pt-BR";
-      utterance.onend = () => {
-        if (btnRead) btnRead.classList.remove("active");
-      };
-      if (btnRead) btnRead.classList.add("active");
+      utterance.onend = () => btnRead?.classList.remove("active");
+
+      btnRead?.classList.add("active");
       synth.speak(utterance);
       MyApp.showToast("Lendo conteúdo em voz alta...", "info");
     };
@@ -820,23 +836,21 @@
       e.preventDefault();
       panel.classList.contains("open") ? closePanel() : openPanel();
     });
-    if (closeBtn)
-      on(closeBtn, "click", (e) => {
-        e.preventDefault();
-        closePanel();
-      });
-    actions.forEach((btnAction) => {
-      const a = btnAction.dataset.a11yAction;
-      if (a) on(btnAction, "click", () => handleAction(a));
+    on($("[data-a11y-close]", panel), "click", (e) => {
+      e.preventDefault();
+      closePanel();
     });
+    $$("[data-a11y-action]", panel).forEach((b) =>
+      on(b, "click", () => handleAction(b.dataset.a11yAction)),
+    );
+
     on(document, "click", (e) => {
       if (
         panel.classList.contains("open") &&
         !panel.contains(e.target) &&
         !btn.contains(e.target)
-      ) {
+      )
         closePanel();
-      }
     });
     on(document, "keydown", (e) => {
       if (e.key === "Escape" && panel.classList.contains("open")) closePanel();
@@ -846,13 +860,27 @@
   MyApp.initTop = () => {
     const btn = $("#btnTop");
     if (!btn) return;
-    const toggle = () =>
-      btn.classList.toggle(
-        "show",
-        window.scrollY > MyApp.config.scrollTopThreshold,
-      );
-    on(window, "scroll", toggle, { passive: true });
-    toggle();
+
+    // NOVO: Throttling na rolagem (Deixa a animação mais fluida e não pesa o celular)
+    let isScrolling = false;
+    on(
+      window,
+      "scroll",
+      () => {
+        if (!isScrolling) {
+          window.requestAnimationFrame(() => {
+            btn.classList.toggle(
+              "show",
+              window.scrollY > MyApp.config.scrollTopThreshold,
+            );
+            isScrolling = false;
+          });
+          isScrolling = true;
+        }
+      },
+      { passive: true },
+    );
+
     on(btn, "click", (e) => {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -875,7 +903,7 @@
     });
   };
 
-  /* Init Geral */
+  /* Dispara tudo quando a página terminar de carregar */
   document.addEventListener("DOMContentLoaded", () => {
     MyApp.initPreloader();
     MyApp.Security.enforceHTTPS();
@@ -893,8 +921,9 @@
     MyApp.initContactForm();
     MyApp.initMinistryModals();
 
-    MyApp.initPaginaInicial(); 
-    MyApp.initContatos(); 
+    // Carregamento de dados (Isso agora roda em paralelo, mais rápido)
+    MyApp.initPaginaInicial();
+    MyApp.initContatos();
     MyApp.initEventos();
     MyApp.initSermoes();
 
@@ -905,7 +934,7 @@
     MyApp.prefetch();
 
     const map = document.querySelector(".mapa-wrapper iframe[data-src]");
-    if (map) {
+    if (map && "IntersectionObserver" in window) {
       const io = new IntersectionObserver((entries, obs) => {
         entries.forEach((en) => {
           if (!en.isIntersecting) return;
@@ -920,8 +949,8 @@
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
         .register("sw.js")
-        .then(() => MyApp.log("Service Worker registado com sucesso!"))
-        .catch((err) => MyApp.log("Erro no Service Worker:", err));
+        .then(() => MyApp.log("Service Worker ativo."))
+        .catch((err) => MyApp.log("Erro no SW:", err));
     }
   });
 })();
