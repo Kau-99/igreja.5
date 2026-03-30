@@ -13,12 +13,10 @@
   MyApp.log = (...a) =>
     MyApp.config.ENV === "development" ? console.log("[ADVIC]", ...a) : 0;
 
-  // Utilitários de Seleção de DOM
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
   const on = (el, ev, fn, opt) => el && el.addEventListener(ev, fn, opt);
 
-  // NOVO: Sanitização de Segurança (Impede injeção de código malicioso via JSON)
   const escapeHTML = (str) => {
     if (typeof str !== "string") return str;
     return str.replace(
@@ -126,7 +124,7 @@
     };
 
     window.addEventListener("load", hidePreloader);
-    setTimeout(hidePreloader, 8000); // Fallback de segurança de 8s
+    setTimeout(hidePreloader, 8000);
   };
 
   MyApp.initMenu = () => {
@@ -200,7 +198,7 @@
     const toast = document.createElement("div");
     toast.className = `toast-message ${type}`;
     toast.setAttribute("role", "status");
-    toast.textContent = message; // Seguro contra XSS
+    toast.textContent = message;
     document.body.appendChild(toast);
 
     requestAnimationFrame(() => toast.classList.add("show"));
@@ -323,7 +321,7 @@
     on(form, "submit", async (e) => {
       e.preventDefault();
       const honeypot = $(".honeypot", form);
-      if (honeypot?.value.trim()) return; // Anti-spam
+      if (honeypot?.value.trim()) return;
 
       const inputs = [$("#nome"), $("#email"), $("#assunto"), $("#mensagem")];
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -370,6 +368,54 @@
           "Erro de conexão. Tente novamente mais tarde.",
           "error",
         );
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    });
+  };
+
+  // NOVO: Função para o Formulário de Oração
+  MyApp.initOracaoForm = () => {
+    const form = $(".oracao-form");
+    if (!form) return;
+
+    on(form, "submit", async (e) => {
+      e.preventDefault();
+
+      const pedido = $("#oracao-pedido");
+      if (!pedido.value.trim()) {
+        pedido.classList.add("input-error");
+        return MyApp.showToast(
+          "Por favor, escreva o seu pedido de oração.",
+          "error",
+        );
+      }
+
+      const btn = $('button[type="submit"]', form);
+      const originalText = btn.innerHTML;
+      btn.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin me-2"></i>Enviando...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams(new FormData(form)).toString(),
+        });
+
+        if (res.ok) {
+          MyApp.showToast(
+            "Seu pedido foi recebido! Estaremos orando por você.",
+            "success",
+          );
+          form.reset();
+        } else {
+          throw new Error("Falha ao enviar para o Netlify");
+        }
+      } catch {
+        MyApp.showToast("Erro de conexão. Verifique sua internet.", "error");
       } finally {
         btn.innerHTML = originalText;
         btn.disabled = false;
@@ -455,7 +501,6 @@
 
       eventos.forEach((evento, index) => {
         const delay = (index % 3) * 80;
-        // Validação e Escape de Dados
         const titulo = escapeHTML(evento.titulo);
         const descricao = escapeHTML(evento.descricao);
         const dataExibicao = escapeHTML(evento.dataExibicao);
@@ -613,7 +658,6 @@
     const diaDaSemana = agora.getDay();
     const horaAtual = agora.getHours();
 
-    // Mostra banner domingo (0) entre 18h e 19:59h
     if (diaDaSemana === 0 && horaAtual >= 18 && horaAtual < 20) {
       const banner = document.createElement("a");
       banner.href = "https://www.youtube.com/@advicof";
@@ -861,7 +905,6 @@
     const btn = $("#btnTop");
     if (!btn) return;
 
-    // NOVO: Throttling na rolagem (Deixa a animação mais fluida e não pesa o celular)
     let isScrolling = false;
     on(
       window,
@@ -919,9 +962,9 @@
     MyApp.initReveal();
     MyApp.initTimeline();
     MyApp.initContactForm();
+    MyApp.initOracaoForm(); // <--- INICIA O FORMULÁRIO DE ORAÇÃO AQUI
     MyApp.initMinistryModals();
 
-    // Carregamento de dados (Isso agora roda em paralelo, mais rápido)
     MyApp.initPaginaInicial();
     MyApp.initContatos();
     MyApp.initEventos();
