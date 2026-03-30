@@ -898,7 +898,6 @@
     });
   };
 
-  /* Dispara tudo quando a página terminar de carregar */
   document.addEventListener("DOMContentLoaded", () => {
     MyApp.initPreloader();
     MyApp.Security.enforceHTTPS();
