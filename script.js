@@ -375,50 +375,6 @@
     });
   };
 
-  MyApp.initOracaoForm = () => {
-    const form = $(".oracao-form");
-    if (!form) return;
-
-    on(form, "submit", async (e) => {
-      e.preventDefault();
-      
-      const pedido = $("#oracao-pedido");
-      if (!pedido.value.trim()) {
-        pedido.classList.add("input-error");
-        return MyApp.showToast("Por favor, escreva o seu pedido de oração.", "error");
-      }
-
-      const btn = $('button[type="submit"]', form);
-      const originalText = btn.innerHTML;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Enviando...';
-      btn.disabled = true;
-
-      try {
-        // Empacota os dados no formato exato que o Netlify exige (URL Encoded)
-        const formData = new FormData(form);
-        const urlEncodedData = new URLSearchParams(formData).toString();
-
-        const res = await fetch("/", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: urlEncodedData
-        });
-        
-        if (res.ok) {
-          MyApp.showToast("Seu pedido foi recebido! Estaremos orando por você.", "success");
-          form.reset();
-        } else {
-          throw new Error("Netlify recusou a conexão.");
-        }
-      } catch (erro) {
-        MyApp.log(erro);
-        MyApp.showToast("Erro ao enviar. Tente novamente.", "error");
-      } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-      }
-    });
-  };
   MyApp.initMinistryModals = () => {
     const cards = $$(".card-min");
     if (!cards.length) return;
@@ -958,7 +914,6 @@
     MyApp.initReveal();
     MyApp.initTimeline();
     MyApp.initContactForm();
-    MyApp.initOracaoForm(); // <--- INICIA O FORMULÁRIO DE ORAÇÃO AQUI
     MyApp.initMinistryModals();
 
     MyApp.initPaginaInicial();
