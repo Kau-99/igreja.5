@@ -375,7 +375,6 @@
     });
   };
 
-  // NOVA FUNÇÃO: Formulário de Oração Atualizado
   MyApp.initOracaoForm = () => {
     const form = $(".oracao-form");
     if (!form) return;
@@ -395,18 +394,21 @@
       btn.disabled = true;
 
       try {
-        // Mudança aqui: Enviando os dados de forma mais pura para o Netlify
+        // Empacota os dados no formato exato que o Netlify exige (URL Encoded)
+        const formData = new FormData(form);
+        const urlEncodedData = new URLSearchParams(formData).toString();
+
         const res = await fetch("/", {
           method: "POST",
-          headers: { "Accept": "application/json" },
-          body: new FormData(form)
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: urlEncodedData
         });
         
         if (res.ok) {
           MyApp.showToast("Seu pedido foi recebido! Estaremos orando por você.", "success");
           form.reset();
         } else {
-          throw new Error("O servidor do Netlify recusou o envio.");
+          throw new Error("Netlify recusou a conexão.");
         }
       } catch (erro) {
         MyApp.log(erro);
