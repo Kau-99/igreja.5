@@ -67,12 +67,13 @@
     <section class="container py-5">
       <div class="row g-4">
         <div class="col-12 col-lg-6">
-          <form id="contactForm" class="contact-form" action="https://formspree.io/f/SEU_ID_AQUI" method="POST"
-            novalidate>
+
+          <form id="contactForm" class="contact-form" name="contato" method="POST" netlify>
+
             <h1 class="mb-2">Entre em Contato</h1>
             <p class="text-muted mb-3">Responderemos o mais breve possível diretamente no seu e-mail.</p>
 
-            <input class="honeypot" type="text" name="website" autocomplete="off" tabindex="-1" aria-hidden="true"
+            <input class="honeypot" type="text" name="bot-field" autocomplete="off" tabindex="-1" aria-hidden="true"
               style="position: absolute; left: -9999px; height: 0; width: 0; opacity: 0;" />
 
             <label for="nome">Nome <span aria-hidden="true">*</span></label>
@@ -90,6 +91,7 @@
             <button class="btn btn-primary mt-2" type="submit">Enviar</button>
             <p class="email-note">Seus dados não serão compartilhados.</p>
           </form>
+
         </div>
 
         <div class="col-12 col-lg-6">
@@ -103,7 +105,7 @@
                   class="fa-solid fa-envelope me-2 text-primary"></i>contato@advic.org.br</li>
             </ul>
             <h3 class="fs-5">Horários de Culto</h3>
-           
+
             <div class="mapa-wrapper mt-3 rounded-3 overflow-hidden">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3681.2978731186768!2d-43.445675623916664!3d-22.679952629805133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x996900e7499671%3A0x7639e656f93e3a9b!2sR.%20V%C3%ADtor%20Hugo%2C%2076%20-%20Vila%20de%20Cava%2C%20Nova%20Igua%C3%A7u%20-%20RJ%2C%2026052-450!5e0!3m2!1spt-BR!2sbr!4v1774314654275!5m2!1spt-BR!2sbr"

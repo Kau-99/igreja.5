@@ -298,83 +298,6 @@
     items.forEach((i) => io.observe(i));
   };
 
-  MyApp.initContactForm = () => {
-    const form = $(".contact-form");
-    if (!form) return;
-
-    ["input", "blur"].forEach((ev) => {
-      on(
-        form,
-        ev,
-        (e) => {
-          const t = e.target;
-          if (t.matches("input, textarea"))
-            t.classList.toggle(
-              "input-error",
-              !t.checkValidity() || !t.value.trim(),
-            );
-        },
-        true,
-      );
-    });
-
-    on(form, "submit", async (e) => {
-      e.preventDefault();
-      const honeypot = $(".honeypot", form);
-      if (honeypot?.value.trim()) return;
-
-      const inputs = [$("#nome"), $("#email"), $("#assunto"), $("#mensagem")];
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      let isValid = true;
-      inputs.forEach((el) => {
-        if (!el) return;
-        const val = el.value.trim();
-        const isEmailField = el.id === "email";
-        const ok = isEmailField ? emailRegex.test(val) : !!val;
-        el.classList.toggle("input-error", !ok);
-        if (!ok) isValid = false;
-      });
-
-      if (!isValid)
-        return MyApp.showToast(
-          "Preencha todos os campos corretamente.",
-          "error",
-        );
-
-      const actionUrl = form.getAttribute("action");
-      if (!actionUrl)
-        return MyApp.showToast("Erro de configuração do formulário.", "error");
-
-      const btn = $('button[type="submit"]', form);
-      const originalText = btn.innerHTML;
-      btn.innerHTML = "Enviando...";
-      btn.disabled = true;
-
-      try {
-        const res = await fetch(actionUrl, {
-          method: "POST",
-          body: new FormData(form),
-          headers: { Accept: "application/json" },
-        });
-        if (res.ok) {
-          MyApp.showToast("Mensagem enviada com sucesso!", "success");
-          form.reset();
-        } else {
-          throw new Error("Falha na resposta da rede");
-        }
-      } catch {
-        MyApp.showToast(
-          "Erro de conexão. Tente novamente mais tarde.",
-          "error",
-        );
-      } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-      }
-    });
-  };
-
   MyApp.initMinistryModals = () => {
     const cards = $$(".card-min");
     if (!cards.length) return;
@@ -912,7 +835,6 @@
     MyApp.initScrollSpy();
     MyApp.initReveal();
     MyApp.initTimeline();
-    MyApp.initContactForm();
     MyApp.initMinistryModals();
 
     MyApp.initPaginaInicial();
