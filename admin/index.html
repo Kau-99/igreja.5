@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Painel Institucional | ADVIC</title>
 
   <link rel="icon" type="image/png" href="../imagens/logo.png" />
@@ -23,7 +23,7 @@
       padding: 0;
     }
 
-    /* Personalização do Login do Netlify */
+    /* Cores do Login do Netlify */
     iframe#netlify-identity-widget {
       z-index: 9999 !important;
     }
@@ -32,7 +32,7 @@
       background-color: var(--color-primary) !important;
     }
 
-    /* Estilos Gerais do CMS (Cores da ADVIC) */
+    /* Cores Gerais do Painel ADVIC */
     [class*="AppHeader"],
     [class*="Button-button-default-primary"],
     [class*="Toggle-activeBackground"] {
@@ -51,54 +51,75 @@
     }
 
     /* =========================================================
-       CORREÇÃO BRUTAL PARA CELULARES (MOBILE FIX)
+       FIX NUCLEAR PARA TELEMÓVEIS (DESTRÓI O JS DO CMS)
        ========================================================= */
     @media screen and (max-width: 850px) {
 
-      /* 1. Força o "esqueleto" inteiro do painel a empilhar de cima para baixo */
-      [class*="AppMainContainer"] {
+      /* 1. Força o esqueleto inteiro a empilhar verticalmente */
+      #nc-root>div>div {
         display: flex !important;
         flex-direction: column !important;
+        min-height: 100vh !important;
       }
 
-      /* 2. O Menu lateral agora vira um menu superior ocupando 100% do espaço */
-      [class*="SidebarContainer"] {
+      /* 2. Menu Lateral (Sidebar) ocupa o topo inteiro, sem margens laterais */
+      aside {
         width: 100% !important;
         max-width: 100% !important;
         min-width: 100% !important;
-        height: auto !important;
-        padding: 15px !important;
+        position: relative !important;
         border-right: none !important;
         border-bottom: 2px solid #e2e8f0 !important;
-        background-color: #fff !important;
       }
 
-      /* 3. A área onde ficam os itens também ocupa 100% e empilha */
-      [class*="CollectionContainer"],
-      [class*="EditorContainer"] {
+      /* 3. Área Principal (Lista e Editor) ocupa o resto do ecrã */
+      main {
         width: 100% !important;
         max-width: 100% !important;
         min-width: 100% !important;
-        display: flex !important;
-        flex-direction: column !important;
-        padding: 10px !important;
       }
 
-      /* 4. Esconde a tela de visualização (Preview) que bugava o espaço no celular */
-      [class*="PreviewPaneContainer"] {
+      /* 4. Destrói o divisor arrastável do React e a Pré-visualização */
+      .Resizer,
+      span[role="presentation"] {
         display: none !important;
       }
 
-      /* 5. A tela de digitação (Editor) ganha toda a largura da tela */
-      [class*="EditorPaneContainer"],
+      .Pane,
+      .Pane1 {
+        width: 100% !important;
+        max-width: 100% !important;
+        position: static !important;
+      }
+
+      .Pane2,
+      [class*="PreviewPane"] {
+        display: none !important;
+        /* Esconde a pré-visualização no telemóvel para não picotar */
+      }
+
+      /* 5. Ajusta o Editor para respeitar as margens do telemóvel */
+      [class*="EditorContainer"] {
+        padding: 0 !important;
+        width: 100% !important;
+      }
+
       [class*="ControlPaneContainer"] {
         width: 100% !important;
         max-width: 100% !important;
-        min-width: 100% !important;
-        padding: 0 !important;
+        padding: 15px !important;
       }
 
-      /* 6. Ajusta a barra do topo (onde fica o botão Salvar) para não vazar da tela */
+      /* 6. Impede que os campos de texto vazem do ecrã */
+      input,
+      textarea,
+      select {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      /* 7. Barra superior (Botão de Guardar) reorganizada */
       [class*="TopBarContainer"] {
         display: flex !important;
         flex-wrap: wrap !important;
