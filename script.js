@@ -298,6 +298,89 @@
     items.forEach((i) => io.observe(i));
   };
 
+  // Função de Contato reativada e adaptada perfeitamente para o Netlify
+  MyApp.initContactForm = () => {
+    const form = $(".contact-form");
+    if (!form) return;
+
+    ["input", "blur"].forEach((ev) => {
+      on(
+        form,
+        ev,
+        (e) => {
+          const t = e.target;
+          if (t.matches("input, textarea"))
+            t.classList.toggle(
+              "input-error",
+              !t.checkValidity() || !t.value.trim(),
+            );
+        },
+        true,
+      );
+    });
+
+    on(form, "submit", async (e) => {
+      e.preventDefault(); // Impede que a página mude para a tela preta de obrigado
+
+      const honeypot = $(".honeypot", form);
+      if (honeypot?.value.trim()) return;
+
+      const inputs = [$("#nome"), $("#email"), $("#assunto"), $("#mensagem")];
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      let isValid = true;
+      inputs.forEach((el) => {
+        if (!el) return;
+        const val = el.value.trim();
+        const isEmailField = el.id === "email";
+        const ok = isEmailField ? emailRegex.test(val) : !!val;
+        el.classList.toggle("input-error", !ok);
+        if (!ok) isValid = false;
+      });
+
+      if (!isValid)
+        return MyApp.showToast(
+          "Preencha todos os campos corretamente.",
+          "error",
+        );
+
+      const btn = $('button[type="submit"]', form);
+      const originalText = btn.innerHTML;
+      btn.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin me-2"></i>Enviando...';
+      btn.disabled = true;
+
+      try {
+        const formData = new FormData(form);
+        if (!formData.has("form-name")) {
+          formData.append("form-name", form.getAttribute("name"));
+        }
+
+        // Empacotamento mágico do Netlify
+        const urlEncodedData = new URLSearchParams(formData).toString();
+
+        const res = await fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: urlEncodedData,
+        });
+
+        if (res.ok) {
+          MyApp.showToast("Mensagem enviada com sucesso!", "success"); // Notificação na mesma tela
+          form.reset();
+        } else {
+          throw new Error("Falha no envio");
+        }
+      } catch (erro) {
+        MyApp.log(erro);
+        MyApp.showToast("Erro de conexão. Tente novamente.", "error");
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    });
+  };
+
   MyApp.initMinistryModals = () => {
     const cards = $$(".card-min");
     if (!cards.length) return;
@@ -835,6 +918,7 @@
     MyApp.initScrollSpy();
     MyApp.initReveal();
     MyApp.initTimeline();
+    MyApp.initContactForm(); 
     MyApp.initMinistryModals();
 
     MyApp.initPaginaInicial();
