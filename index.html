@@ -20,9 +20,9 @@
       "@context": "https://schema.org",
       "@type": "Church",
       "name": "Assembleia de Deus de Vila de Cava - ADVIC",
-      "image": "https://seusite.com.br/imagens/logo.png",
-      "url": "https://seusite.com.br",
-      "telephone": "+552100000000",
+      "image": "https://igrejaadvic.netlify.app/imagens/logo.png",
+      "url": "https://igrejaadvic.netlify.app",
+      "telephone": "+5521971321200",
       "address": { "@type": "PostalAddress", "streetAddress": "R. Vítor Hugo, 76", "addressLocality": "Vila de Cava, Nova Iguaçu", "addressRegion": "RJ", "addressCountry": "BR" }
     }
   </script>
@@ -40,6 +40,7 @@
   <noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   </noscript>
+
   <link rel="stylesheet" href="style.css" />
 
   <meta property="og:title" content="ADVIC — Assembleia de Deus de Vila de Cava" />
@@ -233,6 +234,7 @@
   <button id="btnA11y" class="accessibility-fab" aria-label="Abrir opções de acessibilidade" aria-haspopup="true"
     aria-controls="a11yPanel" aria-expanded="false"><i class="fa-solid fa-universal-access"
       aria-hidden="true"></i></button>
+
   <section id="a11yPanel" class="accessibility-panel" aria-label="Ferramentas de acessibilidade" aria-hidden="true"
     role="dialog">
     <header class="a11y-panel-header"><span><i class="fa-solid fa-universal-access me-2 text-primary"></i>
@@ -261,6 +263,86 @@
           class="fa-solid fa-rotate-right me-2"></i>Redefinir Configurações</button>
     </div>
   </section>
+
+  <div id="pwa-install-container" class="pwa-container" style="display: none;">
+    <div class="pwa-content">
+      <img src="imagens/logo.png" alt="ADVIC App" width="40" height="40" style="border-radius: 8px;">
+      <div class="pwa-text">
+        <strong>App ADVIC</strong>
+        <span>Instale no seu celular</span>
+      </div>
+      <button id="btn-pwa-install" class="btn btn-primary btn-sm">Instalar</button>
+      <button id="btn-pwa-close" class="pwa-close">×</button>
+    </div>
+  </div>
+
+  <style>
+    .pwa-container {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      z-index: 10000;
+      background: white;
+      padding: 12px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      border: 1px solid #eee;
+      animation: slideUp 0.5s ease-out;
+    }
+
+    .pwa-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pwa-text {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .pwa-text strong {
+      font-size: 14px;
+      color: #333;
+    }
+
+    .pwa-text span {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .pwa-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: #999;
+      padding: 0 5px;
+      cursor: pointer;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .pwa-container {
+        max-width: 350px;
+        left: 20px;
+        right: auto;
+      }
+    }
+  </style>
 
   <button id="btnTop" class="btn-top" aria-label="Voltar ao topo"><i class="fa-solid fa-arrow-up"></i></button>
 

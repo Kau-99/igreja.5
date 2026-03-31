@@ -10,6 +10,9 @@
       "img[data-src], .lazy[data-src], [data-lazy], iframe[data-src]",
   };
 
+  // Central de Cache para evitar baixar o mesmo arquivo duas vezes
+  MyApp.Cache = {};
+
   MyApp.log = (...a) =>
     MyApp.config.ENV === "development" ? console.log("[ADVIC]", ...a) : 0;
 
@@ -30,6 +33,16 @@
           '"': "&quot;",
         })[tag],
     );
+  };
+
+  // Função otimizada para buscar os JSONs (Sermões, Eventos)
+  MyApp.fetchJSON = async (url) => {
+    if (MyApp.Cache[url]) return MyApp.Cache[url];
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Falha HTTP: ${response.status}`);
+    const data = await response.json();
+    MyApp.Cache[url] = data;
+    return data;
   };
 
   MyApp.Security = {
@@ -298,7 +311,6 @@
     items.forEach((i) => io.observe(i));
   };
 
-  // Função de Contato reativada e adaptada perfeitamente para o Netlify
   MyApp.initContactForm = () => {
     const form = $(".contact-form");
     if (!form) return;
@@ -320,7 +332,7 @@
     });
 
     on(form, "submit", async (e) => {
-      e.preventDefault(); // Impede que a página mude para a tela preta de obrigado
+      e.preventDefault();
 
       const honeypot = $(".honeypot", form);
       if (honeypot?.value.trim()) return;
@@ -332,8 +344,7 @@
       inputs.forEach((el) => {
         if (!el) return;
         const val = el.value.trim();
-        const isEmailField = el.id === "email";
-        const ok = isEmailField ? emailRegex.test(val) : !!val;
+        const ok = el.id === "email" ? emailRegex.test(val) : !!val;
         el.classList.toggle("input-error", !ok);
         if (!ok) isValid = false;
       });
@@ -347,7 +358,7 @@
       const btn = $('button[type="submit"]', form);
       const originalText = btn.innerHTML;
       btn.innerHTML =
-        '<i class="fa-solid fa-spinner fa-spin me-2"></i>Enviando...';
+        '<i class="fa-solid fa-spinner fa-spin me-2"></i>A enviar...';
       btn.disabled = true;
 
       try {
@@ -356,7 +367,6 @@
           formData.append("form-name", form.getAttribute("name"));
         }
 
-        // Empacotamento mágico do Netlify
         const urlEncodedData = new URLSearchParams(formData).toString();
 
         const res = await fetch("/", {
@@ -366,7 +376,7 @@
         });
 
         if (res.ok) {
-          MyApp.showToast("Mensagem enviada com sucesso!", "success"); // Notificação na mesma tela
+          MyApp.showToast("Mensagem enviada com sucesso!", "success");
           form.reset();
         } else {
           throw new Error("Falha no envio");
@@ -445,18 +455,17 @@
     if (!grid) return;
 
     try {
-      const resposta = await fetch("eventos.json");
-      if (!resposta.ok) throw new Error("Falha HTTP");
-      const dados = await resposta.json();
+      const dados = await MyApp.fetchJSON("eventos.json");
       const eventos = dados.eventos || [];
 
-      grid.innerHTML = "";
       if (!eventos.length) {
         grid.innerHTML =
           '<div class="col-12 text-center py-5 text-muted">Nenhum evento programado.</div>';
         return;
       }
 
+      // Renderização Rápida (Batch Rendering)
+      let htmlContent = "";
       eventos.forEach((evento, index) => {
         const delay = (index % 3) * 80;
         const titulo = escapeHTML(evento.titulo);
@@ -467,7 +476,7 @@
         const calendarUrl = encodeURI(evento.linkCalendario || "#");
         const whatsUrl = encodeURI(evento.linkWhats || "#");
 
-        const htmlEvento = `
+        htmlContent += `
           <div class="col-12 col-md-6 col-lg-4 evento-item" data-animate="fade-up" data-delay="${delay}" data-tipo="${escapeHTML(evento.tipo)}">
             <article class="card-event h-100 d-flex flex-column">
               <img class="lazy" data-src="${imgUrl}" alt="${titulo}" />
@@ -483,8 +492,9 @@
             </article>
           </div>
         `;
-        grid.insertAdjacentHTML("beforeend", htmlEvento);
       });
+
+      grid.innerHTML = htmlContent;
       MyApp.initLazy();
       MyApp.initReveal();
 
@@ -508,18 +518,16 @@
     if (!grid) return;
 
     try {
-      const resposta = await fetch("sermoes.json");
-      if (!resposta.ok) throw new Error("Falha HTTP");
-      const dados = await resposta.json();
+      const dados = await MyApp.fetchJSON("sermoes.json");
       const sermoes = dados.sermoes || [];
 
-      grid.innerHTML = "";
       if (!sermoes.length) {
         grid.innerHTML =
           '<div class="col-12 text-center py-4 text-muted">Nenhum sermão recente disponível.</div>';
         return;
       }
 
+      let htmlContent = "";
       sermoes.forEach((sermao, index) => {
         const delay = (index % 3) * 120;
         const titulo = escapeHTML(sermao.titulo);
@@ -531,7 +539,7 @@
           ? `<a class="btn btn-outline-primary btn-sm" href="${audioUrl}" target="_blank" rel="noopener noreferrer">Ouvir áudio</a>`
           : `<a class="btn btn-outline-primary btn-sm" href="#" aria-disabled="true" style="pointer-events:none;">Ouvir (em breve)</a>`;
 
-        const htmlSermao = `
+        htmlContent += `
           <div class="col-12 col-md-4" data-animate="fade-up" data-delay="${delay}">
             <article class="sermon h-100 d-flex flex-column">
               <h3 class="mb-2">${titulo}</h3>
@@ -543,8 +551,9 @@
             </article>
           </div>
         `;
-        grid.insertAdjacentHTML("beforeend", htmlSermao);
       });
+
+      grid.innerHTML = htmlContent;
       MyApp.initReveal();
     } catch {
       grid.innerHTML =
@@ -560,9 +569,7 @@
     if (!heroTitulo || !heroSubtitulo || !heroBg) return;
 
     try {
-      const resposta = await fetch("inicio.json");
-      if (!resposta.ok) throw new Error("HTTP error");
-      const dados = await resposta.json();
+      const dados = await MyApp.fetchJSON("inicio.json");
 
       if (dados.hero) {
         heroTitulo.textContent = dados.hero.titulo;
@@ -579,9 +586,7 @@
 
   MyApp.initContatos = async () => {
     try {
-      const resposta = await fetch("contatos.json");
-      if (!resposta.ok) throw new Error("HTTP error");
-      const dados = await resposta.json();
+      const dados = await MyApp.fetchJSON("contatos.json");
 
       if (dados.instagram)
         $$('a[href*="instagram.com"]').forEach(
@@ -845,7 +850,6 @@
     $$("[data-a11y-action]", panel).forEach((b) =>
       on(b, "click", () => handleAction(b.dataset.a11yAction)),
     );
-
     on(document, "click", (e) => {
       if (
         panel.classList.contains("open") &&
@@ -904,6 +908,37 @@
     });
   };
 
+  // Instalação da App da Igreja (PWA)
+  MyApp.initPWA = () => {
+    let deferredPrompt;
+    const container = document.getElementById("pwa-install-container");
+    const btnInstall = document.getElementById("btn-pwa-install");
+    const btnClose = document.getElementById("btn-pwa-close");
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (container) container.style.display = "block";
+    });
+
+    if (btnInstall) {
+      btnInstall.addEventListener("click", async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === "accepted" && container)
+          container.style.display = "none";
+        deferredPrompt = null;
+      });
+    }
+
+    if (btnClose) {
+      btnClose.addEventListener("click", () => {
+        if (container) container.style.display = "none";
+      });
+    }
+  };
+
   document.addEventListener("DOMContentLoaded", () => {
     MyApp.initPreloader();
     MyApp.Security.enforceHTTPS();
@@ -918,7 +953,7 @@
     MyApp.initScrollSpy();
     MyApp.initReveal();
     MyApp.initTimeline();
-    MyApp.initContactForm(); 
+    MyApp.initContactForm();
     MyApp.initMinistryModals();
 
     MyApp.initPaginaInicial();
@@ -930,6 +965,7 @@
     MyApp.initVersiculoDaSemana();
     MyApp.initTop();
     MyApp.initAccessibility();
+    MyApp.initPWA();
     MyApp.prefetch();
 
     const map = document.querySelector(".mapa-wrapper iframe[data-src]");
