@@ -1,19 +1,26 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Painel Institucional | ADVIC</title>
+  <title>Painel Administrativo | ADVIC</title>
 
-  <link rel="icon" type="image/png" href="imagens/logo.png" />
+  <!-- Impede que o painel seja indexado por motores de busca -->
+  <meta name="robots" content="noindex, nofollow" />
+
+  <!-- Favicon com caminho correto relativo à pasta /admin/ -->
+  <link rel="icon" type="image/png" href="../imagens/logo.png" />
+
+  <!-- Widget de autenticação Netlify Identity (deve carregar antes do CMS) -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
   <style>
+    /* ── Variáveis de cor da ADVIC ─────────────────────────── */
     :root {
       --color-primary: #0f8c95;
-      --color-hover: #0b6b72;
-      --color-bg: #f4f7f6;
+      --color-hover:   #0b6b72;
+      --color-bg:      #f4f7f6;
     }
 
     body {
@@ -23,7 +30,7 @@
       padding: 0;
     }
 
-    /* Cores do Login do Netlify */
+    /* ── Painel de login do Netlify Identity ───────────────── */
     iframe#netlify-identity-widget {
       z-index: 9999 !important;
     }
@@ -32,7 +39,7 @@
       background-color: var(--color-primary) !important;
     }
 
-    /* Cores Gerais do Painel ADVIC */
+    /* ── Cor primária do Decap CMS ─────────────────────────── */
     [class*="AppHeader"],
     [class*="Button-button-default-primary"],
     [class*="Toggle-activeBackground"] {
@@ -50,19 +57,19 @@
       color: var(--color-primary) !important;
     }
 
-    /* =========================================================
-       FIX NUCLEAR PARA TELEMÓVEIS (DESTRÓI O JS DO CMS)
-       ========================================================= */
+    /* ── Responsividade em dispositivos móveis ─────────────── */
+    /* O Decap CMS não é mobile-first; estas regras corrigem    */
+    /* o layout para ecrãs menores de 850 px.                  */
     @media screen and (max-width: 850px) {
 
-      /* 1. Força o esqueleto inteiro a empilhar verticalmente */
-      #nc-root>div>div {
+      /* 1. Empilha sidebar + conteúdo verticalmente */
+      #nc-root > div > div {
         display: flex !important;
         flex-direction: column !important;
         min-height: 100vh !important;
       }
 
-      /* 2. Menu Lateral (Sidebar) ocupa o topo inteiro, sem margens laterais */
+      /* 2. Sidebar ocupa a largura total no topo */
       aside {
         width: 100% !important;
         max-width: 100% !important;
@@ -72,14 +79,14 @@
         border-bottom: 2px solid #e2e8f0 !important;
       }
 
-      /* 3. Área Principal (Lista e Editor) ocupa o resto do ecrã */
+      /* 3. Área principal ocupa o restante */
       main {
         width: 100% !important;
         max-width: 100% !important;
         min-width: 100% !important;
       }
 
-      /* 4. Destrói o divisor arrastável do React e a Pré-visualização */
+      /* 4. Remove divisor arrastável e esconde pré-visualização */
       .Resizer,
       span[role="presentation"] {
         display: none !important;
@@ -92,13 +99,13 @@
         position: static !important;
       }
 
+      /* Pré-visualização ocupa muito espaço e não é útil no móvel */
       .Pane2,
       [class*="PreviewPane"] {
         display: none !important;
-        /* Esconde a pré-visualização no telemóvel para não picotar */
       }
 
-      /* 5. Ajusta o Editor para respeitar as margens do telemóvel */
+      /* 5. Formulário de edição sem overflow */
       [class*="EditorContainer"] {
         padding: 0 !important;
         width: 100% !important;
@@ -110,7 +117,7 @@
         padding: 15px !important;
       }
 
-      /* 6. Impede que os campos de texto vazem do ecrã */
+      /* 6. Campos de formulário não excedem o ecrã */
       input,
       textarea,
       select {
@@ -119,7 +126,7 @@
         box-sizing: border-box !important;
       }
 
-      /* 7. Barra superior (Botão de Guardar) reorganizada */
+      /* 7. Barra superior (botão Guardar) em linha própria */
       [class*="TopBarContainer"] {
         display: flex !important;
         flex-wrap: wrap !important;
@@ -127,7 +134,7 @@
         padding: 10px !important;
       }
 
-      [class*="TopBarContainer"]>div {
+      [class*="TopBarContainer"] > div {
         width: 100% !important;
         flex: 1 1 100% !important;
       }
@@ -136,20 +143,18 @@
 </head>
 
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <script>
-    CMS.registerPreviewStyle("../style.css");
-    CMS.registerPreviewStyle("https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css");
+  <!--
+    Decap CMS carregado via jsDelivr (CDN estável e com SRI disponível).
+    Versão fixada em @3 para receber patches mas não quebrar em major updates.
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/decap-cms@3/dist/decap-cms.js"></script>
 
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          window.netlifyIdentity.on("login", () => {
-            document.location.href = "/admin/";
-          });
-        }
-      });
-    }
+  <script>
+    // Aplica os estilos do site ao painel de pré-visualização do CMS
+    // Importante: usar caminhos relativos ao domínio raiz (/) e não à pasta /admin/
+    CMS.registerPreviewStyle("/style.css");
+    CMS.registerPreviewStyle("https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css");
+    CMS.registerPreviewStyle("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css");
   </script>
 </body>
 

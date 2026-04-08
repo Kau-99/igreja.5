@@ -55,8 +55,8 @@
           <li><a href="index.html">Início</a></li>
           <li><a href="sobre.html">Sobre</a></li>
           <li><a href="eventos.html">Eventos</a></li>
-          <li><a class="active" aria-current="page" href="contato.html">Contato</a></li>
-          <li><a href="privacidade.html">Privacidade & Imagem</a></li>
+          <li><a href="contato.html">Contato</a></li>
+          <li><a href="privacidade.html">Privacidade &amp; Imagem</a></li>
           <li><a class="btn btn-sm btn-cta" href="contato.html">Seja Membro</a></li>
         </ul>
       </nav>
@@ -67,7 +67,6 @@
     <section class="container py-5">
       <div class="row g-4">
         <div class="col-12 col-lg-6">
-
           <form id="contactForm" class="contact-form" name="contato" method="POST" netlify>
 
             <h1 class="mb-2">Entre em Contato</h1>
@@ -91,7 +90,6 @@
             <button class="btn btn-primary mt-2" type="submit">Enviar</button>
             <p class="email-note">Seus dados não serão compartilhados.</p>
           </form>
-
         </div>
 
         <div class="col-12 col-lg-6">
@@ -104,15 +102,18 @@
               <li id="info-email" class="mb-2"><i
                   class="fa-solid fa-envelope me-2 text-primary"></i>contato@advic.org.br</li>
             </ul>
+
             <h3 class="fs-5">Horários de Culto</h3>
             <ul class="list-unstyled mb-3">
               <li><i class="fa-solid fa-calendar-days me-2 text-primary"></i>Domingos: 9h, 18h</li>
               <li><i class="fa-solid fa-calendar-days me-2 text-primary"></i>Quartas: 19h30</li>
+            </ul>
 
+            <!-- Mapa carregado sob demanda via IntersectionObserver (lazy) -->
             <div class="mapa-wrapper mt-3 rounded-3 overflow-hidden">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3681.2978731186768!2d-43.445675623916664!3d-22.679952629805133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x996900e7499671%3A0x7639e656f93e3a9b!2sR.%20V%C3%ADtor%20Hugo%2C%2076%20-%20Vila%20de%20Cava%2C%20Nova%20Igua%C3%A7u%20-%20RJ%2C%2026052-450!5e0!3m2!1spt-BR!2sbr!4v1774314654275!5m2!1spt-BR!2sbr"
-                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3681.2978731186768!2d-43.445675623916664!3d-22.679952629805133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x996900e7499671%3A0x7639e656f93e3a9b!2sR.%20V%C3%ADtor%20Hugo%2C%2076%20-%20Vila%20de%20Cava%2C%20Nova%20Igua%C3%A7u%20-%20RJ%2C%2026052-450!5e0!3m2!1spt-BR!2sbr!4v1774314654275!5m2!1spt-BR!2sbr"
+                width="600" height="450" style="border:0;" allowfullscreen="" title="Localização da ADVIC no Google Maps"
                 referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
           </div>
@@ -133,47 +134,22 @@
 
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-content">
-      <div class="footer-brand"><img src="imagens/logo.png" alt="Logo ADVIC" class="logo-img" height="56"
-          loading="lazy" />
+      <div class="footer-brand">
+        <img src="imagens/logo.png" alt="Logo ADVIC" class="logo-img" height="56" loading="lazy" />
         <p class="mb-0">© 2025 ADVIC — Todos os direitos reservados</p>
       </div>
-      <nav class="social-links" aria-label="Redes sociais"><a href="https://www.instagram.com/advic_viladecava/"
-          target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a><a
-          href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer"><i
-            class="fab fa-facebook"></i></a><a href="https://www.youtube.com/@advicof" target="_blank"
-          rel="noopener noreferrer"><i class="fab fa-youtube"></i></a></nav>
+      <nav class="social-links" aria-label="Redes sociais">
+        <a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+        <a href="https://www.youtube.com/@advicof" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+      </nav>
     </div>
   </footer>
 
-  <button id="btnA11y" class="accessibility-fab" aria-label="Abrir opções de acessibilidade" aria-haspopup="true"
-    aria-controls="a11yPanel" aria-expanded="false"><i class="fa-solid fa-universal-access"
-      aria-hidden="true"></i></button>
-  <section id="a11yPanel" class="accessibility-panel" aria-label="Ferramentas de acessibilidade" aria-hidden="true"
-    role="dialog">
-    <header class="a11y-panel-header"><span><i class="fa-solid fa-universal-access me-2 text-primary"></i>
-        Acessibilidade</span><button type="button" class="a11y-close" data-a11y-close
-        aria-label="Fechar painel">×</button></header>
-    <div class="a11y-panel-body">
-      <div class="a11y-grid"><button type="button" class="a11y-tool" data-a11y-action="font-inc"
-          title="Aumentar texto"><i class="fa-solid fa-magnifying-glass-plus"></i>Texto +</button><button type="button"
-          class="a11y-tool" data-a11y-action="font-dec" title="Diminuir texto"><i
-            class="fa-solid fa-magnifying-glass-minus"></i>Texto -</button><button type="button" class="a11y-tool"
-          data-a11y-action="toggle-contrast" id="btn-a11y-contrast"><i
-            class="fa-solid fa-circle-half-stroke"></i>Contraste</button><button type="button" class="a11y-tool"
-          data-a11y-action="toggle-links" id="btn-a11y-links"><i class="fa-solid fa-link"></i>Destacar
-          Links</button><button type="button" class="a11y-tool" data-a11y-action="toggle-spacing"
-          id="btn-a11y-spacing"><i class="fa-solid fa-text-width"></i>Espaçamento</button><button type="button"
-          class="a11y-tool" data-a11y-action="toggle-dyslexia" id="btn-a11y-dyslexia"><i
-            class="fa-solid fa-font"></i>Dislexia</button><button type="button" class="a11y-tool"
-          data-a11y-action="toggle-cursor" id="btn-a11y-cursor"><i class="fa-solid fa-arrow-pointer"></i>Cursor
-          Maior</button><button type="button" class="a11y-tool" data-a11y-action="read-page" id="btn-a11y-read"><i
-            class="fa-solid fa-volume-high"></i>Ler Página</button></div><button type="button" class="a11y-reset-btn"
-        data-a11y-action="reset"><i class="fa-solid fa-rotate-right me-2"></i>Redefinir Configurações</button>
-    </div>
-  </section>
-  <button id="btnTop" class="btn-top" aria-label="Voltar ao topo"><i class="fa-solid fa-arrow-up"></i></button>
+  <!-- Painel de acessibilidade e btnTop injetados por components.js -->
 
   <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="components.js"></script>
   <script defer src="script.js"></script>
 </body>
 

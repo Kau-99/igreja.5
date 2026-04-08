@@ -73,7 +73,7 @@
       </button>
       <nav id="primary-navigation" class="nav-wrapper">
         <ul class="nav-menu">
-          <li><a class="active" aria-current="page" href="index.html">Início</a></li>
+          <li><a href="index.html">Início</a></li>
           <li><a href="sobre.html">Sobre</a></li>
           <li><a href="eventos.html">Eventos</a></li>
           <li><a href="contato.html">Contato</a></li>
@@ -231,38 +231,7 @@
     </div>
   </footer>
 
-  <button id="btnA11y" class="accessibility-fab" aria-label="Abrir opções de acessibilidade" aria-haspopup="true"
-    aria-controls="a11yPanel" aria-expanded="false"><i class="fa-solid fa-universal-access"
-      aria-hidden="true"></i></button>
-
-  <section id="a11yPanel" class="accessibility-panel" aria-label="Ferramentas de acessibilidade" aria-hidden="true"
-    role="dialog">
-    <header class="a11y-panel-header"><span><i class="fa-solid fa-universal-access me-2 text-primary"></i>
-        Acessibilidade</span><button type="button" class="a11y-close" data-a11y-close
-        aria-label="Fechar painel">×</button></header>
-    <div class="a11y-panel-body">
-      <div class="a11y-grid">
-        <button type="button" class="a11y-tool" data-a11y-action="font-inc" title="Aumentar texto"><i
-            class="fa-solid fa-magnifying-glass-plus"></i>Texto +</button>
-        <button type="button" class="a11y-tool" data-a11y-action="font-dec" title="Diminuir texto"><i
-            class="fa-solid fa-magnifying-glass-minus"></i>Texto -</button>
-        <button type="button" class="a11y-tool" data-a11y-action="toggle-contrast" id="btn-a11y-contrast"><i
-            class="fa-solid fa-circle-half-stroke"></i>Contraste</button>
-        <button type="button" class="a11y-tool" data-a11y-action="toggle-links" id="btn-a11y-links"><i
-            class="fa-solid fa-link"></i>Destacar Links</button>
-        <button type="button" class="a11y-tool" data-a11y-action="toggle-spacing" id="btn-a11y-spacing"><i
-            class="fa-solid fa-text-width"></i>Espaçamento</button>
-        <button type="button" class="a11y-tool" data-a11y-action="toggle-dyslexia" id="btn-a11y-dyslexia"><i
-            class="fa-solid fa-font"></i>Dislexia</button>
-        <button type="button" class="a11y-tool" data-a11y-action="toggle-cursor" id="btn-a11y-cursor"><i
-            class="fa-solid fa-arrow-pointer"></i>Cursor Maior</button>
-        <button type="button" class="a11y-tool" data-a11y-action="read-page" id="btn-a11y-read"><i
-            class="fa-solid fa-volume-high"></i>Ler Página</button>
-      </div>
-      <button type="button" class="a11y-reset-btn" data-a11y-action="reset"><i
-          class="fa-solid fa-rotate-right me-2"></i>Redefinir Configurações</button>
-    </div>
-  </section>
+  <!-- Painel de acessibilidade e btnTop injetados por components.js -->
 
   <div id="pwa-install-container" class="pwa-container" style="display: none;">
     <div class="pwa-content">
@@ -276,77 +245,8 @@
     </div>
   </div>
 
-  <style>
-    .pwa-container {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      right: 20px;
-      z-index: 10000;
-      background: white;
-      padding: 12px;
-      border-radius: 12px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-      border: 1px solid #eee;
-      animation: slideUp 0.5s ease-out;
-    }
-
-    .pwa-content {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .pwa-text {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      line-height: 1.2;
-    }
-
-    .pwa-text strong {
-      font-size: 14px;
-      color: #333;
-    }
-
-    .pwa-text span {
-      font-size: 12px;
-      color: #666;
-    }
-
-    .pwa-close {
-      background: none;
-      border: none;
-      font-size: 20px;
-      color: #999;
-      padding: 0 5px;
-      cursor: pointer;
-    }
-
-    @keyframes slideUp {
-      from {
-        transform: translateY(100px);
-        opacity: 0;
-      }
-
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    @media (min-width: 768px) {
-      .pwa-container {
-        max-width: 350px;
-        left: 20px;
-        right: auto;
-      }
-    }
-  </style>
-
-  <button id="btnTop" class="btn-top" aria-label="Voltar ao topo"><i class="fa-solid fa-arrow-up"></i></button>
-
   <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="components.js"></script>
   <script defer src="script.js"></script>
 
   <script>

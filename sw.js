@@ -1,4 +1,4 @@
-const CACHE_NAME = "advic-v2";
+const CACHE_NAME = "advic-v3";
 
 const STATIC_ASSETS = [
   "/",
@@ -13,6 +13,8 @@ const STATIC_ASSETS = [
   "/eventos.json",
   "/sermoes.json",
   "/contatos.json",
+  "/sobre.json",
+  "/components.js",
   "/imagens/logo.png",
 ];
 

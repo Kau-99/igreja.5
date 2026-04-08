@@ -1,1 +1,61 @@
-{}
+{
+  "hero": {
+    "imagem": "imagens/imagem-igreja.jpg",
+    "titulo": "Nossa História",
+    "subtitulo": "Conheça as raízes, os propósitos e as pessoas que formam a ADVIC."
+  },
+  "historia": {
+    "titulo": "Uma Igreja Família",
+    "paragrafo1": "A Assembleia de Deus de Vila de Cava (ADVIC) nasceu do desejo de espalhar o amor de Cristo na nossa região. Desde o primeiro culto, nosso foco tem sido acolher famílias, restaurar vidas e ensinar a Palavra com integridade.",
+    "paragrafo2": "Cremos que a igreja não é feita de tijolos, mas de pessoas que servem umas às outras. Aqui, cada membro encontra um ambiente de crescimento, comunhão e propósito.",
+    "imagem": "imagens/imagem-igreja.jpg"
+  },
+  "timeline": [
+    {
+      "data": "Anos 80",
+      "titulo": "O Início do Sonho",
+      "descricao": "Nossos primeiros cultos aconteceram em lares e pequenos salões. Um tempo de oração e sacrifício."
+    },
+    {
+      "data": "1995",
+      "titulo": "O Primeiro Templo",
+      "descricao": "Com a graça de Deus inauguramos nosso primeiro templo físico, um ponto de luz em Vila de Cava."
+    },
+    {
+      "data": "2010",
+      "titulo": "Expansão da Visão",
+      "descricao": "Nossos ministérios de jovens e ação social cresceram e começamos trabalhos assistenciais intensos."
+    },
+    {
+      "data": "Dias Atuais",
+      "titulo": "Vivendo o Extraordinário",
+      "descricao": "Hoje somos uma igreja vibrante e estruturada, pronta para o futuro, firmada na Palavra."
+    }
+  ],
+  "lideranca": [
+    {
+      "nome": "Pr. Luiz Paes leme",
+      "cargo": "Pastor Presidente",
+      "imagem": "imagens/WhatsApp Image 2025-10-17 at 20.57.52.jpeg",
+      "instagram": "#"
+    },
+    {
+      "nome": "Pr. Roberto Alves",
+      "cargo": "Vice-Presidente",
+      "imagem": "imagens/pastor2.jpg",
+      "instagram": "#"
+    },
+    {
+      "nome": "Lucas Martins",
+      "cargo": "Líder de Jovens",
+      "imagem": "imagens/pastor lider em 1950.jpg",
+      "instagram": "#"
+    },
+    {
+      "nome": "Miss. Ana Júlia",
+      "cargo": "Coord. Infantil",
+      "imagem": "imagens/pastor4.jpg",
+      "instagram": "#"
+    }
+  ]
+}
