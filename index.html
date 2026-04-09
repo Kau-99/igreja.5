@@ -43,9 +43,11 @@
 
   <link rel="stylesheet" href="style.css" />
 
+  <link rel="canonical" href="https://igrejaadvic.netlify.app/" />
   <meta property="og:title" content="ADVIC — Assembleia de Deus de Vila de Cava" />
   <meta property="og:description" content="Cultos, eventos e ministérios. Participe conosco." />
-  <meta property="og:image" content="imagens/logo.png" />
+  <meta property="og:image" content="https://igrejaadvic.netlify.app/imagens/logo.png" />
+  <meta property="og:url" content="https://igrejaadvic.netlify.app/" />
   <meta property="og:type" content="website" />
 
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
@@ -98,30 +100,36 @@
       </div>
     </section>
 
+    <section id="proximo-evento" class="countdown-section" aria-label="Próximo evento">
+      <div class="container text-center" id="countdown-container">
+        <!-- preenchido dinamicamente por initCountdown() -->
+      </div>
+    </section>
+
     <section id="pilares" class="py-5">
       <div class="container">
         <h2 class="section-title text-center">Nossos Pilares</h2>
         <p class="text-center text-muted mb-4">O que guia nossa caminhada.</p>
         <div class="row g-4">
-          <div class="col-12 col-md-3" data-animate="fade-up">
+          <div class="col-6 col-md-3" data-animate="fade-up">
             <div class="pillar"><i class="fa-solid fa-heart"></i>
               <h3>Amor</h3>
               <p>Vivemos o mandamento do amor a Deus e ao próximo.</p>
             </div>
           </div>
-          <div class="col-12 col-md-3" data-animate="fade-up" data-delay="80">
+          <div class="col-6 col-md-3" data-animate="fade-up" data-delay="80">
             <div class="pillar"><i class="fa-solid fa-people-group"></i>
               <h3>Comunidade</h3>
               <p>Relacionamentos que edificam e acolhem.</p>
             </div>
           </div>
-          <div class="col-12 col-md-3" data-animate="fade-up" data-delay="160">
+          <div class="col-6 col-md-3" data-animate="fade-up" data-delay="160">
             <div class="pillar"><i class="fa-solid fa-hands-praying"></i>
               <h3>Fé</h3>
               <p>Firmados na Palavra e em oração contínua.</p>
             </div>
           </div>
-          <div class="col-12 col-md-3" data-animate="fade-up" data-delay="240">
+          <div class="col-6 col-md-3" data-animate="fade-up" data-delay="240">
             <div class="pillar"><i class="fa-solid fa-hand-holding-heart"></i>
               <h3>Serviço</h3>
               <p>Servimos a Deus servindo pessoas.</p>

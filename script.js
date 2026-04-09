@@ -31,14 +31,23 @@
     );
   };
 
-  // ─── BUSCA JSON COM CACHE ─────────────────────────────────────────────────
-  MyApp.fetchJSON = async (url) => {
+  // ─── BUSCA JSON COM CACHE E TIMEOUT ─────────────────────────────────────
+  MyApp.fetchJSON = async (url, timeoutMs = 8000) => {
     if (MyApp.Cache[url]) return MyApp.Cache[url];
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Falha HTTP: ${response.status}`);
-    const data = await response.json();
-    MyApp.Cache[url] = data;
-    return data;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const response = await fetch(url, { signal: controller.signal });
+      if (!response.ok) throw new Error(`Falha HTTP: ${response.status}`);
+      const data = await response.json();
+      MyApp.Cache[url] = data;
+      return data;
+    } catch (err) {
+      if (err.name === "AbortError") throw new Error("Tempo esgotado ao carregar dados.");
+      throw err;
+    } finally {
+      clearTimeout(timer);
+    }
   };
 
   // ─── SEGURANÇA ────────────────────────────────────────────────────────────
@@ -363,7 +372,11 @@
     const cards = $$(".card-min");
     if (!cards.length) return;
 
+    // Remove overlay existente para evitar acúmulo de listeners
+    $("#min-modal-overlay")?.remove();
+
     const overlay = document.createElement("div");
+    overlay.id        = "min-modal-overlay";
     overlay.className = "min-modal-overlay";
     overlay.innerHTML = `
       <div class="min-modal-content" role="dialog" aria-modal="true" aria-labelledby="min-modal-title">
@@ -384,29 +397,57 @@
     const img   = $("#min-modal-img",   overlay);
     const title = $("#min-modal-title", overlay);
     const text  = $("#min-modal-text",  overlay);
+    let lastFocus = null;
+
+    // Foco seletável dentro do modal para o focus trap
+    const getFocusable = () =>
+      $$('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])', overlay)
+        .filter((el) => !el.disabled);
+
+    const trapFocus = (e) => {
+      if (!overlay.classList.contains("open")) return;
+      const focusable = getFocusable();
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last  = focusable[focusable.length - 1];
+      if (e.key === "Tab") {
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus();
+        }
+      }
+    };
+
+    const openModal = (card) => {
+      lastFocus = document.activeElement;
+      title.textContent = card.dataset.title || "";
+      text.textContent  = card.dataset.text  || "";
+      img.src           = card.dataset.img   || "";
+      overlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+      // Foca o botão de fechar ao abrir
+      requestAnimationFrame(() => $(".min-modal-close", overlay)?.focus());
+    };
 
     const closeModal = () => {
       overlay.classList.remove("open");
       document.body.style.overflow = "";
+      // Retorna foco ao elemento que abriu o modal
+      lastFocus?.focus();
     };
 
     cards.forEach((card) => {
       const btn = $(".open-ministry-modal", card);
-      if (btn) {
-        on(btn, "click", (e) => {
-          e.preventDefault();
-          title.textContent = card.dataset.title || "";
-          text.textContent  = card.dataset.text  || "";
-          img.src           = card.dataset.img   || "";
-          overlay.classList.add("open");
-          document.body.style.overflow = "hidden";
-        });
-      }
+      if (btn) on(btn, "click", (e) => { e.preventDefault(); openModal(card); });
     });
 
     $$(".min-modal-close, .min-modal-btn-close", overlay).forEach((btn) => on(btn, "click", closeModal));
     on(overlay, "click", (e) => { if (e.target === overlay) closeModal(); });
-    on(document, "keydown", (e) => { if (e.key === "Escape" && overlay.classList.contains("open")) closeModal(); });
+    on(document, "keydown", (e) => {
+      if (e.key === "Escape" && overlay.classList.contains("open")) closeModal();
+      trapFocus(e);
+    });
   };
 
   // ─── VALIDADORES DE SCHEMA JSON ───────────────────────────────────────────
@@ -431,6 +472,36 @@
     return required.every((k) => typeof l[k] === "string" && l[k].trim() !== "");
   };
 
+  // ─── TEMPLATES DE SKELETON LOADING ───────────────────────────────────────
+  const skeletonEvento = () => `
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="skeleton-card h-100 d-flex flex-column">
+        <div class="skeleton skeleton-img"></div>
+        <div class="p-3 d-flex flex-column flex-grow-1">
+          <div class="skeleton skeleton-line w-75"></div>
+          <div class="skeleton skeleton-line w-50"></div>
+          <div class="skeleton skeleton-line mt-2 w-100"></div>
+          <div class="skeleton skeleton-line w-90 mb-3"></div>
+          <div class="d-flex gap-2 mt-auto">
+            <div class="skeleton skeleton-btn"></div>
+            <div class="skeleton skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  const skeletonSermao = () => `
+    <div class="col-12 col-md-4">
+      <div class="skeleton-card h-100 d-flex flex-column p-3">
+        <div class="skeleton skeleton-line w-90 mb-2" style="height:1.3rem"></div>
+        <div class="skeleton skeleton-line w-60 mb-auto"></div>
+        <div class="d-flex gap-2 pt-3">
+          <div class="skeleton skeleton-btn"></div>
+          <div class="skeleton skeleton-btn"></div>
+        </div>
+      </div>
+    </div>`;
+
   // ─── RENDERIZADORES ───────────────────────────────────────────────────────
   const renderEvento = (evento, index) => {
     if (!validateEvento(evento)) return "";
@@ -442,6 +513,16 @@
     const imgUrl      = encodeURI(evento.imagem || "");
     const calendarUrl = encodeURI(evento.linkCalendario || "#");
     const whatsUrl    = encodeURI(evento.linkWhats || "#");
+    // Botão de partilha: usa Web Share API nativa; fallback para WhatsApp
+    const shareBtn = `<button
+        class="btn btn-outline-primary btn-sm btn-share"
+        data-share-title="${titulo}"
+        data-share-text="${descricao}"
+        data-share-url="${calendarUrl !== encodeURI("#") ? calendarUrl : window.location.href}"
+        data-share-fallback="${whatsUrl}"
+        aria-label="Compartilhar ${titulo}">
+        <i class="fa-solid fa-share-nodes me-1" aria-hidden="true"></i>Compartilhar
+      </button>`;
     return `
       <div class="col-12 col-md-6 col-lg-4 evento-item" data-animate="fade-up" data-delay="${delay}" data-tipo="${escapeHTML(evento.tipo || "")}">
         <article class="card-event h-100 d-flex flex-column">
@@ -452,7 +533,7 @@
             <p class="mb-3 flex-grow-1">${descricao}</p>
             <div class="d-flex gap-2 mt-auto">
               <a class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer" href="${calendarUrl}">Calendário</a>
-              <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer" href="${whatsUrl}">Compartilhar</a>
+              ${shareBtn}
             </div>
           </div>
         </article>
@@ -532,9 +613,17 @@
     emptyMessage,
     errorMessage,
     onAfterRender,
+    skeletonTemplate = null, // função () => string HTML de um card skeleton
+    skeletonCount    = 3,    // quantos skeletons mostrar enquanto carrega
   }) => {
     const grid = $(containerId);
     if (!grid) return;
+
+    // Mostra skeletons imediatamente, substituindo o spinner estático
+    if (skeletonTemplate) {
+      grid.innerHTML = Array.from({ length: skeletonCount }, skeletonTemplate).join("");
+    }
+
     try {
       const dados = await MyApp.fetchJSON(jsonFile);
       const items = Array.isArray(dados[key]) ? dados[key] : [];
@@ -544,20 +633,27 @@
       }
       grid.innerHTML = items.map(renderer).join("");
       if (onAfterRender) onAfterRender(grid, items);
-    } catch {
-      grid.innerHTML = `<div class="col-12 text-center py-5 text-danger">${errorMessage}</div>`;
+    } catch (err) {
+      const isOffline = !navigator.onLine;
+      const msg = isOffline
+        ? `<i class="fa-solid fa-wifi-slash me-2"></i>Você está offline. ${errorMessage}`
+        : `<i class="fa-solid fa-circle-exclamation me-2"></i>${errorMessage}`;
+      grid.innerHTML = `<div class="col-12 text-center py-5 text-danger">${msg}</div>`;
+      MyApp.log("Erro ao carregar", jsonFile, err.message);
     }
   };
 
   MyApp.initEventos = async () => {
     const select = $("#filtro-eventos");
     await MyApp.initDynamicSection({
-      containerId:  "#eventos-grid",
-      jsonFile:     "eventos.json",
-      key:          "eventos",
-      renderer:     renderEvento,
-      emptyMessage: "Nenhum evento programado.",
-      errorMessage: "Não foi possível carregar a programação.",
+      containerId:      "#eventos-grid",
+      jsonFile:         "eventos.json",
+      key:              "eventos",
+      renderer:         renderEvento,
+      emptyMessage:     "Nenhum evento programado no momento. Volte em breve!",
+      errorMessage:     "Não foi possível carregar a programação. Tente recarregar a página.",
+      skeletonTemplate: skeletonEvento,
+      skeletonCount:    3,
       onAfterRender: (grid) => {
         MyApp.registerLazyElements($$("[data-src]", grid));
         MyApp.registerRevealElements($$("[data-animate]", grid));
@@ -576,12 +672,14 @@
 
   MyApp.initSermoes = async () => {
     await MyApp.initDynamicSection({
-      containerId:  "#sermoes-grid",
-      jsonFile:     "sermoes.json",
-      key:          "sermoes",
-      renderer:     renderSermao,
-      emptyMessage: "Nenhum sermão recente disponível.",
-      errorMessage: "Não foi possível carregar os sermões.",
+      containerId:      "#sermoes-grid",
+      jsonFile:         "sermoes.json",
+      key:              "sermoes",
+      renderer:         renderSermao,
+      emptyMessage:     "Nenhum sermão disponível no momento. Confira nosso canal no YouTube!",
+      errorMessage:     "Não foi possível carregar os sermões. Tente recarregar a página.",
+      skeletonTemplate: skeletonSermao,
+      skeletonCount:    3,
       onAfterRender: (grid) => {
         MyApp.registerRevealElements($$("[data-animate]", grid));
       },
@@ -881,6 +979,176 @@
     getLazyObserver().observe(map);
   };
 
+  // ─── DARK MODE ────────────────────────────────────────────────────────────
+  MyApp.initDarkMode = () => {
+    const btn = $("#btnDarkMode");
+    if (!btn) return;
+
+    const applyTheme = (theme) => {
+      document.documentElement.setAttribute("data-theme", theme);
+      try { localStorage.setItem("advic-theme", theme); } catch { /* privado */ }
+      btn.innerHTML =
+        theme === "dark"
+          ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>'
+          : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
+      btn.setAttribute(
+        "aria-label",
+        theme === "dark" ? "Mudar para modo claro" : "Mudar para modo escuro",
+      );
+    };
+
+    on(btn, "click", () => {
+      const current = document.documentElement.getAttribute("data-theme");
+      applyTheme(current === "dark" ? "light" : "dark");
+    });
+
+    // Sincroniza com mudanças do sistema operacional enquanto a aba está aberta
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (e) => {
+        if (!localStorage.getItem("advic-theme")) {
+          applyTheme(e.matches ? "dark" : "light");
+        }
+      });
+  };
+
+  // ─── CONTADOR REGRESSIVO ──────────────────────────────────────────────────
+  MyApp.initCountdown = async () => {
+    const container = $("#countdown-container");
+    if (!container) return;
+
+    try {
+      const dados = await MyApp.fetchJSON("eventos.json");
+      const agora  = new Date();
+      const proximos = (Array.isArray(dados.eventos) ? dados.eventos : [])
+        .filter((ev) => ev.dataISO && new Date(ev.dataISO) > agora)
+        .sort((a, b) => new Date(a.dataISO) - new Date(b.dataISO));
+
+      if (!proximos.length) {
+        container.closest("section")?.style.setProperty("display", "none");
+        return;
+      }
+
+      const evento = proximos[0];
+      const alvo   = new Date(evento.dataISO);
+
+      container.innerHTML = `
+        <p class="countdown-label">PRÓXIMO EVENTO</p>
+        <p class="countdown-titulo">${escapeHTML(evento.titulo)}</p>
+        <div class="countdown-timer" id="countdown-timer" role="timer" aria-live="off" aria-label="Contagem regressiva">
+          <div class="countdown-unit"><span id="cd-days">--</span><small>dias</small></div>
+          <span class="countdown-sep" aria-hidden="true">:</span>
+          <div class="countdown-unit"><span id="cd-hours">--</span><small>horas</small></div>
+          <span class="countdown-sep" aria-hidden="true">:</span>
+          <div class="countdown-unit"><span id="cd-mins">--</span><small>min</small></div>
+          <span class="countdown-sep" aria-hidden="true">:</span>
+          <div class="countdown-unit"><span id="cd-secs">--</span><small>seg</small></div>
+        </div>`;
+
+      const pad  = (n) => String(n).padStart(2, "0");
+
+      const tick = () => {
+        const diff = alvo - new Date();
+        if (diff <= 0) {
+          clearInterval(timerId);
+          container.innerHTML = `<p class="lead fw-bold text-primary">O evento está a acontecer agora! 🎉</p>`;
+          return;
+        }
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor((diff % 86400000) / 3600000);
+        const m = Math.floor((diff % 3600000)  / 60000);
+        const s = Math.floor((diff % 60000)    / 1000);
+        $("#cd-days").textContent  = pad(d);
+        $("#cd-hours").textContent = pad(h);
+        $("#cd-mins").textContent  = pad(m);
+        $("#cd-secs").textContent  = pad(s);
+      };
+
+      tick();
+      if (MyApp._countdownTimerId) clearInterval(MyApp._countdownTimerId);
+      MyApp._countdownTimerId = setInterval(tick, 1000);
+    } catch {
+      container.closest("section")?.style.setProperty("display", "none");
+    }
+  };
+
+  // ─── NOTIFICAÇÃO DE ATUALIZAÇÃO DO SERVICE WORKER ────────────────────────
+  MyApp.initPWAUpdate = (registration) => {
+    if (!registration) return;
+
+    const showBanner = () => {
+      if ($("#sw-update-banner")) return; // já visível
+      const banner = document.createElement("div");
+      banner.id = "sw-update-banner";
+      banner.className = "sw-update-banner";
+      banner.setAttribute("role", "alert");
+      banner.innerHTML = `
+        <span><i class="fa-solid fa-rotate me-2" aria-hidden="true"></i>Nova versão disponível!</span>
+        <div class="sw-update-actions">
+          <button id="btn-sw-update" class="btn btn-sm btn-light">Atualizar agora</button>
+          <button id="btn-sw-dismiss" class="sw-update-dismiss" aria-label="Fechar">×</button>
+        </div>`;
+      document.body.appendChild(banner);
+      requestAnimationFrame(() => banner.classList.add("show"));
+
+      on($("#btn-sw-update"), "click", () => {
+        registration.waiting?.postMessage({ type: "SKIP_WAITING" });
+      });
+      on($("#btn-sw-dismiss"), "click", () => {
+        banner.classList.remove("show");
+        setTimeout(() => banner.remove(), 350);
+      });
+    };
+
+    // SW novo já está em espera (ex: aba recarregada)
+    if (registration.waiting && navigator.serviceWorker.controller) showBanner();
+
+    // SW novo encontrado após o carregamento da página
+    registration.addEventListener("updatefound", () => {
+      const newWorker = registration.installing;
+      if (!newWorker) return;
+      newWorker.addEventListener("statechange", () => {
+        if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+          showBanner();
+        }
+      });
+    });
+
+    // Quando o novo SW assume o controlo, recarrega a página
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      window.location.reload();
+    });
+  };
+
+  // ─── WEB SHARE API ────────────────────────────────────────────────────────
+  // Delegação de evento no document — funciona para cards injetados dinamicamente
+  MyApp.initWebShare = () => {
+    on(document, "click", async (e) => {
+      const btn = e.target.closest(".btn-share");
+      if (!btn) return;
+
+      const title    = btn.dataset.shareTitle    || document.title;
+      const text     = btn.dataset.shareText     || "";
+      const url      = btn.dataset.shareUrl      || window.location.href;
+      const fallback = btn.dataset.shareFallback || "";
+
+      if ("share" in navigator) {
+        try {
+          await navigator.share({ title, text, url });
+          return;
+        } catch (err) {
+          if (err.name === "AbortError") return; // utilizador cancelou
+        }
+      }
+
+      // Fallback: WhatsApp ou link direto
+      const waUrl = fallback && fallback !== encodeURI("#")
+        ? fallback
+        : `https://wa.me/?text=${encodeURIComponent(`${title}\n${url}`)}`;
+      window.open(waUrl, "_blank", "noopener,noreferrer");
+    });
+  };
+
   // ─── BOOTSTRAP ───────────────────────────────────────────────────────────
   document.addEventListener("DOMContentLoaded", () => {
     MyApp.initPreloader();
@@ -906,6 +1174,9 @@
     MyApp.initSermoes();
     MyApp.initSobre();
 
+    MyApp.initDarkMode();
+    MyApp.initWebShare();
+    MyApp.initCountdown();
     MyApp.initLiveBanner();
     MyApp.initVersiculoDaSemana();
     MyApp.initTop();
@@ -916,7 +1187,10 @@
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
         .register("sw.js")
-        .then(() => MyApp.log("Service Worker ativo."))
+        .then((registration) => {
+          MyApp.log("Service Worker ativo.");
+          MyApp.initPWAUpdate(registration);
+        })
         .catch((err) => MyApp.log("Erro no SW:", err));
     }
   });

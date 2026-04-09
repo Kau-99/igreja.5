@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sem conexão | ADVIC</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/x-icon" href="imagens/logo.png" />
+  <link rel="manifest" href="site.webmanifest" />
+  <meta name="theme-color" content="#0f8c95" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .offline-page {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      gap: 1.5rem;
+    }
+    .offline-icon {
+      font-size: 4rem;
+      color: var(--primary, #0f8c95);
+      opacity: .7;
+    }
+    .offline-page h1 { font-size: 1.75rem; margin: 0; }
+    .offline-page p  { max-width: 30ch; color: var(--text-muted, #6c757d); margin: 0; }
+    .offline-page .btn { margin-top: .5rem; }
+  </style>
+</head>
+
+<body>
+  <main class="offline-page" role="main">
+    <div class="offline-icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="1" y1="1" x2="23" y2="23"/>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+        <path d="M10.71 5.05A16 16 0 0 1 22.56 9"/>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+        <line x1="12" y1="20" x2="12.01" y2="20"/>
+      </svg>
+    </div>
+    <h1>Você está sem conexão</h1>
+    <p>Verifique sua internet e tente novamente. As páginas visitadas anteriormente ainda estão disponíveis.</p>
+    <button class="btn btn-primary" onclick="window.location.reload()">
+      Tentar novamente
+    </button>
+    <a class="btn btn-outline-secondary" href="/">Ir para o início</a>
+  </main>
+</body>
+
+</html>

@@ -517,6 +517,8 @@ img {
 
 .mapa-wrapper iframe {
   display: block;
+  width: 100%;
+  height: 450px;
 }
 
 /* Timeline Zigue-Zague */
@@ -1441,4 +1443,605 @@ body.a11y-reduce-motion *::after {
     left: 20px;
     right: auto;
   }
+}
+
+/* =========================================================
+   DARK MODE
+   Toggle via data-theme="dark" no <html>.
+   Aplicado por components.js antes do DOMContentLoaded.
+========================================================= */
+[data-theme="dark"] {
+  --primary:     #26d9e6;
+  --primary-700: #1fc9d6;
+  --primary-900: #a0eef2;
+  --bg:          #0f172a;
+  --soft:        #1e293b;
+  --text:        #e2e8f0;
+  --muted:       #94a3b8;
+  --border:      #334155;
+  --card:        #1e293b;
+  --shadow:      0 10px 24px rgba(0, 0, 0, .5);
+}
+
+[data-theme="dark"] body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+[data-theme="dark"] .site-header {
+  background: rgba(15, 23, 42, .92);
+  border-bottom-color: rgba(255, 255, 255, .06);
+}
+
+/* Fundo do menu hambúrguer no dark mode */
+[data-theme="dark"] .nav-wrapper {
+  background: rgba(15, 23, 42, .97);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, .45);
+}
+
+[data-theme="dark"] .nav-menu a,
+[data-theme="dark"] .logo-text {
+  color: var(--text);
+}
+
+[data-theme="dark"] .nav-menu a {
+  border-bottom-color: var(--border);
+}
+
+[data-theme="dark"] .bg-soft {
+  background: var(--soft) !important;
+}
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .card-event,
+[data-theme="dark"] .sermon,
+[data-theme="dark"] .card-min,
+[data-theme="dark"] .leader-card,
+[data-theme="dark"] .pillar,
+[data-theme="dark"] .pwa-container,
+[data-theme="dark"] .min-modal-content {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+[data-theme="dark"] .accessibility-panel,
+[data-theme="dark"] .a11y-tool,
+[data-theme="dark"] .a11y-panel-header {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+[data-theme="dark"] .accordion-item { border-color: var(--border); }
+
+[data-theme="dark"] .accordion-button {
+  background: var(--card);
+  color: var(--text);
+}
+
+[data-theme="dark"] .accordion-button:not(.collapsed) {
+  background: var(--soft);
+  color: var(--primary);
+  box-shadow: inset 0 -1px 0 var(--border);
+}
+
+[data-theme="dark"] .accordion-body {
+  background: var(--soft);
+  color: var(--text);
+}
+
+[data-theme="dark"] .accordion-button::after {
+  filter: invert(1);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select,
+[data-theme="dark"] .form-select {
+  background: var(--soft);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder { color: var(--muted); }
+
+[data-theme="dark"] .text-muted { color: var(--muted) !important; }
+
+[data-theme="dark"] .site-footer  { background: #060d1a; }
+
+[data-theme="dark"] .cta {
+  background: var(--primary-900);
+  color: #0a5b61;
+}
+
+[data-theme="dark"] .verse-section { background: var(--soft); }
+
+[data-theme="dark"] .toast-message {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+[data-theme="dark"] .sw-update-banner { background: var(--primary-700); }
+
+[data-theme="dark"] .pwa-text strong { color: var(--text); }
+[data-theme="dark"] .pwa-text span   { color: var(--muted); }
+
+/* ── Toggle de tema dentro do nav-menu ─────────────────── */
+
+/* Mobile: estilo idêntico aos outros links de nav */
+@media (max-width: 991px) {
+  .nav-dark-mode-li {
+    list-style: none;
+  }
+
+  .nav-dark-mode-li .btn-dark-mode {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    width: 100%;
+    padding: 1rem 0;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    border-radius: 0;
+    background: none;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text);
+    text-align: left;
+    cursor: pointer;
+    transition: color var(--fast), padding-left var(--fast);
+    min-height: 44px;
+  }
+
+  .nav-dark-mode-li .btn-dark-mode:hover {
+    color: var(--primary-700);
+    padding-left: 10px;
+    background: none;
+    transform: none;
+  }
+
+  .nav-dark-mode-li .btn-dark-mode i {
+    font-size: 1.1rem;
+    color: var(--primary-700);
+    flex-shrink: 0;
+    width: 1.25rem;
+    text-align: center;
+  }
+
+  /* Label de texto gerada por CSS — atualiza automaticamente com data-theme */
+  .nav-dark-mode-li .btn-dark-mode::after {
+    content: "Modo Escuro";
+  }
+
+  [data-theme="dark"] .nav-dark-mode-li .btn-dark-mode::after {
+    content: "Modo Claro";
+  }
+}
+
+/* Desktop: separador visual antes do CTA */
+@media (min-width: 992px) {
+  .nav-dark-mode-li {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    padding-left: .25rem;
+    border-left: 1px solid var(--border);
+    margin-left: .25rem;
+  }
+
+  [data-theme="dark"] .nav-dark-mode-li {
+    border-left-color: var(--border);
+  }
+}
+
+/* Botão de alternância de tema no header */
+.btn-dark-mode {
+  background: none;
+  border: none;
+  color: var(--primary-900);
+  font-size: 1.05rem;
+  cursor: pointer;
+  padding: .4rem .5rem;
+  border-radius: 50%;
+  line-height: 1;
+  transition: background var(--fast), color var(--fast), transform var(--fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.btn-dark-mode:hover {
+  background: rgba(0, 0, 0, .07);
+  transform: rotate(20deg);
+}
+
+[data-theme="dark"] .btn-dark-mode         { color: var(--primary); }
+[data-theme="dark"] .btn-dark-mode:hover   { background: rgba(255, 255, 255, .08); }
+
+/* =========================================================
+   SKELETON LOADING
+   Substitui spinners enquanto JSONs carregam.
+========================================================= */
+.skeleton-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--border)  25%,
+    var(--soft)    50%,
+    var(--border)  75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  border-radius: 4px;
+  display: block;
+}
+
+@keyframes skeleton-shimmer {
+  0%   { background-position:  200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-img  { height: 180px; width: 100%; border-radius: 0; }
+.skeleton-line { height: 1rem;  margin-bottom: .5rem; }
+.skeleton-btn  { height: 34px;  width: 90px; border-radius: 8px; flex-shrink: 0; }
+
+/* =========================================================
+   CONTADOR REGRESSIVO
+========================================================= */
+.countdown-section {
+  background: var(--soft);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 0;
+}
+
+.countdown-label {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: .25rem;
+}
+
+.countdown-titulo {
+  font-size: clamp(1.1rem, 1rem + .5vw, 1.5rem);
+  color: var(--primary-900);
+  margin-bottom: 1.25rem;
+}
+
+.countdown-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 64px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: .6rem .5rem .4rem;
+  box-shadow: var(--shadow);
+}
+
+.countdown-unit span {
+  font-family: "Lora", serif;
+  font-size: clamp(1.8rem, 1.3rem + 2vw, 2.8rem);
+  font-weight: 700;
+  color: var(--primary-700);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-unit small {
+  font-size: .6rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--muted);
+  margin-top: .25rem;
+}
+
+.countdown-sep {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--border);
+  line-height: 1;
+  padding-bottom: 1rem;
+  user-select: none;
+}
+
+/* =========================================================
+   BANNER DE ATUALIZAÇÃO DO SERVICE WORKER
+========================================================= */
+.sw-update-banner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 10001;
+  background: var(--primary-900);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: .85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, .3);
+  transform: translateY(120%);
+  opacity: 0;
+  transition: transform .35s cubic-bezier(.34, 1.56, .64, 1), opacity .3s ease;
+  max-width: 340px;
+}
+
+.sw-update-banner.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.sw-update-banner > span {
+  font-size: .875rem;
+  flex: 1;
+  line-height: 1.35;
+}
+
+.sw-update-actions {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  flex-shrink: 0;
+}
+
+.sw-update-dismiss {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, .65);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0 .2rem;
+  line-height: 1;
+  transition: color var(--fast);
+}
+
+.sw-update-dismiss:hover { color: #fff; }
+
+@media (max-width: 480px) {
+  .sw-update-banner {
+    right: 12px;
+    left: 12px;
+    max-width: none;
+    bottom: 12px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVIDADE GLOBAL — MELHORIAS
+========================================================= */
+
+/* ── Scroll offset para o header fixo ─────────────────── */
+/* Evita que âncoras (#historia, #lideranca, etc.) fiquem
+   escondidas atrás do header sticky de ~72px               */
+[id] {
+  scroll-margin-top: 80px;
+}
+
+/* ── Hero — botões em coluna em ecrãs muito pequenos ────── */
+@media (max-width: 480px) {
+  .hero .d-flex.gap-3 {
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero .btn-lg {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+}
+
+/* ── Mapa — wrapper responsivo ───────────────────────────── */
+.mapa-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+@media (max-width: 768px) {
+  .mapa-wrapper iframe { height: 360px; }
+}
+@media (max-width: 576px) {
+  .mapa-wrapper iframe { height: 280px; }
+}
+
+/* ── Informações de contacto — ícone alinhado ao topo ────── */
+@media (max-width: 575px) {
+  #info-endereco,
+  #info-telefone,
+  #info-email {
+    display: flex;
+    align-items: flex-start;
+    gap: .4rem;
+  }
+  #info-endereco i,
+  #info-telefone i,
+  #info-email i {
+    flex-shrink: 0;
+    margin-top: .2rem;
+  }
+}
+
+/* ── Filtro de eventos — full width em ecrãs pequenos ─────── */
+@media (max-width: 576px) {
+  #filtro-eventos {
+    min-width: 0 !important;
+    width: 100%;
+  }
+  .d-flex.align-items-center.justify-content-between.flex-wrap {
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+  .d-flex.align-items-center.justify-content-between.flex-wrap .d-flex {
+    width: 100%;
+  }
+  .d-flex.align-items-center.justify-content-between.flex-wrap label {
+    display: none; /* esconde "Filtrar:" que ocupa espaço desnecessário */
+  }
+}
+
+/* ── Secção CTA — botão ocupa a largura total no mobile ─── */
+@media (max-width: 767px) {
+  .cta .btn {
+    width: 100%;
+    text-align: center;
+  }
+  .cta .container { text-align: center; }
+}
+
+/* ── Footer — centralizado em ecrãs muito pequenos ────────── */
+@media (max-width: 480px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  .footer-brand {
+    flex-direction: column;
+    align-items: center;
+  }
+  .social-links { margin-top: .5rem; }
+}
+
+/* ── Countdown — oculta separadores em ecrãs <360px ──────── */
+@media (max-width: 360px) {
+  .countdown-sep  { display: none; }
+  .countdown-unit { min-width: 54px; }
+}
+
+/* ── Pilares — mínimo de 2 colunas mesmo em mobile ────────── */
+@media (max-width: 767px) {
+  #pilares .col-12:not([class*="col-sm"]):not([class*="col-md"]) {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+/* ── Cards de sermão — padding reduzido em mobile ──────────── */
+@media (max-width: 575px) {
+  .sermon { padding: .85rem; }
+  .card-event img { height: 170px; }
+}
+
+/* ── Modal de ministérios — mais alto no mobile ────────────── */
+@media (max-width: 576px) {
+  .min-modal-content { max-height: 96dvh; }
+  .min-modal-header  { height: 160px; }
+  .min-modal-body    { padding: 1.25rem; }
+}
+
+/* ── Painel de acessibilidade — full width em mobile ────────── */
+@media (max-width: 420px) {
+  .accessibility-panel {
+    left: .75rem;
+    right: .75rem;
+    width: auto;
+  }
+}
+
+/* ── Alvos de toque mínimos (WCAG 2.5.5) ─────────────────────
+   Em dispositivos de toque, botões e links devem ter pelo menos
+   44×44px de área clicável.                                    */
+@media (hover: none) and (pointer: coarse) {
+  .btn,
+  .a11y-tool,
+  .accessibility-fab,
+  .btn-top,
+  .btn-dark-mode,
+  .nav-menu a,
+  .nav-toggle {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .nav-menu a {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* ── Versículo — texto ajustado em ecrãs pequenos ───────────── */
+@media (max-width: 480px) {
+  .verse-section { padding: 3rem 1rem; }
+  .verse-text    { font-size: clamp(1.15rem, 4.5vw, 1.6rem); }
+}
+
+/* ── Timeline — reduz padding interno em mobile ─────────────── */
+@media (max-width: 768px) {
+  .timeline-content { padding: 1.1rem; }
+  .timeline-item    { padding: 0 0 0 44px; margin-bottom: 2rem; }
+}
+
+/* ── Formulário de contacto — melhoria de foco visual ──────── */
+.contact-form input:focus-visible,
+.contact-form textarea:focus-visible,
+.contact-form select:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 0;
+  box-shadow: 0 0 0 4px rgba(31, 201, 214, .18);
+}
+
+/* ── Preloader — evita corte da logo em ecrãs muito pequenos ── */
+@media (max-width: 360px) {
+  .preloader-logo { width: 72px; max-width: 25vw; }
+}
+
+/* ── Secção líder — centraliza em mobile ──────────────────────  */
+@media (max-width: 575px) {
+  .leader-card    { max-width: 280px; margin-inline: auto; }
+}
+
+/* ── Print — estilos básicos de impressão ──────────────────────
+   Remove elementos de navegação, botões e componentes fixos.  */
+@media print {
+  .site-header,
+  .preloader,
+  #btnTop,
+  #btnA11y,
+  #a11yPanel,
+  .accessibility-fab,
+  .pwa-container,
+  .sw-update-banner,
+  .live-banner,
+  .cta,
+  .btn-dark-mode,
+  footer .social-links {
+    display: none !important;
+  }
+  body {
+    font-size: 12pt;
+    color: #000;
+    background: #fff;
+  }
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: .75em;
+    color: #555;
+  }
+  .hero {
+    min-height: auto;
+    padding: 1rem 0;
+  }
+  .hero-bg { display: none; }
+  .hero h1, .hero p { color: #000 !important; text-shadow: none !important; }
 }
