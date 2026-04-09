@@ -1,6 +1,5 @@
 "use strict";
-// Aplica o tema salvo ANTES de qualquer renderização para evitar flash de cor.
-// Executado sincronamente no topo do script (antes do DOMContentLoaded).
+
 (() => {
   const saved   = localStorage.getItem("advic-theme");
   const prefers = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -10,21 +9,6 @@
   );
 })();
 
-/**
- * ADVIC — Componentes Compartilhados
- *
- * Este script (defer, antes de script.js) injeta elementos puramente
- * JavaScript que são idênticos em todas as páginas:
- *   • Painel de acessibilidade (#a11yPanel + #btnA11y)
- *   • Botão "voltar ao topo" (#btnTop)
- *
- * Também define automaticamente o link ativo do menu com base na URL,
- * eliminando a necessidade de marcar manualmente class="active" em cada HTML.
- *
- * Carregamento: <script defer src="components.js"></script>
- * Deve aparecer ANTES de <script defer src="script.js"></script>
- * Scripts defer executam em ordem antes de DOMContentLoaded.
- */
 (() => {
   const A11Y_PANEL = `
 <button id="btnA11y" class="accessibility-fab" aria-label="Abrir opções de acessibilidade" aria-haspopup="true" aria-controls="a11yPanel" aria-expanded="false">
@@ -71,10 +55,6 @@
   <i class="fa-solid fa-arrow-up"></i>
 </button>`;
 
-  // ── Botão de alternância de tema (Dark / Light) ──────────
-  // Injetado como <li> dentro do .nav-menu, antes do CTA "Seja Membro".
-  // • Mobile: aparece dentro do menu hambúrguer com label de texto
-  // • Desktop: aparece inline com os demais links de navegação
   const navMenu = document.querySelector(".nav-menu");
   if (navMenu && !document.getElementById("btnDarkMode")) {
     const currentTheme = document.documentElement.getAttribute("data-theme");
@@ -91,20 +71,14 @@
     li.className = "nav-dark-mode-li";
     li.appendChild(darkBtn);
 
-    // Insere antes do último <li> (CTA "Seja Membro")
     const lastLi = navMenu.querySelector("li:last-child");
     lastLi ? navMenu.insertBefore(li, lastLi) : navMenu.appendChild(li);
   }
 
-  // Injeta os componentes apenas se ainda não existirem no HTML estático.
-  // Isso evita IDs duplicados em páginas que ainda têm os elementos hardcoded.
   if (!document.getElementById("btnA11y")) {
     document.body.insertAdjacentHTML("beforeend", A11Y_PANEL);
   }
 
-  // Define o link ativo do menu com base na URL atual.
-  // Se o HTML já tiver class="active" hardcoded, sobrescreve corretamente
-  // de qualquer forma — evita page ativa errada ao navegar de volta ao cache.
   const currentFile = window.location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll(".nav-menu a[href]").forEach((link) => {
     const href = link.getAttribute("href");

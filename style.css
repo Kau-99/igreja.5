@@ -73,9 +73,9 @@ img {
   display: block;
 }
 
-.text-primary {
-  color: var(--primary) !important;
-}
+.text-primary     { color: var(--primary)     !important; }
+.text-primary-700 { color: var(--primary-700) !important; }
+.text-primary-900 { color: var(--primary-900) !important; }
 
 /* =========================================================
    HEADER & NAV (MENU HAMBÚRGUER ANIMADO)
@@ -1461,6 +1461,7 @@ body.a11y-reduce-motion *::after {
   --border:      #334155;
   --card:        #1e293b;
   --shadow:      0 10px 24px rgba(0, 0, 0, .5);
+  color-scheme: dark;
 }
 
 [data-theme="dark"] body {
@@ -1504,6 +1505,68 @@ body.a11y-reduce-motion *::after {
   border-color: var(--border);
   color: var(--text);
 }
+
+/* Sobrescreve as variáveis internas do Bootstrap para .card */
+[data-theme="dark"] .card {
+  --bs-card-bg:           var(--card);
+  --bs-card-border-color: var(--border);
+  --bs-card-color:        var(--text);
+  --bs-card-cap-bg:       var(--soft);
+  background-color: var(--card) !important;
+  color: var(--text) !important;
+}
+
+/* Formulário de contacto */
+[data-theme="dark"] .contact-form {
+  background:   var(--card) !important;
+  border-color: var(--border);
+  color:        var(--text);
+}
+
+[data-theme="dark"] .contact-form label {
+  color: var(--text);
+}
+
+[data-theme="dark"] .contact-form input,
+[data-theme="dark"] .contact-form textarea {
+  background: var(--soft) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+/* Autofill escuro — evita fundo amarelo/branco do browser */
+[data-theme="dark"] input:-webkit-autofill,
+[data-theme="dark"] input:-webkit-autofill:hover,
+[data-theme="dark"] input:-webkit-autofill:focus,
+[data-theme="dark"] textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 40px #1e293b inset !important;
+  -webkit-text-fill-color: #e2e8f0 !important;
+  caret-color: #e2e8f0;
+}
+
+/* Classe de erro — versão escura */
+[data-theme="dark"] .input-error {
+  background: rgba(211, 64, 64, .15) !important;
+  border-color: #d34040 !important;
+}
+
+/* Timeline */
+[data-theme="dark"] .timeline-content {
+  background:   var(--card);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .timeline::before {
+  background: var(--border);
+}
+
+[data-theme="dark"] .timeline-dot {
+  border-color: var(--card);
+}
+
+/* Liderança */
+[data-theme="dark"] .leader-info h3 { color: var(--primary-900); }
+[data-theme="dark"] .leader-info span { color: var(--muted); }
 
 [data-theme="dark"] .accessibility-panel,
 [data-theme="dark"] .a11y-tool,
@@ -1552,9 +1615,12 @@ body.a11y-reduce-motion *::after {
 [data-theme="dark"] .site-footer  { background: #060d1a; }
 
 [data-theme="dark"] .cta {
-  background: var(--primary-900);
-  color: #0a5b61;
+  background: linear-gradient(90deg, #082e33, #0c4d54);
+  color: #e2e8f0;
 }
+
+[data-theme="dark"] .cta h2,
+[data-theme="dark"] .cta p { color: #e2e8f0; }
 
 [data-theme="dark"] .verse-section { background: var(--soft); }
 
@@ -1568,6 +1634,16 @@ body.a11y-reduce-motion *::after {
 
 [data-theme="dark"] .pwa-text strong { color: var(--text); }
 [data-theme="dark"] .pwa-text span   { color: var(--muted); }
+
+[data-theme="dark"] .btn-top {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--primary);
+}
+
+[data-theme="dark"] .btn-top:hover {
+  background: var(--soft);
+}
 
 /* ── Toggle de tema dentro do nav-menu ─────────────────── */
 
