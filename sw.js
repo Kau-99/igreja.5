@@ -1,4 +1,7 @@
-const CACHE_NAME = "advic-v4";
+// ── OneSignal SDK (descomente após configurar o App ID em components.js) ──
+// importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
+
+const CACHE_NAME = "advic-v5";
 
 const STATIC_ASSETS = [
   "/",
@@ -40,6 +43,32 @@ self.addEventListener("activate", (event) => {
     }),
   );
   self.clients.claim();
+});
+
+// ─── WEB PUSH NOTIFICATIONS ───────────────────────────────────────────────
+self.addEventListener("push", (event) => {
+  const data    = event.data?.json() ?? {};
+  const title   = data.title   || "ADVIC";
+  const options = {
+    body:  data.body  || "Nova notificação da ADVIC.",
+    icon:  "/imagens/logo.png",
+    badge: "/imagens/logo.png",
+    data:  { url: data.url || "/" },
+    vibrate: [100, 50, 100],
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const url = event.notification.data?.url || "/";
+  event.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((list) => {
+      const existing = list.find((c) => c.url === url && "focus" in c);
+      if (existing) return existing.focus();
+      return clients.openWindow(url);
+    }),
+  );
 });
 
 self.addEventListener("fetch", (event) => {

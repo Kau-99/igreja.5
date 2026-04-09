@@ -11,6 +11,9 @@
     liveUrl: "https://www.youtube.com/@advicof",
     // Agendamento da transmissão ao vivo: 0=Domingo, 18h–20h
     liveSchedule: { dayOfWeek: 0, startHour: 18, endHour: 20 },
+    // ⚠️  YouTube: defina YOUTUBE_CHANNEL_ID nas variáveis de ambiente da Netlify.
+    //     O channel ID é gerido pela função serverless (netlify/functions/youtube-feed.js).
+    youtubeFeedUrl: "/.netlify/functions/youtube-feed",
   };
 
   // Cache central — evita buscar o mesmo JSON duas vezes
@@ -367,6 +370,57 @@
     });
   };
 
+  // ─── FORMULÁRIO DE PEDIDO DE ORAÇÃO ──────────────────────────────────────
+  MyApp.initOracaoForm = () => {
+    const form = $("#oracaoForm");
+    if (!form) return;
+
+    on(form, "submit", async (e) => {
+      e.preventDefault();
+      const honeypot = form.querySelector('[name="bot-field"]');
+      if (honeypot?.value.trim()) return;
+
+      const nomeEl   = $("#or-nome");
+      const pedidoEl = $("#or-pedido");
+      let valid = true;
+
+      [nomeEl, pedidoEl].forEach((el) => {
+        if (!el) return;
+        const ok = !!el.value.trim();
+        el.classList.toggle("input-error", !ok);
+        if (!ok) valid = false;
+      });
+
+      if (!valid) return MyApp.showToast("Preencha todos os campos obrigatórios.", "error");
+
+      const btn = form.querySelector('button[type="submit"]');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Enviando...';
+      btn.disabled  = true;
+
+      try {
+        const formData = new FormData(form);
+        if (!formData.has("form-name")) formData.append("form-name", "oracao");
+        const res = await fetch("/", {
+          method:  "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body:    new URLSearchParams(formData).toString(),
+        });
+        if (res.ok) {
+          MyApp.showToast("Pedido de oração enviado. Deus abençoe você! 🙏", "success");
+          form.reset();
+        } else {
+          throw new Error("Falha no envio");
+        }
+      } catch {
+        MyApp.showToast("Erro ao enviar. Por favor, tente novamente.", "error");
+      } finally {
+        btn.innerHTML = orig;
+        btn.disabled  = false;
+      }
+    });
+  };
+
   // ─── MODAIS DE MINISTÉRIOS ────────────────────────────────────────────────
   MyApp.initMinistryModals = () => {
     const cards = $$(".card-min");
@@ -668,6 +722,62 @@
         }
       },
     });
+  };
+
+  // ─── FEED DO YOUTUBE ─────────────────────────────────────────────────────
+  MyApp.initYouTubeFeed = async () => {
+    const grid = $("#youtube-grid");
+    if (!grid) return;
+
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 8000);
+      const response = await fetch(MyApp.config.youtubeFeedUrl, { signal: controller.signal });
+      clearTimeout(timer);
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const xmlText = await response.text();
+      const doc     = new DOMParser().parseFromString(xmlText, "application/xml");
+      const entries = Array.from(doc.querySelectorAll("entry")).slice(0, 6);
+
+      if (!entries.length) throw new Error("Feed vazio");
+
+      grid.innerHTML = entries.map((entry, i) => {
+        // O <id> contém "yt:video:VIDEO_ID"
+        const rawId   = entry.querySelector("id")?.textContent || "";
+        const videoId = rawId.replace("yt:video:", "").trim();
+        const title   = escapeHTML(entry.querySelector("title")?.textContent || "Vídeo sem título");
+        const pub     = entry.querySelector("published")?.textContent || "";
+        const date    = pub ? new Date(pub).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" }) : "";
+        const thumb   = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+        const url     = `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
+        const delay   = (i % 3) * 80;
+
+        return `
+          <div class="col-12 col-md-6 col-lg-4" data-animate="fade-up" data-delay="${delay}">
+            <a class="yt-card text-decoration-none" href="${url}" target="_blank" rel="noopener noreferrer"
+               aria-label="Assistir: ${title}">
+              <div class="yt-thumb-wrapper">
+                <img src="${thumb}" alt="${title}" loading="lazy" width="320" height="180" />
+                <span class="yt-play-btn" aria-hidden="true"><i class="fab fa-youtube"></i></span>
+              </div>
+              <div class="yt-info">
+                <p class="yt-title">${title}</p>
+                ${date ? `<time class="yt-date">${date}</time>` : ""}
+              </div>
+            </a>
+          </div>`;
+      }).join("");
+
+      MyApp.registerRevealElements($$("[data-animate]", grid));
+
+    } catch (err) {
+      // Falha silenciosa: esconde a secção para não poluir o layout
+      const section = grid.closest("section");
+      if (section) section.style.display = "none";
+      MyApp.log("YouTube feed:", err.message);
+    }
   };
 
   MyApp.initSermoes = async () => {
@@ -1177,6 +1287,8 @@
     MyApp.initDarkMode();
     MyApp.initWebShare();
     MyApp.initCountdown();
+    MyApp.initYouTubeFeed();
+    MyApp.initOracaoForm();
     MyApp.initLiveBanner();
     MyApp.initVersiculoDaSemana();
     MyApp.initTop();

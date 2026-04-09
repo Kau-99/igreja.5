@@ -127,6 +127,41 @@
       </div>
     </section>
 
+    <section class="container py-5" id="oracao" aria-labelledby="oracao-titulo">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-7">
+          <form id="oracaoForm" class="contact-form" name="oracao" method="POST" netlify>
+            <div class="text-center mb-4">
+              <i class="fa-solid fa-hands-praying fa-2x text-primary mb-3" aria-hidden="true"></i>
+              <h2 id="oracao-titulo" class="mb-1">Pedido de Oração</h2>
+              <p class="text-muted">Envie seu pedido com confiança. Nossa equipe intercederá por você.</p>
+            </div>
+
+            <input class="honeypot" type="text" name="bot-field" autocomplete="off" tabindex="-1" aria-hidden="true"
+              style="position: absolute; left: -9999px; height: 0; width: 0; opacity: 0;" />
+
+            <label for="or-nome">Nome <span aria-hidden="true">*</span></label>
+            <input id="or-nome" name="nome" type="text" required aria-required="true" autocomplete="name" />
+
+            <label for="or-pedido">Seu Pedido <span aria-hidden="true">*</span></label>
+            <textarea id="or-pedido" name="pedido" rows="5" required aria-required="true"
+              placeholder="Compartilhe seu pedido de oração..."></textarea>
+
+            <label class="d-flex gap-2 align-items-center mt-1" style="cursor:pointer;">
+              <input type="checkbox" name="anonimo" value="sim" class="form-check-input m-0"
+                style="width:1.1rem;height:1.1rem;flex-shrink:0;" />
+              <span>Manter anônimo</span>
+            </label>
+
+            <button class="btn btn-primary mt-2" type="submit">
+              <i class="fa-solid fa-hands-praying me-2" aria-hidden="true"></i>Enviar Pedido
+            </button>
+            <p class="email-note">Seu pedido é tratado com total sigilo pela equipe pastoral.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
     <section class="cta">
       <div class="container d-lg-flex align-items-center justify-content-between">
         <div class="me-lg-3">

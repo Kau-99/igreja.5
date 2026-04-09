@@ -2101,6 +2101,7 @@ body.a11y-reduce-motion *::after {
   .live-banner,
   .cta,
   .btn-dark-mode,
+  .whatsapp-fab,
   footer .social-links {
     display: none !important;
   }
@@ -2120,4 +2121,136 @@ body.a11y-reduce-motion *::after {
   }
   .hero-bg { display: none; }
   .hero h1, .hero p { color: #000 !important; text-shadow: none !important; }
+}
+
+/* =========================================================
+   WHATSAPP FLOATING BUTTON
+========================================================= */
+.whatsapp-fab {
+  position: fixed;
+  bottom: 5.5rem;
+  right: 1.25rem;
+  width: 52px;
+  height: 52px;
+  background: #25d366;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.65rem;
+  box-shadow: 0 4px 18px rgba(37, 211, 102, .45);
+  z-index: 998;
+  transition: transform var(--fast), box-shadow var(--fast);
+  text-decoration: none;
+}
+
+.whatsapp-fab:hover,
+.whatsapp-fab:focus-visible {
+  transform: scale(1.12);
+  box-shadow: 0 6px 26px rgba(37, 211, 102, .65);
+  color: #fff;
+  outline: none;
+}
+
+@media (max-width: 480px) {
+  .whatsapp-fab {
+    bottom: 4.75rem;
+    right: .85rem;
+    width: 46px;
+    height: 46px;
+    font-size: 1.45rem;
+  }
+}
+
+@media print {
+  .whatsapp-fab { display: none !important; }
+}
+
+/* =========================================================
+   YOUTUBE VIDEO CARDS
+========================================================= */
+.yt-card {
+  display: block;
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  color: var(--text);
+  transition: transform var(--fast), box-shadow var(--fast);
+}
+
+.yt-card:hover,
+.yt-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  text-decoration: none;
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.yt-thumb-wrapper {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--border);
+}
+
+.yt-thumb-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .4s ease;
+}
+
+.yt-card:hover .yt-thumb-wrapper img {
+  transform: scale(1.04);
+}
+
+.yt-play-btn {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, .32);
+  color: #fff;
+  font-size: 2.6rem;
+  opacity: 0;
+  transition: opacity var(--fast);
+}
+
+.yt-card:hover .yt-play-btn,
+.yt-card:focus-visible .yt-play-btn {
+  opacity: 1;
+}
+
+.yt-info {
+  padding: .85rem 1rem .9rem;
+}
+
+.yt-title {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0 0 .35rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--text);
+}
+
+.yt-date {
+  font-size: .8rem;
+  color: var(--muted);
+  display: block;
+}
+
+[data-theme="dark"] .yt-card {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--text);
 }

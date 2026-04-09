@@ -16,15 +16,41 @@
   <meta name="theme-color" content="#0f8c95" />
 
   <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Church",
-      "name": "Assembleia de Deus de Vila de Cava - ADVIC",
-      "image": "https://igrejaadvic.netlify.app/imagens/logo.png",
-      "url": "https://igrejaadvic.netlify.app",
-      "telephone": "+5521971321200",
-      "address": { "@type": "PostalAddress", "streetAddress": "R. Vítor Hugo, 76", "addressLocality": "Vila de Cava, Nova Iguaçu", "addressRegion": "RJ", "addressCountry": "BR" }
-    }
+  {
+    "@context": "https://schema.org",
+    "@type": "Church",
+    "name": "Assembleia de Deus de Vila de Cava — ADVIC",
+    "alternateName": "ADVIC",
+    "description": "Igreja evangélica pentecostal em Vila de Cava, Nova Iguaçu — RJ. Cultos aos Domingos (9h e 18h) e Quartas (19h30). Todos são bem-vindos.",
+    "url": "https://igrejaadvic.netlify.app",
+    "logo": "https://igrejaadvic.netlify.app/imagens/logo.png",
+    "image": "https://igrejaadvic.netlify.app/imagens/imagem-igreja.jpg",
+    "telephone": "+55-21-97132-1261",
+    "email": "contato@advic.org.br",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "R. Vítor Hugo, 76",
+      "addressLocality": "Nova Iguaçu",
+      "addressRegion": "RJ",
+      "postalCode": "26052-450",
+      "addressCountry": "BR"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": -22.679952629805133,
+      "longitude": -43.445675623916664
+    },
+    "openingHoursSpecification": [
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday",    "opens": "09:00", "closes": "11:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday",    "opens": "18:00", "closes": "20:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Wednesday", "opens": "19:30", "closes": "21:30" }
+    ],
+    "sameAs": [
+      "https://www.instagram.com/advic_viladecava/",
+      "https://www.facebook.com/advcviladecava",
+      "https://www.youtube.com/@advicof"
+    ]
+  }
   </script>
 
   <link
@@ -206,6 +232,27 @@
           <div class="col-12 text-center py-4">
             <div class="spinner-border text-primary" role="status"></div>
             <p class="text-muted mt-2">Buscando pregações...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="youtube" class="py-5 bg-soft">
+      <div class="container">
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+          <div>
+            <h2 class="section-title mb-1">No YouTube</h2>
+            <p class="text-muted mb-0">Últimas pregações e vídeos do canal.</p>
+          </div>
+          <a class="btn btn-outline-primary btn-sm" href="https://www.youtube.com/@advicof" target="_blank"
+            rel="noopener noreferrer">
+            <i class="fab fa-youtube me-2" aria-hidden="true"></i>Inscrever-se no Canal
+          </a>
+        </div>
+        <div id="youtube-grid" class="row g-4">
+          <div class="col-12 text-center py-4">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="text-muted mt-2">Carregando vídeos...</p>
           </div>
         </div>
       </div>

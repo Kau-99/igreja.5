@@ -79,6 +79,56 @@
     document.body.insertAdjacentHTML("beforeend", A11Y_PANEL);
   }
 
+  // ── Plausible Analytics (sem cookies, conformidade LGPD) ─────────────────
+  // ⚠️  CONFIGURAÇÃO: Crie uma conta gratuita em https://plausible.io
+  //     e adicione o domínio "igrejaadvic.netlify.app" no painel deles.
+  //     A partir daí, este script começa a registar visitas automaticamente.
+  if (!document.getElementById("plausible-script")) {
+    const pl = document.createElement("script");
+    pl.id    = "plausible-script";
+    pl.defer = true;
+    pl.setAttribute("data-domain", "igrejaadvic.netlify.app");
+    pl.src = "https://plausible.io/js/script.js";
+    document.head.appendChild(pl);
+  }
+
+  // ── OneSignal Web Push Notifications ─────────────────────────────────────
+  // ⚠️  CONFIGURAÇÃO NECESSÁRIA (3 passos):
+  //     1. Crie uma conta gratuita em https://onesignal.com
+  //     2. Crie um novo App → plataforma "Web"
+  //     3. Copie o App ID e substitua "SEU_APP_ID_AQUI" abaixo
+  const ONESIGNAL_APP_ID = "SEU_APP_ID_AQUI";
+  if (ONESIGNAL_APP_ID !== "SEU_APP_ID_AQUI" && !document.getElementById("onesignal-script")) {
+    const os  = document.createElement("script");
+    os.id     = "onesignal-script";
+    os.src    = "https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js";
+    os.defer  = true;
+    document.head.appendChild(os);
+
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    window.OneSignalDeferred.push(function (OneSignal) {
+      OneSignal.init({
+        appId:                   ONESIGNAL_APP_ID,
+        serviceWorkerPath:       "sw.js",
+        notifyButton:            { enable: false },
+        welcomeNotification:     { disable: true },
+        promptOptions: {
+          slidedown: {
+            prompts: [{
+              type: "push",
+              autoPrompt: false,
+              text: {
+                actionMessage:  "Receba avisos de eventos e novidades da ADVIC.",
+                acceptButton:   "Permitir",
+                cancelButton:   "Agora não",
+              },
+            }],
+          },
+        },
+      });
+    });
+  }
+
   const currentFile = window.location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll(".nav-menu a[href]").forEach((link) => {
     const href = link.getAttribute("href");
