@@ -443,6 +443,36 @@
     };
     CMS.registerPreviewTemplate('sermoes', SermaoPreview);
 
+    /* ── Preview: Líder ───────────────────────────────────────── */
+    var LiderPreview = function(props) {
+      var h   = window.React.createElement;
+      var e   = props.entry;
+      var get = function(k) { return e.getIn(['data', k]) || ''; };
+
+      return h('div', { style: { padding: '1.5rem', fontFamily: 'Inter, sans-serif' } },
+        h('div', {
+          style: {
+            background: '#fff', borderRadius: '14px',
+            border: '1px solid #e5e7eb', overflow: 'hidden',
+            maxWidth: '220px', boxShadow: '0 10px 24px rgba(0,0,0,.08)',
+            textAlign: 'center', padding: '1.25rem'
+          }
+        },
+          get('imagem') && h('img', {
+            src: get('imagem'), alt: get('nome'),
+            style: { width: '120px', height: '120px', borderRadius: '50%',
+                     objectFit: 'cover', display: 'block', margin: '0 auto .75rem' }
+          }),
+          h('h3', { style: { fontFamily: 'Georgia, serif', color: '#0a5b61',
+                             fontSize: '1rem', marginBottom: '.25rem' } },
+            get('nome') || 'Nome do Líder'),
+          h('span', { style: { color: '#6b7280', fontSize: '.85rem' } },
+            get('cargo') || 'Cargo / Função')
+        )
+      );
+    };
+    CMS.registerPreviewTemplate('lideranca', LiderPreview);
+
     /* ── Oculta a tela de carregamento quando o CMS renderizar ── */
     /* Estratégia: verificar periodicamente se o header do CMS     */
     /* está no DOM (sinal de que o React terminou de montar).      */
@@ -452,9 +482,12 @@
     };
     var _checkReady  = setInterval(function() {
       var appReady =
-        document.querySelector('#nc-root header')          ||
-        document.querySelector('[class*="AppHeader"]')     ||
-        document.querySelector('[class*="AppHeaderContent"]');
+        document.querySelector('#nc-root header')             ||
+        document.querySelector('[class*="AppHeader"]')        ||
+        document.querySelector('[class*="AppHeaderContent"]') ||
+        document.querySelector('[data-testid="cms-main"]')    ||
+        document.querySelector('.css-de3p5l')                 ||
+        document.querySelector('header[class*="css-"]');
       if (appReady) { _hideLoader(); clearInterval(_checkReady); }
     }, 250);
     /* Fallback máximo: 8 s (rede lenta / dispositivos lentos) */

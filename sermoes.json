@@ -17,11 +17,12 @@
       "audioDisponivel": false
     },
     {
-      "audioDisponivel": false,
-      "id": "4",
-      "titulo": "pregação profetica",
-      "pregadorData": "Pastor Adilson - 29/03/2026",
-      "linkVideo": "https://youtu.be/7x94Y2aGIT8?si=g5p7Uq04r7-0VCXh"
+      "id": "3",
+      "titulo": "Pregação Profética",
+      "pregadorData": "Pastor Adilson — 29/03/2026",
+      "linkVideo": "https://youtu.be/7x94Y2aGIT8?si=g5p7Uq04r7-0VCXh",
+      "linkAudio": "#",
+      "audioDisponivel": false
     }
   ]
 }

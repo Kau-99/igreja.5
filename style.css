@@ -77,6 +77,24 @@ img {
 .text-primary-700 { color: var(--primary-700) !important; }
 .text-primary-900 { color: var(--primary-900) !important; }
 
+/* Skip-to-content link (acessibilidade) */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  background: var(--primary-900);
+  color: #fff;
+  padding: .5rem 1rem;
+  border-radius: 0 0 var(--radius) var(--radius);
+  font-weight: 600;
+  text-decoration: none;
+  transition: top .2s ease;
+}
+.skip-link:focus {
+  top: 0;
+}
+
 /* =========================================================
    HEADER & NAV (MENU HAMBÚRGUER ANIMADO)
 ========================================================= */

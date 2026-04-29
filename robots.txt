@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
+Disallow: /.netlify/
+Disallow: /offline.html
 
 Sitemap: https://igrejaadvic.netlify.app/sitemap.xml

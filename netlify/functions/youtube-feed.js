@@ -17,6 +17,14 @@
  * Cache:    30 minutos (s-maxage no CDN da Netlify)
  */
 exports.handler = async function (event, context) {
+  if (event.httpMethod !== "GET") {
+    return {
+      statusCode: 405,
+      headers: { Allow: "GET", "Content-Type": "application/json" },
+      body: JSON.stringify({ error: "Método não permitido." }),
+    };
+  }
+
   const channelId = process.env.YOUTUBE_CHANNEL_ID;
 
   if (!channelId) {
@@ -31,7 +39,10 @@ exports.handler = async function (event, context) {
 
   try {
     const response = await fetch(feedUrl, {
-      headers: { Accept: "application/xml, text/xml" },
+      headers: {
+        Accept: "application/xml, text/xml",
+        "User-Agent": "Mozilla/5.0 ADVIC-Site/1.0 (+https://igrejaadvic.netlify.app)",
+      },
     });
 
     if (!response.ok) {
@@ -44,7 +55,7 @@ exports.handler = async function (event, context) {
       statusCode: 200,
       headers: {
         "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "public, s-maxage=1800, max-age=1800",
+        "Cache-Control": "public, s-maxage=1800, max-age=1800, stale-while-revalidate=86400",
         "Access-Control-Allow-Origin": "*",
       },
       body: xml,

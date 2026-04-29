@@ -15,6 +15,9 @@ backend:
     uploadMedia: "🖼️ Carregar imagem: {{path}}"
     deleteMedia: "🗑️ Remover imagem: {{path}}"
 
+# ── Desenvolvimento local (descomente para usar com `npx decap-server`) ──
+# local_backend: true
+
 # ── Identidade e aparência do painel ───────────────────────
 site_url:  "https://igrejaadvic.netlify.app"
 logo_url:  "https://igrejaadvic.netlify.app/imagens/logo.png"
@@ -22,6 +25,11 @@ locale:    "pt"
 
 # Mostra o link "Ver no site" ao lado de cada entrada
 show_preview_links: true
+
+# Garante que nomes de arquivo gerados pelo CMS não tenham caracteres especiais
+slug:
+  encoding: "unicode"
+  clean_accents: true
 
 # ── Pasta de imagens ────────────────────────────────────────
 media_folder:  "imagens"
@@ -168,7 +176,7 @@ collections:
               - label:    "Foto"
                 name:     "imagem"
                 widget:   "image"
-                hint:     "Foto com rosto visível. Proporção 1:1 (quadrada) é ideal."
+                hint:     "Foto com rosto visível. Proporção 1:1 (quadrada). Mín. 400×400 px. Formatos: JPG ou WebP."
                 required: true
 
               - label:    "Nome Completo"
@@ -188,8 +196,7 @@ collections:
                 widget:   "string"
                 required: false
                 hint:     "URL completa do perfil. Ex: https://instagram.com/fulano"
-                pattern:
-                  ["^https?://.*", "Deve começar com https://"]
+                pattern:  ["^(https?://.*)?$", "Deixe vazio ou insira uma URL completa (https://)"]
 
   # ──────────────────────────────────────────────────────────
   # 2. AGENDA E MENSAGENS
@@ -258,7 +265,7 @@ collections:
               - label:    "Arte do Evento (imagem)"
                 name:     "imagem"
                 widget:   "image"
-                hint:     "Proporção 16:9 (landscape). Mín. 800×450 px."
+                hint:     "Arte do evento em formato paisagem (16:9). Mín. 800×450 px. Formatos: JPG ou WebP."
                 required: false
 
               - label:    "Link — Adicionar ao Google Agenda"
@@ -266,14 +273,14 @@ collections:
                 widget:   "string"
                 required: false
                 hint:     "Gere o link em calendar.google.com e cole aqui."
-                pattern:  ["^https?://.*", "Deve começar com https://"]
+                pattern:  ["^(https?://.*)?$", "Deixe vazio ou insira uma URL completa (https://)"]
 
               - label:    "Link — Compartilhar no WhatsApp"
                 name:     "linkWhats"
                 widget:   "string"
                 required: false
                 hint:     "Use https://wa.me/?text=… ou um link de grupo."
-                pattern:  ["^https?://.*", "Deve começar com https://"]
+                pattern:  ["^(https?://.*)?$", "Deixe vazio ou insira uma URL completa (https://)"]
 
       # ── Sermões ───────────────────────────────────────────
       - label: "🎙️ Sermões e Pregações"
@@ -323,7 +330,7 @@ collections:
                 widget:   "string"
                 required: false
                 hint:     "Preencha apenas se a opção acima estiver ativada."
-                pattern:  ["^https?://.*", "Deve começar com https://"]
+                pattern:  ["^(https?://.*)?$", "Deixe vazio ou insira uma URL completa (https://)"]
 
   # ──────────────────────────────────────────────────────────
   # 3. CONFIGURAÇÕES GLOBAIS
@@ -342,28 +349,28 @@ collections:
             widget:   "string"
             required: false
             hint:     "URL completa. Ex: https://instagram.com/advic_viladecava"
-            pattern:  ["^https?://.*", "Deve começar com https://"]
+            pattern:  ["^(https?://.*)?$", "Deixe vazio ou insira uma URL completa (https://)"]
 
           - label:    "Facebook"
             name:     "facebook"
             widget:   "string"
             required: false
             hint:     "URL completa. Ex: https://facebook.com/advcviladecava"
-            pattern:  ["^https?://.*", "Deve começar com https://"]
+            pattern:  ["^(https?://.*)?$", "Deixe vazio ou insira uma URL completa (https://)"]
 
           - label:    "YouTube"
             name:     "youtube"
             widget:   "string"
             required: false
             hint:     "URL do canal. Ex: https://youtube.com/@advicof"
-            pattern:  ["^https?://.*", "Deve começar com https://"]
+            pattern:  ["^(https?://.*)?$", "Deixe vazio ou insira uma URL completa (https://)"]
 
           - label:    "Telefone Principal"
             name:     "telefone"
             widget:   "string"
             hint:     "Formato: (21) 00000-0000"
             required: false
-            pattern:  ["^\\(\\d{2}\\)\\s?\\d{4,5}-\\d{4}$", "Formato esperado: (21) 00000-0000"]
+            pattern:  ["^(\\(\\d{2}\\)\\s?\\d{4,5}-\\d{4})?$", "Formato esperado: (21) 00000-0000 (ou deixe vazio)"]
 
           - label:    "E-mail de Contato"
             name:     "email"
@@ -371,8 +378,8 @@ collections:
             hint:     "E-mail que aparece na página de contato."
             required: false
             pattern:
-              ['^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-               "Digite um endereço de e-mail válido"]
+              ['^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})?$',
+               "Digite um e-mail válido (ou deixe vazio)"]
 
           - label:    "Endereço Completo"
             name:     "endereco"
