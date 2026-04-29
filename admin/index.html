@@ -486,8 +486,8 @@
         document.querySelector('[class*="AppHeader"]')        ||
         document.querySelector('[class*="AppHeaderContent"]') ||
         document.querySelector('[data-testid="cms-main"]')    ||
-        document.querySelector('.css-de3p5l')                 ||
-        document.querySelector('header[class*="css-"]');
+        document.querySelector('header[class*="css-"]')       ||
+        document.querySelector('.nc-appHeader-root');
       if (appReady) { _hideLoader(); clearInterval(_checkReady); }
     }, 250);
     /* Fallback máximo: 8 s (rede lenta / dispositivos lentos) */
