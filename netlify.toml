@@ -1,15 +1,57 @@
+# ============================================================
+#  ADVIC — Configuração Netlify
+#  Documentação: https://docs.netlify.com/configure-builds/file-based-configuration/
+# ============================================================
+
+# ── Build principal ─────────────────────────────────────────
 [build]
   functions = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "18"
 
+# ── Otimização de assets (pós-build) ────────────────────────
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = false
+  minify = true
+
+[build.processing.js]
+  bundle = false
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+[build.processing.images]
+  compress = true
+
+# ── Contextos de deploy ──────────────────────────────────────
+# Variável ENVIRONMENT disponível em script.js via window.ENVIRONMENT
+
+[context.production]
+  [context.production.environment]
+    ENVIRONMENT = "production"
+
+[context.deploy-preview]
+  [context.deploy-preview.environment]
+    ENVIRONMENT = "preview"
+
+[context.branch-deploy]
+  [context.branch-deploy.environment]
+    ENVIRONMENT = "development"
+
+# ── Redirects ───────────────────────────────────────────────
+# Força HTTPS (Netlify já faz isso na infra, mas garante via regra explícita)
 [[redirects]]
   from   = "http://igrejaadvic.netlify.app/*"
   to     = "https://igrejaadvic.netlify.app/:splat"
   status = 301
   force  = true
 
+# Fallback 404 com página institucional
 [[redirects]]
   from   = "/*"
   to     = "/404.html"

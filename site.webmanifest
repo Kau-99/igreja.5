@@ -1,33 +1,58 @@
 {
   "name": "ADVIC — Assembleia de Deus de Vila de Cava",
   "short_name": "ADVIC",
-  "start_url": "/index.html",
+  "description": "Cultos, eventos, ministérios e contato da ADVIC em Vila de Cava, Nova Iguaçu — RJ.",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "orientation": "any",
+  "orientation": "portrait-primary",
   "lang": "pt-BR",
   "dir": "ltr",
-  "description": "Site institucional da ADVIC — cultos, eventos, ministérios e contato.",
   "background_color": "#ffffff",
   "theme_color": "#0f8c95",
+  "categories": ["religion", "community"],
+  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "android-chrome-192x192.png",
+      "src": "imagens/logo.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "android-chrome-512x512.png",
+      "src": "imagens/logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "android-chrome-512x512.png",
+      "src": "imagens/logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
-  "prefer_related_applications": false
+  "shortcuts": [
+    {
+      "name": "Eventos",
+      "short_name": "Eventos",
+      "description": "Ver a programação de cultos e eventos",
+      "url": "/eventos.html",
+      "icons": [{ "src": "imagens/logo.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Contato",
+      "short_name": "Contato",
+      "description": "Falar com a ADVIC e ver horários",
+      "url": "/contato.html",
+      "icons": [{ "src": "imagens/logo.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Pedido de Oração",
+      "short_name": "Oração",
+      "description": "Enviar um pedido de oração",
+      "url": "/contato.html#oracao",
+      "icons": [{ "src": "imagens/logo.png", "sizes": "96x96", "type": "image/png" }]
+    }
+  ]
 }

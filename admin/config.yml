@@ -1,5 +1,5 @@
 # ============================================================
-#  ADVIC — Configuração do Painel Administrativo (Decap CMS)
+#  ADVIC — Painel Administrativo (Decap CMS v3)
 #  Documentação: https://decapcms.org/docs/configuration-options/
 # ============================================================
 
@@ -8,409 +8,407 @@ backend:
   name: git-gateway
   branch: main
   commit_messages:
-    create: "✨ Adicionar {{collection}}: {{slug}}"
-    update: "✏️ Atualizar {{collection}}: {{slug}}"
-    delete: "🗑️ Remover {{collection}}: {{slug}}"
-    uploadMedia: "🖼️ Carregar imagem: {{path}}"
-    deleteMedia: "🗑️ Remover imagem: {{path}}"
+    create:      "feat(cms): Adicionar {{collection}} — {{slug}}"
+    update:      "fix(cms): Atualizar {{collection}} — {{slug}}"
+    delete:      "chore(cms): Remover {{collection}} — {{slug}}"
+    uploadMedia: "chore(cms): Carregar imagem {{path}}"
+    deleteMedia: "chore(cms): Remover imagem {{path}}"
 
-# ── Desenvolvimento local (descomente para usar com `npx decap-server`) ──
+# ── Desenvolvimento local ────────────────────────────────────
+# Descomente + execute `npx decap-server` na raiz do projeto
 # local_backend: true
 
-# ── Identidade e aparência do painel ───────────────────────
-site_url: "https://igrejaadvic.netlify.app"
-logo_url: "https://igrejaadvic.netlify.app/imagens/logo.png"
-locale: "pt"
+# ── Identidade e aparência ──────────────────────────────────
+site_url:  "https://igrejaadvic.netlify.app"
+logo_url:  "https://igrejaadvic.netlify.app/imagens/logo.png"
+locale:    "pt"
 
-# Mostra o link "Ver no site" ao lado de cada entrada
+# Link "Ver no site" ao lado de cada entrada publicada
 show_preview_links: true
 
-# Garante que nomes de arquivo gerados pelo CMS não tenham caracteres especiais
+# Nomes de arquivo gerados pelo CMS: sem acentos, sem espaços
 slug:
-  encoding: "unicode"
-  clean_accents: true
+  encoding:             "unicode"
+  clean_accents:        true
+  sanitize_replacement: "-"
 
-# ── Pasta de imagens ────────────────────────────────────────
-media_folder: "imagens"
+# ── Biblioteca de mídia ──────────────────────────────────────
+media_folder:  "imagens"
 public_folder: "imagens"
+media_library:
+  name: default
+  config:
+    max_file_size: 5242880   # 5 MB
+    multiple:      false
 
-# ── Fluxo editorial ─────────────────────────────────────────
-# Descomente a linha abaixo para exigir aprovação antes de publicar
+# ── Fluxo editorial (descomente para exigir aprovação) ──────
 # publish_mode: editorial_workflow
 
 # ============================================================
 #  COLEÇÕES
 # ============================================================
 collections:
+
   # ──────────────────────────────────────────────────────────
   # 1. PÁGINAS FIXAS
   # ──────────────────────────────────────────────────────────
-  - name: "paginas"
-    label: "📄 Páginas do Site"
-    description: "Edite os textos e imagens das páginas estáticas."
+  - name:           "paginas"
+    label:          "📄 Páginas do Site"
+    label_singular: "Página"
+    description:    "Textos e imagens das páginas estáticas."
+    editor:
+      preview: false
     files:
-      # ── Página Inicial ────────────────────────────────────
+
+      # ── Página Inicial ──────────────────────────────────
       - label: "🏠 Página Inicial"
-        name: "inicio"
-        file: "inicio.json"
+        name:  "inicio"
+        file:  "inicio.json"
         fields:
-          - label: "Banner Principal (Topo da página)"
-            name: "hero"
+          - label:  "Banner Principal"
+            name:   "hero"
             widget: "object"
+            collapsed: false
             fields:
-              - label: "Imagem de Fundo"
-                name: "imagem"
-                widget: "image"
-                hint: "Resolução ideal: 1920×1080 px. Formato JPG ou WebP."
+              - label:    "Imagem de Fundo"
+                name:     "imagem"
+                widget:   "image"
+                hint:     "Resolução ideal 1920×1080 px. Formato JPG ou WebP."
                 required: true
 
-              - label: "Título Principal"
-                name: "titulo"
-                widget: "string"
-                hint: "Texto grande no centro do banner. Máx. 60 caracteres."
-                pattern: [".{5,60}", "Entre 5 e 60 caracteres"]
+              - label:    "Título Principal"
+                name:     "titulo"
+                widget:   "string"
+                hint:     "Texto grande no centro do banner. Máx. 60 caracteres."
+                pattern:  [".{5,60}", "Entre 5 e 60 caracteres"]
                 required: true
 
-              - label: "Subtítulo"
-                name: "subtitulo"
-                widget: "text"
-                hint: "Frase de apoio abaixo do título. Máx. 120 caracteres."
-                pattern: [".{10,120}", "Entre 10 e 120 caracteres"]
+              - label:    "Subtítulo"
+                name:     "subtitulo"
+                widget:   "text"
+                hint:     "Frase de apoio abaixo do título. Máx. 120 caracteres."
+                pattern:  [".{10,120}", "Entre 10 e 120 caracteres"]
                 required: true
 
-      # ── Página Sobre Nós ──────────────────────────────────
-      - label: "ℹ️ Página Sobre Nós"
-        name: "sobre"
-        file: "sobre.json"
+      # ── Sobre Nós ───────────────────────────────────────
+      - label: "ℹ️ Sobre Nós"
+        name:  "sobre"
+        file:  "sobre.json"
         fields:
-          - label: "Banner do Topo"
-            name: "hero"
-            widget: "object"
-            hint: "Imagem e textos que aparecem no topo da página Sobre Nós."
-            fields:
-              - label: "Imagem de Fundo"
-                name: "imagem"
-                widget: "image"
-                hint: "Mesma imagem da página inicial ou foto da fachada da igreja."
-                required: true
 
-              - label: "Título"
-                name: "titulo"
-                widget: "string"
-                default: "Nossa História"
-                required: true
-
-              - label: "Subtítulo"
-                name: "subtitulo"
-                widget: "text"
-                default: "Conheça as raízes, os propósitos e as pessoas que formam a ADVIC."
-                required: true
-
-          - label: "Texto Principal da Seção"
-            name: "historia"
-            widget: "object"
-            hint: "Parágrafos introdutórios que aparecem ao lado da foto da igreja."
-            fields:
-              - label: "Título da Seção"
-                name: "titulo"
-                widget: "string"
-                default: "Uma Igreja Família"
-                required: true
-
-              - label: "Parágrafo 1"
-                name: "paragrafo1"
-                widget: "text"
-                hint: "Fale sobre a origem e missão da ADVIC."
-                required: true
-
-              - label: "Parágrafo 2"
-                name: "paragrafo2"
-                widget: "text"
-                hint: "Complemento do parágrafo anterior. Pode falar sobre valores."
-                required: false
-
-              - label: "Foto ao Lado do Texto"
-                name: "imagem"
-                widget: "image"
-                hint: "Foto da fachada ou interior da igreja. Proporção 4:3 ideal."
-                required: false
-
-          - label: "Nossa Caminhada (Linha do Tempo)"
-            name: "timeline"
-            widget: "list"
+          - label:    "Banner do Topo"
+            name:     "hero"
+            widget:   "object"
             collapsed: true
-            summary: "{{fields.data}} — {{fields.titulo}}"
-            hint: "Marcos históricos da ADVIC. Adicione, edite ou reordene."
-            min: 1
+            hint:     "Imagem e textos que aparecem no topo da página Sobre Nós."
             fields:
-              - label: "Ano / Período"
-                name: "data"
-                widget: "string"
-                hint: "Ex: Anos 80 | 1995 | Dias Atuais"
+              - label:    "Imagem de Fundo"
+                name:     "imagem"
+                widget:   "image"
+                hint:     "Mesma imagem da página inicial ou foto da fachada."
                 required: true
 
-              - label: "Título do Marco"
-                name: "titulo"
-                widget: "string"
-                hint: "Ex: O Primeiro Templo"
+              - label:    "Título"
+                name:     "titulo"
+                widget:   "string"
+                default:  "Nossa História"
                 required: true
 
-              - label: "Descrição"
-                name: "descricao"
-                widget: "text"
-                hint: "Breve descrição do que aconteceu nessa fase. 1 a 2 frases."
+              - label:    "Subtítulo"
+                name:     "subtitulo"
+                widget:   "text"
+                default:  "Conheça as raízes, os propósitos e as pessoas que formam a ADVIC."
                 required: true
 
-          - label: "Nossa Liderança"
-            name: "lideranca"
-            widget: "list"
-            collapsed: true
-            summary: "{{fields.nome}} — {{fields.cargo}}"
-            hint: "Pastores e líderes exibidos na página Sobre Nós."
-            min: 1
+          - label:    "Quem Somos"
+            name:     "historia"
+            widget:   "object"
+            collapsed: false
+            hint:     "Parágrafos que aparecem ao lado da foto da igreja."
             fields:
-              - label: "Foto"
-                name: "imagem"
-                widget: "image"
-                hint: "Foto com rosto visível. Proporção 1:1 (quadrada). Mín. 400×400 px. Formatos: JPG ou WebP."
+              - label:    "Título da Seção"
+                name:     "titulo"
+                widget:   "string"
+                default:  "Uma Igreja Família"
                 required: true
 
-              - label: "Nome Completo"
-                name: "nome"
-                widget: "string"
-                hint: "Ex: Pr. Luiz Paes Leme"
+              - label:    "Parágrafo 1"
+                name:     "paragrafo1"
+                widget:   "text"
+                hint:     "Origem e missão da ADVIC."
                 required: true
 
-              - label: "Cargo ou Função"
-                name: "cargo"
-                widget: "string"
-                hint: "Ex: Pastor Presidente | Líder de Jovens | Coord. Infantil"
-                required: true
-
-              - label: "Link do Instagram (opcional)"
-                name: "instagram"
-                widget: "string"
+              - label:    "Parágrafo 2"
+                name:     "paragrafo2"
+                widget:   "text"
+                hint:     "Complemento — valores e visão. Opcional."
                 required: false
-                hint: "URL completa do perfil. Ex: https://instagram.com/fulano"
-                pattern:
-                  [
-                    "^(https?://.*)?$",
-                    "Deixe vazio ou insira uma URL completa (https://)",
-                  ]
+
+              - label:    "Foto ao Lado do Texto"
+                name:     "imagem"
+                widget:   "image"
+                hint:     "Proporção 4:3 ideal."
+                required: false
+
+          - label:      "Nossa Caminhada (Linha do Tempo)"
+            name:       "timeline"
+            widget:     "list"
+            collapsed:  true
+            summary:    "{{fields.data}} — {{fields.titulo}}"
+            add_to_top: false
+            hint:       "Marcos históricos da ADVIC. Reordene arrastando."
+            min:        1
+            max:        20
+            fields:
+              - label:    "Ano / Período"
+                name:     "data"
+                widget:   "string"
+                hint:     "Ex: Anos 80 | 1995 | Dias Atuais"
+                required: true
+
+              - label:    "Título do Marco"
+                name:     "titulo"
+                widget:   "string"
+                required: true
+
+              - label:    "Descrição"
+                name:     "descricao"
+                widget:   "text"
+                hint:     "1 a 2 frases sobre este período."
+                required: true
+
+          - label:      "Nossa Liderança"
+            name:       "lideranca"
+            widget:     "list"
+            collapsed:  true
+            summary:    "{{fields.nome}} — {{fields.cargo}}"
+            add_to_top: false
+            hint:       "Pastores e líderes exibidos na página Sobre Nós."
+            min:        1
+            max:        12
+            fields:
+              - label:    "Foto"
+                name:     "imagem"
+                widget:   "image"
+                hint:     "Proporção 1:1 (quadrada). Mín. 400×400 px. JPG ou WebP."
+                required: true
+
+              - label:    "Nome Completo"
+                name:     "nome"
+                widget:   "string"
+                hint:     "Ex: Pr. Luiz Paes Leme"
+                required: true
+
+              - label:    "Cargo ou Função"
+                name:     "cargo"
+                widget:   "string"
+                hint:     "Ex: Pastor Presidente | Líder de Jovens"
+                required: true
+
+              - label:    "Instagram (opcional)"
+                name:     "instagram"
+                widget:   "string"
+                required: false
+                hint:     "URL completa. Ex: https://instagram.com/fulano — ou deixe vazio."
+                pattern:  ["^(https?://.*)?$", "URL completa (https://) ou deixe vazio"]
 
   # ──────────────────────────────────────────────────────────
   # 2. AGENDA E MENSAGENS
   # ──────────────────────────────────────────────────────────
-  - name: "conteudo"
-    label: "🗓️ Agenda e Mensagens"
-    description: "Adicione ou edite cultos, eventos e sermões da igreja."
+  - name:           "conteudo"
+    label:          "🗓️ Agenda e Mensagens"
+    label_singular: "Item"
+    description:    "Cultos, eventos e sermões da igreja."
     files:
-      # ── Eventos ───────────────────────────────────────────
+
+      # ── Eventos ─────────────────────────────────────────
       - label: "📅 Agenda de Eventos"
-        name: "eventos"
-        file: "eventos.json"
+        name:  "eventos"
+        file:  "eventos.json"
+        editor:
+          preview: true
         fields:
-          - label: "Lista de Eventos"
-            name: "eventos"
-            widget: "list"
-            summary: "📅 {{fields.dataExibicao}} — {{fields.titulo}}"
-            collapsed: true
-            hint: "Os eventos mais recentes aparecem primeiro no site."
+          - label:      "Lista de Eventos"
+            name:       "eventos"
+            widget:     "list"
+            summary:    "📅 {{fields.dataExibicao}} — {{fields.titulo}} [{{fields.tipo}}]"
+            collapsed:  true
+            add_to_top: true
+            hint:       "Eventos mais recentes no topo. Clique em ＋ para adicionar."
+            max:        50
             fields:
-              - label: "ID de Controle"
-                name: "id"
-                widget: "string"
-                hint: "Número sequencial único. Ex: 1, 2, 3… Não repetir."
+              - label:    "ID de Controle"
+                name:     "id"
+                widget:   "string"
+                hint:     "Número único e sequencial. Ex: 4, 5, 6…"
                 required: true
 
-              - label: "Título do Evento"
-                name: "titulo"
-                widget: "string"
-                hint: "Nome do evento como vai aparecer no card. Máx. 50 caracteres."
-                pattern: [".{3,50}", "Entre 3 e 50 caracteres"]
+              - label:    "Título do Evento"
+                name:     "titulo"
+                widget:   "string"
+                hint:     "Como aparece no card. Máx. 50 caracteres."
+                pattern:  [".{3,50}", "Entre 3 e 50 caracteres"]
                 required: true
 
-              - label: "Categoria"
-                name: "tipo"
-                widget: "select"
-                hint: "Usada no filtro da página de Eventos."
+              - label:    "Categoria"
+                name:     "tipo"
+                widget:   "select"
+                hint:     "Usada no filtro da página de Eventos."
+                required: true
                 options:
-                  - { label: "Culto", value: "culto" }
-                  - { label: "Louvor", value: "louvor" }
+                  - { label: "Culto",   value: "culto"   }
+                  - { label: "Louvor",  value: "louvor"  }
                   - { label: "Família", value: "familia" }
                   - { label: "Vigília", value: "vigilia" }
+
+              - label:    "Data e Hora (ISO — para ordenação)"
+                name:     "dataISO"
+                widget:   "datetime"
+                format:   "YYYY-MM-DDTHH:mm"
+                hint:     "Selecione no calendário. Usado para ordenar e para o contador."
                 required: true
 
-              - label: "Data e Hora (para o sistema)"
-                name: "dataISO"
-                widget: "datetime"
-                format: "YYYY-MM-DDTHH:mm"
-                hint: "Selecione no calendário. Usado internamente para ordenar."
+              - label:    "Data e Hora (texto — exibido no card)"
+                name:     "dataExibicao"
+                widget:   "string"
+                hint:     "Texto livre. Ex: 20 Abr • 19h | Domingo, 18h"
                 required: true
 
-              - label: "Data e Hora (como aparece no card)"
-                name: "dataExibicao"
-                widget: "string"
-                hint: "Texto livre. Ex: 20 Abr • 19h | Domingo, 18h"
+              - label:    "Descrição Breve"
+                name:     "descricao"
+                widget:   "text"
+                hint:     "Aparece no card. Máx. 2 linhas (≈ 120 caracteres)."
+                pattern:  [".{10,180}", "Entre 10 e 180 caracteres"]
                 required: true
 
-              - label: "Descrição Breve"
-                name: "descricao"
-                widget: "text"
-                hint: "Aparece no card do evento. Máx. 2 linhas (≈ 120 caracteres)."
-                pattern: [".{10,180}", "Entre 10 e 180 caracteres"]
-                required: true
-
-              - label: "Arte do Evento (imagem)"
-                name: "imagem"
-                widget: "image"
-                hint: "Arte do evento em formato paisagem (16:9). Mín. 800×450 px. Formatos: JPG ou WebP."
+              - label:    "Arte do Evento (imagem)"
+                name:     "imagem"
+                widget:   "image"
+                hint:     "Paisagem 16:9. Mín. 800×450 px. JPG ou WebP."
                 required: false
 
-              - label: "Link — Adicionar ao Google Agenda"
-                name: "linkCalendario"
-                widget: "string"
+              - label:    "Link — Google Agenda"
+                name:     "linkCalendario"
+                widget:   "string"
                 required: false
-                hint: "Gere o link em calendar.google.com e cole aqui."
-                pattern:
-                  [
-                    "^(https?://.*)?$",
-                    "Deixe vazio ou insira uma URL completa (https://)",
-                  ]
+                hint:     "Gere em calendar.google.com/calendar/r/eventedit e cole aqui."
+                pattern:  ["^(https?://.*)?$", "URL completa ou deixe vazio"]
 
-              - label: "Link — Compartilhar no WhatsApp"
-                name: "linkWhats"
-                widget: "string"
+              - label:    "Link — Compartilhar no WhatsApp"
+                name:     "linkWhats"
+                widget:   "string"
                 required: false
-                hint: "Use https://wa.me/?text=… ou um link de grupo."
-                pattern:
-                  [
-                    "^(https?://.*)?$",
-                    "Deixe vazio ou insira uma URL completa (https://)",
-                  ]
+                hint:     "Ex: https://wa.me/?text=Participe+do+evento…"
+                pattern:  ["^(https?://.*)?$", "URL completa ou deixe vazio"]
 
-      # ── Sermões ───────────────────────────────────────────
+      # ── Sermões ─────────────────────────────────────────
       - label: "🎙️ Sermões e Pregações"
-        name: "sermoes"
-        file: "sermoes.json"
+        name:  "sermoes"
+        file:  "sermoes.json"
+        editor:
+          preview: true
         fields:
-          - label: "Lista de Sermões"
-            name: "sermoes"
-            widget: "list"
-            summary: "🎙️ {{fields.titulo}} ({{fields.pregadorData}})"
-            collapsed: true
-            hint: "Os sermões mais recentes aparecem primeiro."
+          - label:      "Lista de Sermões"
+            name:       "sermoes"
+            widget:     "list"
+            summary:    "🎙️ {{fields.titulo}} — {{fields.pregadorData}}"
+            collapsed:  true
+            add_to_top: true
+            hint:       "Sermões mais recentes no topo."
+            max:        100
             fields:
-              - label: "ID de Controle"
-                name: "id"
-                widget: "string"
-                hint: "Número sequencial único. Ex: 1, 2, 3…"
+              - label:    "ID"
+                name:     "id"
+                widget:   "string"
+                hint:     "Número único. Ex: 4"
                 required: true
 
-              - label: "Título da Mensagem"
-                name: "titulo"
-                widget: "string"
-                hint: "Título do sermão como pregado. Ex: A Força da Fé"
+              - label:    "Título da Mensagem"
+                name:     "titulo"
+                widget:   "string"
+                hint:     "Ex: A Força da Fé"
                 required: true
 
-              - label: "Pregador e Data"
-                name: "pregadorData"
-                widget: "string"
-                hint: "Ex: Pr. Luiz — 12 Abr | Miss. Ana — Dom. 19h"
+              - label:    "Pregador e Data"
+                name:     "pregadorData"
+                widget:   "string"
+                hint:     "Ex: Pr. Luiz — 12 Abr | Miss. Ana — Dom. 19h"
                 required: true
 
-              - label: "Link do Vídeo (YouTube)"
-                name: "linkVideo"
-                widget: "string"
-                hint: "Cole o link do vídeo no YouTube. Ex: https://youtu.be/abc123"
+              - label:    "Link do Vídeo (YouTube)"
+                name:     "linkVideo"
+                widget:   "string"
+                hint:     "Ex: https://youtu.be/abc123"
                 required: true
-                pattern: ["^https?://.*", "Deve começar com https://"]
+                pattern:  ["^https?://.*", "Deve começar com https://"]
 
-              - label: "Áudio disponível?"
-                name: "audioDisponivel"
-                widget: "boolean"
-                default: false
-                hint: "Ative apenas se o link de áudio abaixo estiver preenchido."
+              - label:    "Áudio disponível?"
+                name:     "audioDisponivel"
+                widget:   "boolean"
+                default:  false
+                hint:     "Ative apenas se o link de áudio abaixo estiver preenchido."
 
-              - label: "Link do Áudio (Spotify, Drive, etc.)"
-                name: "linkAudio"
-                widget: "string"
+              - label:    "Link do Áudio"
+                name:     "linkAudio"
+                widget:   "string"
                 required: false
-                hint: "Preencha apenas se a opção acima estiver ativada."
-                pattern:
-                  [
-                    "^(https?://.*)?$",
-                    "Deixe vazio ou insira uma URL completa (https://)",
-                  ]
+                hint:     "Spotify, Drive, etc. Deixe vazio se não houver."
+                pattern:  ["^(https?://.*)?$", "URL completa ou deixe vazio"]
 
   # ──────────────────────────────────────────────────────────
   # 3. CONFIGURAÇÕES GLOBAIS
   # ──────────────────────────────────────────────────────────
-  - name: "configuracoes"
-    label: "⚙️ Configurações Globais"
-    description: "Contatos, endereço e links das redes sociais usados em todo o site."
+  - name:           "configuracoes"
+    label:          "⚙️ Configurações Globais"
+    label_singular: "Configuração"
+    description:    "Contatos, redes sociais e endereço usados em todo o site."
+    editor:
+      preview: false
     files:
+
       - label: "📞 Contatos e Redes Sociais"
-        name: "contatos"
-        file: "contatos.json"
+        name:  "contatos"
+        file:  "contatos.json"
         fields:
-          - label: "Instagram"
-            name: "instagram"
-            widget: "string"
+          - label:    "Instagram"
+            name:     "instagram"
+            widget:   "string"
             required: false
-            hint: "URL completa. Ex: https://instagram.com/advic_viladecava"
-            pattern:
-              [
-                "^(https?://.*)?$",
-                "Deixe vazio ou insira uma URL completa (https://)",
-              ]
+            hint:     "Ex: https://instagram.com/advic_viladecava"
+            pattern:  ["^(https?://.*)?$", "URL completa ou deixe vazio"]
 
-          - label: "Facebook"
-            name: "facebook"
-            widget: "string"
+          - label:    "Facebook"
+            name:     "facebook"
+            widget:   "string"
             required: false
-            hint: "URL completa. Ex: https://facebook.com/advcviladecava"
-            pattern:
-              [
-                "^(https?://.*)?$",
-                "Deixe vazio ou insira uma URL completa (https://)",
-              ]
+            hint:     "Ex: https://facebook.com/advcviladecava"
+            pattern:  ["^(https?://.*)?$", "URL completa ou deixe vazio"]
 
-          - label: "YouTube"
-            name: "youtube"
-            widget: "string"
+          - label:    "YouTube"
+            name:     "youtube"
+            widget:   "string"
             required: false
-            hint: "URL do canal. Ex: https://youtube.com/@advicof"
-            pattern:
-              [
-                "^(https?://.*)?$",
-                "Deixe vazio ou insira uma URL completa (https://)",
-              ]
+            hint:     "Ex: https://youtube.com/@advicof"
+            pattern:  ["^(https?://.*)?$", "URL completa ou deixe vazio"]
 
-          - label: "Telefone Principal"
-            name: "telefone"
-            widget: "string"
-            hint: "Formato: (21) 00000-0000"
+          - label:    "Telefone Principal"
+            name:     "telefone"
+            widget:   "string"
+            hint:     "Formato: (21) 00000-0000"
             required: false
-            pattern:
-              [
-                "^(\\(\\d{2}\\)\\s?\\d{4,5}-\\d{4})?$",
-                "Formato esperado: (21) 00000-0000 (ou deixe vazio)",
-              ]
+            pattern:  ["^(\\(\\d{2}\\)\\s?\\d{4,5}-\\d{4})?$",
+                       "Formato: (21) 00000-0000 — ou deixe vazio"]
 
-          - label: "E-mail de Contato"
-            name: "email"
-            widget: "string"
-            hint: "E-mail que aparece na página de contato."
+          - label:    "E-mail de Contato"
+            name:     "email"
+            widget:   "string"
+            hint:     "Ex: contato@advic.org.br"
             required: false
-            pattern:
-              [
-                "^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})?$",
-                "Digite um e-mail válido (ou deixe vazio)",
-              ]
+            pattern:  ['^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})?$',
+                       "E-mail válido — ou deixe vazio"]
 
-          - label: "Endereço Completo"
-            name: "endereco"
-            widget: "text"
-            hint: "Endereço que aparece na página de contato e no rodapé."
+          - label:    "Endereço Completo"
+            name:     "endereco"
+            widget:   "text"
+            hint:     "Exibido na página de Contato e no rodapé."
             required: false
