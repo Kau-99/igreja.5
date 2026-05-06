@@ -27,7 +27,8 @@
   const on = (el, ev, fn, opt) => el && el.addEventListener(ev, fn, opt);
 
   const escapeHTML = (str) => {
-    if (typeof str !== "string") return str;
+    if (str == null) return "";
+    if (typeof str !== "string") str = String(str);
     return str.replace(
       /[&<>'"]/g,
       (tag) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[tag],
@@ -206,10 +207,15 @@
     requestAnimationFrame(() => toast.classList.add("show"));
     setTimeout(() => {
       toast.classList.remove("show");
-      toast.addEventListener("transitionend", () => {
+      let cleaned = false;
+      const cleanup = () => {
+        if (cleaned) return;
+        cleaned = true;
         toast.remove();
         setTimeout(processToastQueue, 180);
-      }, { once: true });
+      };
+      toast.addEventListener("transitionend", cleanup, { once: true });
+      setTimeout(cleanup, 600); // fallback: prefers-reduced-motion ou browser sem transição
     }, MyApp.config.toastDuration);
   }
 
@@ -344,6 +350,7 @@
       if (!isValid) return MyApp.showToast("Preencha todos os campos corretamente.", "error");
 
       const btn = $('button[type="submit"]', form);
+      if (!btn) return;
       const originalText = btn.innerHTML;
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>A enviar...';
       btn.disabled = true;
@@ -567,15 +574,21 @@
     const dataExib    = escapeHTML(evento.dataExibicao);
     const dataISO     = escapeHTML(evento.dataISO);
     const imgUrl      = encodeURI(evento.imagem || "");
-    const calendarUrl = encodeURI(evento.linkCalendario || "#");
-    const whatsUrl    = encodeURI(evento.linkWhats || "#");
-    // Botão de partilha: usa Web Share API nativa; fallback para WhatsApp
+    const calendarUrl = evento.linkCalendario && evento.linkCalendario !== "#"
+      ? encodeURI(evento.linkCalendario) : "";
+    const whatsUrl = evento.linkWhats && evento.linkWhats !== "#"
+      ? encodeURI(evento.linkWhats) : "";
+
+    const calendarBtn = calendarUrl
+      ? `<a class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer" href="${calendarUrl}">Calendário</a>`
+      : `<button class="btn btn-primary btn-sm" disabled aria-disabled="true" title="Link do calendário não disponível">Calendário</button>`;
+
     const shareBtn = `<button
         class="btn btn-outline-primary btn-sm btn-share"
         data-share-title="${titulo}"
         data-share-text="${descricao}"
-        data-share-url="${calendarUrl !== encodeURI("#") ? calendarUrl : window.location.href}"
-        data-share-fallback="${whatsUrl}"
+        data-share-url="${calendarUrl || window.location.href}"
+        data-share-fallback="${whatsUrl || ""}"
         aria-label="Compartilhar ${titulo}">
         <i class="fa-solid fa-share-nodes me-1" aria-hidden="true"></i>Compartilhar
       </button>`;
@@ -588,7 +601,7 @@
             <p class="text-muted mb-1"><strong>Data:</strong> <time datetime="${dataISO}">${dataExib}</time></p>
             <p class="mb-3 flex-grow-1">${descricao}</p>
             <div class="d-flex gap-2 mt-auto">
-              <a class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer" href="${calendarUrl}">Calendário</a>
+              ${calendarBtn}
               ${shareBtn}
             </div>
           </div>
@@ -601,11 +614,12 @@
     const delay       = (index % 3) * 120;
     const titulo      = escapeHTML(sermao.titulo);
     const pregadorData = escapeHTML(sermao.pregadorData);
-    const videoUrl    = encodeURI(sermao.linkVideo || "#");
-    const audioUrl    = encodeURI(sermao.linkAudio || "#");
+    const videoUrl = sermao.linkVideo && sermao.linkVideo !== "#"
+      ? encodeURI(sermao.linkVideo) : "";
+    const audioUrl = sermao.linkAudio && sermao.linkAudio !== "#"
+      ? encodeURI(sermao.linkAudio) : "";
 
-    // Botão de áudio acessível: <button disabled> em vez de <a aria-disabled>
-    const btnAudio = sermao.audioDisponivel
+    const btnAudio = (sermao.audioDisponivel && audioUrl)
       ? `<a class="btn btn-outline-primary btn-sm" href="${audioUrl}" target="_blank" rel="noopener noreferrer">Ouvir áudio</a>`
       : `<button class="btn btn-outline-primary btn-sm" disabled aria-disabled="true" title="Áudio ainda não disponível">Ouvir (em breve)</button>`;
 
@@ -615,7 +629,10 @@
           <h3 class="mb-2">${titulo}</h3>
           <p class="text-muted mb-3 flex-grow-1">${pregadorData}</p>
           <div class="d-flex gap-2 mt-auto">
-            <a class="btn btn-primary btn-sm" href="${videoUrl}" target="_blank" rel="noopener noreferrer">Assistir</a>
+            ${videoUrl
+              ? `<a class="btn btn-primary btn-sm" href="${videoUrl}" target="_blank" rel="noopener noreferrer">Assistir</a>`
+              : `<button class="btn btn-primary btn-sm" disabled aria-disabled="true" title="Vídeo ainda não disponível">Assistir</button>`
+            }
             ${btnAudio}
           </div>
         </article>
@@ -642,14 +659,17 @@
     const nome      = escapeHTML(lider.nome);
     const cargo     = escapeHTML(lider.cargo);
     const imgSrc    = encodeURI(lider.imagem || "");
-    const instagram = encodeURI(lider.instagram || "#");
+    const instagramRaw = lider.instagram && lider.instagram !== "#" ? encodeURI(lider.instagram) : "";
+    const instagramHtml = instagramRaw
+      ? `<a href="${instagramRaw}" target="_blank" rel="noopener noreferrer" aria-label="Instagram de ${nome}"><i class="fab fa-instagram" aria-hidden="true"></i></a>`
+      : `<span class="leader-social-placeholder" aria-hidden="true"><i class="fab fa-instagram"></i></span>`;
     return `
       <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-animate="fade-up" data-delay="${delay}">
         <div class="leader-card">
           <div class="leader-img-wrapper">
             <img data-src="${imgSrc}" alt="${nome}" class="lazy" />
             <div class="leader-social">
-              <a href="${instagram}" ${instagram !== "#" ? 'target="_blank" rel="noopener noreferrer"' : ""}><i class="fab fa-instagram"></i></a>
+              ${instagramHtml}
             </div>
           </div>
           <div class="leader-info">
@@ -884,7 +904,6 @@
   };
 
   // ─── BANNER AO VIVO ───────────────────────────────────────────────────────
-  // URL e horário configurados em MyApp.config para fácil manutenção
   MyApp.initLiveBanner = () => {
     const { dayOfWeek, startHour, endHour } = MyApp.config.liveSchedule;
     const agora = new Date();
@@ -897,7 +916,13 @@
     banner.rel       = "noopener noreferrer";
     banner.className = "live-banner";
     banner.innerHTML = `<span class="live-dot"></span><span><strong>ESTAMOS EM DIRETO:</strong> Clique aqui para assistir ao culto de hoje!</span>`;
-    document.body.insertBefore(banner, document.body.firstChild);
+    // Insere depois do skip-link (se existir) para não quebrar a ordem de foco
+    const skipLink = document.querySelector(".skip-link");
+    if (skipLink?.nextSibling) {
+      document.body.insertBefore(banner, skipLink.nextSibling);
+    } else {
+      document.body.insertBefore(banner, document.body.firstChild);
+    }
   };
 
   // ─── VERSÍCULO DA SEMANA ──────────────────────────────────────────────────
@@ -1216,19 +1241,21 @@
     if (registration.waiting && navigator.serviceWorker.controller) showBanner();
 
     // SW novo encontrado após o carregamento da página
+    // _pendingUpdate evita reload automático na 1.ª instalação do SW
+    let _pendingUpdate = false;
     registration.addEventListener("updatefound", () => {
       const newWorker = registration.installing;
       if (!newWorker) return;
       newWorker.addEventListener("statechange", () => {
         if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+          _pendingUpdate = true;
           showBanner();
         }
       });
     });
 
-    // Quando o novo SW assume o controlo, recarrega a página
     navigator.serviceWorker.addEventListener("controllerchange", () => {
-      window.location.reload();
+      if (_pendingUpdate) window.location.reload();
     });
   };
 

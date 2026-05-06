@@ -727,6 +727,19 @@ img {
   transform: scale(1.1);
 }
 
+.leader-social-placeholder {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, .4);
+  font-size: 1.1rem;
+  cursor: default;
+}
+
 .leader-info {
   padding: 1.25rem 1rem;
 }
