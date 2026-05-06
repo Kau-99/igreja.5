@@ -173,7 +173,9 @@
   MyApp.initSmoothScroll = () => {
     $$('a[href^="#"]:not(.open-ministry-modal):not(.accordion-button)').forEach((link) => {
       on(link, "click", (e) => {
-        const target = $(link.getAttribute("href"));
+        const hash = link.getAttribute("href");
+        if (!hash || hash === "#") return;
+        const target = $(hash);
         if (!target) return;
         e.preventDefault();
         target.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1160,7 +1162,7 @@
       const tick = () => {
         const diff = alvo - new Date();
         if (diff <= 0) {
-          clearInterval(timerId);
+          clearInterval(MyApp._countdownTimerId);
           container.innerHTML = `<p class="lead fw-bold text-primary">O evento está a acontecer agora! 🎉</p>`;
           return;
         }

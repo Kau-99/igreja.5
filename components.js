@@ -98,7 +98,9 @@
   //     2. Crie um novo App → plataforma "Web"
   //     3. Copie o App ID e substitua "SEU_APP_ID_AQUI" abaixo
   const ONESIGNAL_APP_ID = "SEU_APP_ID_AQUI";
-  if (ONESIGNAL_APP_ID !== "SEU_APP_ID_AQUI" && !document.getElementById("onesignal-script")) {
+  if (ONESIGNAL_APP_ID === "SEU_APP_ID_AQUI") {
+    console.info("[ADVIC] Push notifications desativadas — configure ONESIGNAL_APP_ID em components.js");
+  } else if (!document.getElementById("onesignal-script")) {
     const os  = document.createElement("script");
     os.id     = "onesignal-script";
     os.src    = "https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js";
@@ -129,10 +131,12 @@
     });
   }
 
-  const currentFile = window.location.pathname.split("/").pop() || "index.html";
+  const rawFile   = window.location.pathname.split("/").pop();
+  const currentFile = rawFile === "" || rawFile === "index.html" ? "index.html" : rawFile;
   document.querySelectorAll(".nav-menu a[href]").forEach((link) => {
     const href = link.getAttribute("href");
-    const isActive = href === currentFile || (currentFile === "" && href === "index.html");
+    const isActive = href === currentFile ||
+      (currentFile === "index.html" && (href === "" || href === "/"));
     link.classList.toggle("active", isActive);
     if (isActive) {
       link.setAttribute("aria-current", "page");

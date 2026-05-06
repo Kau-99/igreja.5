@@ -1,7 +1,7 @@
 // ── OneSignal SDK (descomente após configurar o App ID em components.js) ──
 // importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-const CACHE_NAME = "advic-v5";
+const CACHE_NAME = "advic-v6";
 
 const STATIC_ASSETS = [
   "/",
@@ -11,9 +11,11 @@ const STATIC_ASSETS = [
   "/contato.html",
   "/privacidade.html",
   "/offline.html",
+  "/404.html",
   "/style.css",
   "/script.js",
   "/components.js",
+  "/site.webmanifest",
   "/inicio.json",
   "/eventos.json",
   "/sermoes.json",
@@ -76,7 +78,7 @@ self.addEventListener("fetch", (event) => {
 
   if (request.method !== "GET") return;
 
-  if (request.headers.get("Accept").includes("text/html")) {
+  if ((request.headers.get("Accept") || "").includes("text/html")) {
     event.respondWith(
       fetch(request)
         .then((response) => {
