@@ -499,6 +499,38 @@ img {
   transform: translateY(-2px);
 }
 
+/* Honeypot antispam — visualmente oculto, acessível a leitores de ecrã não */
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  height: 0;
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Checkbox do formulário de oração */
+.form-check-label-oracao {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  cursor: pointer;
+  margin-top: .25rem;
+}
+
+.form-check-label-oracao .form-check-input {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.form-check-input:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
 /* Form & Map */
 .contact-form {
   background: #fff;
@@ -1644,6 +1676,18 @@ body.a11y-reduce-motion *::after {
 [data-theme="dark"] input::placeholder,
 [data-theme="dark"] textarea::placeholder { color: var(--muted); }
 
+[data-theme="dark"] .form-check-input {
+  background-color: var(--soft);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .form-check-input:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+[data-theme="dark"] .form-check-label-oracao { color: var(--text); }
+
 [data-theme="dark"] .text-muted { color: var(--muted) !important; }
 
 [data-theme="dark"] .site-footer  { background: #060d1a; }
@@ -2136,6 +2180,8 @@ body.a11y-reduce-motion *::after {
   .cta,
   .btn-dark-mode,
   .whatsapp-fab,
+  #youtube,
+  #pwa-install-container,
   footer .social-links {
     display: none !important;
   }
@@ -2195,10 +2241,6 @@ body.a11y-reduce-motion *::after {
     height: 46px;
     font-size: 1.45rem;
   }
-}
-
-@media print {
-  .whatsapp-fab { display: none !important; }
 }
 
 /* =========================================================

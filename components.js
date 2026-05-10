@@ -1,7 +1,8 @@
 "use strict";
 
 (() => {
-  const saved   = localStorage.getItem("advic-theme");
+  let saved = null;
+  try { saved = localStorage.getItem("advic-theme"); } catch { /* modo privado */ }
   const prefers = window.matchMedia("(prefers-color-scheme: dark)").matches;
   document.documentElement.setAttribute(
     "data-theme",
@@ -99,7 +100,7 @@
   //     3. Copie o App ID e substitua "SEU_APP_ID_AQUI" abaixo
   const ONESIGNAL_APP_ID = "SEU_APP_ID_AQUI";
   if (ONESIGNAL_APP_ID === "SEU_APP_ID_AQUI") {
-    console.info("[ADVIC] Push notifications desativadas — configure ONESIGNAL_APP_ID em components.js");
+    /* Push desativado — substitua ONESIGNAL_APP_ID por um App ID real */
   } else if (!document.getElementById("onesignal-script")) {
     const os  = document.createElement("script");
     os.id     = "onesignal-script";

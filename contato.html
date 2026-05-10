@@ -88,17 +88,16 @@
             <h1 class="mb-2">Entre em Contato</h1>
             <p class="text-muted mb-3">Responderemos o mais breve possível diretamente no seu e-mail.</p>
 
-            <input class="honeypot" type="text" name="bot-field" autocomplete="off" tabindex="-1" aria-hidden="true"
-              style="position: absolute; left: -9999px; height: 0; width: 0; opacity: 0;" />
+            <input class="honeypot" type="text" name="bot-field" autocomplete="off" tabindex="-1" aria-hidden="true" />
 
             <label for="nome">Nome <span aria-hidden="true">*</span></label>
-            <input id="nome" name="nome" type="text" required aria-required="true" />
+            <input id="nome" name="nome" type="text" required aria-required="true" autocomplete="name" />
 
             <label for="email">E-mail <span aria-hidden="true">*</span></label>
             <input id="email" name="email" type="email" required aria-required="true" autocomplete="email" />
 
             <label for="assunto">Assunto <span aria-hidden="true">*</span></label>
-            <input id="assunto" name="assunto" type="text" required aria-required="true" />
+            <input id="assunto" name="assunto" type="text" required aria-required="true" autocomplete="off" />
 
             <label for="mensagem">Mensagem <span aria-hidden="true">*</span></label>
             <textarea id="mensagem" name="mensagem" rows="5" required aria-required="true"></textarea>
@@ -147,8 +146,7 @@
               <p class="text-muted">Envie seu pedido com confiança. Nossa equipe intercederá por você.</p>
             </div>
 
-            <input class="honeypot" type="text" name="bot-field" autocomplete="off" tabindex="-1" aria-hidden="true"
-              style="position: absolute; left: -9999px; height: 0; width: 0; opacity: 0;" />
+            <input class="honeypot" type="text" name="bot-field" autocomplete="off" tabindex="-1" aria-hidden="true" />
 
             <label for="or-nome">Nome <span aria-hidden="true">*</span></label>
             <input id="or-nome" name="nome" type="text" required aria-required="true" autocomplete="name" />
@@ -157,9 +155,8 @@
             <textarea id="or-pedido" name="pedido" rows="5" required aria-required="true"
               placeholder="Compartilhe seu pedido de oração..."></textarea>
 
-            <label class="d-flex gap-2 align-items-center mt-1" style="cursor:pointer;">
-              <input type="checkbox" name="anonimo" value="sim" class="form-check-input m-0"
-                style="width:1.1rem;height:1.1rem;flex-shrink:0;" />
+            <label class="form-check-label-oracao">
+              <input type="checkbox" name="anonimo" value="sim" class="form-check-input" />
               <span>Manter anônimo</span>
             </label>
 

@@ -1143,9 +1143,9 @@
     window
       .matchMedia("(prefers-color-scheme: dark)")
       .addEventListener("change", (e) => {
-        if (!localStorage.getItem("advic-theme")) {
-          applyTheme(e.matches ? "dark" : "light");
-        }
+        let saved = null;
+        try { saved = localStorage.getItem("advic-theme"); } catch { /* privado */ }
+        if (!saved) applyTheme(e.matches ? "dark" : "light");
       });
   };
 
@@ -1195,10 +1195,12 @@
         const h = Math.floor((diff % 86400000) / 3600000);
         const m = Math.floor((diff % 3600000)  / 60000);
         const s = Math.floor((diff % 60000)    / 1000);
-        $("#cd-days").textContent  = pad(d);
-        $("#cd-hours").textContent = pad(h);
-        $("#cd-mins").textContent  = pad(m);
-        $("#cd-secs").textContent  = pad(s);
+        const elDays  = $("#cd-days");
+        if (!elDays) { clearInterval(MyApp._countdownTimerId); return; }
+        elDays.textContent              = pad(d);
+        $("#cd-hours").textContent      = pad(h);
+        $("#cd-mins").textContent       = pad(m);
+        $("#cd-secs").textContent       = pad(s);
       };
 
       tick();

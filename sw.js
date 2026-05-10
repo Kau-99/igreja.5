@@ -1,7 +1,7 @@
 // ── OneSignal SDK (descomente após configurar o App ID em components.js) ──
 // importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-const CACHE_NAME = "advic-v6";
+const CACHE_NAME = "advic-v7";
 
 const STATIC_ASSETS = [
   "/",
@@ -73,46 +73,58 @@ self.addEventListener("notificationclick", (event) => {
   );
 });
 
+// Só armazena em cache respostas válidas e não opacas
+const safePut = (cache, request, response) => {
+  if (response.ok && response.type !== "opaque") {
+    cache.put(request, response.clone()).catch(() => { /* quota */ });
+  }
+};
+
 self.addEventListener("fetch", (event) => {
   const request = event.request;
+  const url     = new URL(request.url);
 
   if (request.method !== "GET") return;
 
+  // Ignora requisições externas ao domínio (CDNs, YouTube, etc.) — sem caching
+  if (url.origin !== self.location.origin) return;
+
+  // HTML → Network-First com fallback offline
   if ((request.headers.get("Accept") || "").includes("text/html")) {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          caches.open(CACHE_NAME).then((cache) => safePut(cache, request, response));
           return response;
         })
-        .catch(() => caches.match(request) || caches.match("/offline.html")),
+        .catch(() =>
+          caches.match(request).then((cached) => cached || caches.match("/offline.html"))
+        ),
     );
     return;
   }
 
-  if (request.url.includes(".json")) {
+  // JSON → Network-First (conteúdo dinâmico via CMS)
+  if (url.pathname.endsWith(".json")) {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          caches.open(CACHE_NAME).then((cache) => safePut(cache, request, response));
           return response;
         })
         .catch(() => caches.match(request)),
     );
     return;
   }
+
+  // Assets estáticos → Cache-First
   event.respondWith(
     caches.match(request).then((cachedResponse) => {
-      return (
-        cachedResponse ||
-        fetch(request).then((response) => {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-          return response;
-        })
-      );
+      if (cachedResponse) return cachedResponse;
+      return fetch(request).then((response) => {
+        caches.open(CACHE_NAME).then((cache) => safePut(cache, request, response));
+        return response;
+      });
     }),
   );
 });
