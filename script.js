@@ -36,22 +36,25 @@
   };
 
   // ─── BUSCA JSON COM CACHE E TIMEOUT ─────────────────────────────────────
-  MyApp.fetchJSON = async (url, timeoutMs = 8000) => {
-    if (MyApp.Cache[url]) return MyApp.Cache[url];
+  // Armazena a Promise imediatamente para que chamadas simultâneas ao mesmo
+  // URL não disparem fetchs duplicados (race condition).
+  MyApp.fetchJSON = (url, timeoutMs = 8000) => {
+    if (url in MyApp.Cache) return MyApp.Cache[url];
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), timeoutMs);
-    try {
-      const response = await fetch(url, { signal: controller.signal });
-      if (!response.ok) throw new Error(`Falha HTTP: ${response.status}`);
-      const data = await response.json();
-      MyApp.Cache[url] = data;
-      return data;
-    } catch (err) {
-      if (err.name === "AbortError") throw new Error("Tempo esgotado ao carregar dados.");
-      throw err;
-    } finally {
-      clearTimeout(timer);
-    }
+    const timer      = setTimeout(() => controller.abort(), timeoutMs);
+    const promise    = fetch(url, { signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Falha HTTP: ${response.status}`);
+        return response.json();
+      })
+      .catch((err) => {
+        delete MyApp.Cache[url]; // remove em falha para permitir nova tentativa
+        if (err.name === "AbortError") throw new Error("Tempo esgotado ao carregar dados.");
+        throw err;
+      })
+      .finally(() => clearTimeout(timer));
+    MyApp.Cache[url] = promise;
+    return promise;
   };
 
   // ─── SEGURANÇA ────────────────────────────────────────────────────────────
@@ -62,7 +65,8 @@
         if (!raw) return;
         if (/^\s*(javascript|data):/i.test(raw)) {
           a.removeAttribute("href");
-          a.setAttribute("role", "link");
+          a.removeAttribute("role");
+          a.setAttribute("aria-disabled", "true");
           a.dataset.blockedHref = "blocked";
           return;
         }
@@ -403,6 +407,7 @@
       if (!valid) return MyApp.showToast("Preencha todos os campos obrigatórios.", "error");
 
       const btn = form.querySelector('button[type="submit"]');
+      if (!btn) return;
       const orig = btn.innerHTML;
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Enviando...';
       btn.disabled  = true;
@@ -487,6 +492,7 @@
       title.textContent = card.dataset.title || "";
       text.textContent  = card.dataset.text  || "";
       img.src           = card.dataset.img   || "";
+      img.alt           = card.dataset.title ? `Imagem: ${card.dataset.title}` : "Imagem do Ministério";
       overlay.classList.add("open");
       document.body.style.overflow = "hidden";
       // Foca o botão de fechar ao abrir
@@ -769,6 +775,7 @@
         // O <id> contém "yt:video:VIDEO_ID"
         const rawId   = entry.querySelector("id")?.textContent || "";
         const videoId = rawId.replace("yt:video:", "").trim();
+        if (!videoId) return ""; // ignora entradas sem ID válido
         const title   = escapeHTML(entry.querySelector("title")?.textContent || "Vídeo sem título");
         const pub     = entry.querySelector("published")?.textContent || "";
         const date    = pub ? new Date(pub).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" }) : "";
@@ -834,8 +841,8 @@
       const dados = await MyApp.fetchJSON("sobre.json");
       const historia = dados.historia || {};
 
-      // Texto introdutório da história
-      if (textoEl && (historia.paragrafo1 || historia.paragrafo2)) {
+      // Texto introdutório da história (sempre substitui o spinner)
+      if (textoEl) {
         const titulo = escapeHTML(historia.titulo || "Uma Igreja Família");
         textoEl.innerHTML = `
           <h2 class="section-title mb-3">${titulo}</h2>
@@ -856,7 +863,8 @@
         MyApp.registerRevealElements($$("[data-animate]", liderancaEl));
       }
     } catch {
-      MyApp.log("Erro ao carregar sobre.json — usando conteúdo estático.");
+      MyApp.log("Erro ao carregar sobre.json.");
+      if (textoEl) textoEl.innerHTML = `<p class="text-muted">Não foi possível carregar o conteúdo.</p>`;
     }
   };
 

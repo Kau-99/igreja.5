@@ -509,23 +509,6 @@ img {
   pointer-events: none;
 }
 
-/* Checkbox do formulário de oração */
-.form-check-label-oracao {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  cursor: pointer;
-  margin-top: .25rem;
-}
-
-.form-check-label-oracao .form-check-input {
-  width: 1.1rem;
-  height: 1.1rem;
-  flex-shrink: 0;
-  margin: 0;
-  cursor: pointer;
-}
-
 .form-check-input:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
@@ -1472,6 +1455,11 @@ body.a11y-reduce-motion *::after {
   gap: 12px;
 }
 
+.pwa-logo-img {
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
 .pwa-text {
   flex-grow: 1;
   display: flex;
@@ -2037,8 +2025,18 @@ body.a11y-reduce-motion *::after {
   }
 }
 
-/* ── Filtro de eventos — full width em ecrãs pequenos ─────── */
+/* ── Filtro de eventos ────────────────────────────────────── */
+.select-filtro-eventos {
+  min-width: 180px;
+  max-width: 260px;
+}
+
 @media (max-width: 576px) {
+  .select-filtro-eventos {
+    min-width: 0 !important;
+    max-width: none;
+    width: 100%;
+  }
   #filtro-eventos {
     min-width: 0 !important;
     width: 100%;

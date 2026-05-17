@@ -15,6 +15,8 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#0f8c95" />
 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet" />
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" as="style"
@@ -155,10 +157,10 @@
             <textarea id="or-pedido" name="pedido" rows="5" required aria-required="true"
               placeholder="Compartilhe seu pedido de oração..."></textarea>
 
-            <label class="form-check-label-oracao">
-              <input type="checkbox" name="anonimo" value="sim" class="form-check-input" />
-              <span>Manter anônimo</span>
-            </label>
+            <div class="form-check my-1">
+              <input id="or-anonimo" type="checkbox" name="anonimo" value="sim" class="form-check-input" />
+              <label class="form-check-label" for="or-anonimo">Manter anônimo</label>
+            </div>
 
             <button class="btn btn-primary mt-2" type="submit">
               <i class="fa-solid fa-hands-praying me-2" aria-hidden="true"></i>Enviar Pedido
