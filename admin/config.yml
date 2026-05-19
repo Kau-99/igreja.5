@@ -15,7 +15,7 @@ backend:
     deleteMedia: "chore(cms): Remover imagem {{path}}"
 
 # ── Desenvolvimento local ────────────────────────────────────
-# Descomente + execute `npx decap-server` na raiz do projeto
+# Descomente e rode `npx decap-server` localmente para testar o painel sem fazer commit
 # local_backend: true
 
 # ── Identidade e aparência ──────────────────────────────────
@@ -23,10 +23,10 @@ site_url:  "https://igrejaadvic.netlify.app"
 logo_url:  "https://igrejaadvic.netlify.app/imagens/logo.png"
 locale:    "pt"
 
-# Link "Ver no site" ao lado de cada entrada publicada
+# Exibe "Ver no site" ao lado de cada item — útil para confirmar mudanças após publicação
 show_preview_links: true
 
-# Nomes de arquivo gerados pelo CMS: sem acentos, sem espaços
+# Garante slugs limpos nos commits — sem acentos, sem espaços
 slug:
   encoding:             "unicode"
   clean_accents:        true
@@ -41,7 +41,8 @@ media_library:
     max_file_size: 5242880   # 5 MB
     multiple:      false
 
-# ── Fluxo editorial (descomente para exigir aprovação) ──────
+# ── Fluxo editorial ──────────────────────────────────────────
+# Ativar quando houver múltiplos editores — exige revisão antes de publicar
 # publish_mode: editorial_workflow
 
 # ============================================================

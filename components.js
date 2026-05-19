@@ -80,10 +80,9 @@
     document.body.insertAdjacentHTML("beforeend", A11Y_PANEL);
   }
 
-  // ── Plausible Analytics (sem cookies, conformidade LGPD) ─────────────────
-  // ⚠️  CONFIGURAÇÃO: Crie uma conta gratuita em https://plausible.io
-  //     e adicione o domínio "igrejaadvic.netlify.app" no painel deles.
-  //     A partir daí, este script começa a registar visitas automaticamente.
+  // ── Plausible Analytics (sem cookies — conformidade com LGPD) ────────────
+  // Escolhi o Plausible por não usar cookies, dispensando o banner de consentimento.
+  // Configurar: painel Plausible → adicionar domínio "igrejaadvic.netlify.app".
   if (!document.getElementById("plausible-script")) {
     const pl = document.createElement("script");
     pl.id    = "plausible-script";
@@ -93,14 +92,12 @@
     document.head.appendChild(pl);
   }
 
-  // ── OneSignal Web Push Notifications ─────────────────────────────────────
-  // ⚠️  CONFIGURAÇÃO NECESSÁRIA (3 passos):
-  //     1. Crie uma conta gratuita em https://onesignal.com
-  //     2. Crie um novo App → plataforma "Web"
-  //     3. Copie o App ID e substitua "SEU_APP_ID_AQUI" abaixo
+  // ── OneSignal — Web Push Notifications ───────────────────────────────────
+  // Push desativado por padrão; ativo apenas após substituir ONESIGNAL_APP_ID.
+  // Passos: criar App no onesignal.com → plataforma "Web" → copiar o App ID.
   const ONESIGNAL_APP_ID = "SEU_APP_ID_AQUI";
   if (ONESIGNAL_APP_ID === "SEU_APP_ID_AQUI") {
-    /* Push desativado — substitua ONESIGNAL_APP_ID por um App ID real */
+    /* App ID não configurado — push permanece desativado */
   } else if (!document.getElementById("onesignal-script")) {
     const os  = document.createElement("script");
     os.id     = "onesignal-script";

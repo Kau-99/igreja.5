@@ -1,20 +1,15 @@
 /**
- * Netlify Function — YouTube RSS Feed Proxy
+ * Proxy serverless para o feed RSS público do YouTube.
  *
- * Busca o feed RSS público do canal no servidor, evitando problemas de CORS
- * e expondo o Channel ID apenas como variável de ambiente (não no código frontend).
+ * Faço o fetch no servidor por dois motivos: o YouTube não serve CORS para browsers,
+ * e assim o Channel ID fica somente em variável de ambiente — fora do bundle frontend.
  *
- * ⚠️  CONFIGURAÇÃO NECESSÁRIA:
- *   1. Acesse o painel da Netlify → Site configuration → Environment variables
- *   2. Adicione a variável:  YOUTUBE_CHANNEL_ID = <seu channel ID>
- *
- * Como encontrar o Channel ID:
- *   • Acesse youtube.com/@advicof no navegador
- *   • Abra o código-fonte (Ctrl+U) e pesquise por "channelId" ou "externalId"
- *   • O ID começa com "UC" seguido de 22 caracteres
+ * Configuração: Netlify → Site configuration → Environment variables
+ *   YOUTUBE_CHANNEL_ID = UC... (22 caracteres após o prefixo "UC")
+ *   Para encontrar: inspecione o código-fonte de youtube.com/@advicof e busque "channelId".
  *
  * Endpoint: GET /.netlify/functions/youtube-feed
- * Cache:    30 minutos (s-maxage no CDN da Netlify)
+ * Cache CDN: 30 min (s-maxage=1800) + stale-while-revalidate de 24h
  */
 exports.handler = async function (event, context) {
   if (event.httpMethod !== "GET") {

@@ -7,16 +7,15 @@
     scrollTopThreshold: 260,
     toastDuration: 4000,
     lazySelector: "img[data-src], .lazy[data-src], [data-lazy], iframe[data-src]",
-    // URL do canal para o banner de transmissão ao vivo
+    // Canal usado no banner ao vivo e no fallback de compartilhamento
     liveUrl: "https://www.youtube.com/@advicof",
-    // Agendamento da transmissão ao vivo: 0=Domingo, 18h–20h
+    // Janela do banner ao vivo: dayOfWeek 0=Domingo, das 18h às 20h
     liveSchedule: { dayOfWeek: 0, startHour: 18, endHour: 20 },
-    // ⚠️  YouTube: defina YOUTUBE_CHANNEL_ID nas variáveis de ambiente da Netlify.
-    //     O channel ID é gerido pela função serverless (netlify/functions/youtube-feed.js).
+    // Proxy serverless — o Channel ID real fica em YOUTUBE_CHANNEL_ID no painel da Netlify
     youtubeFeedUrl: "/.netlify/functions/youtube-feed",
   };
 
-  // Cache central — evita buscar o mesmo JSON duas vezes
+  // Mapa URL → Promise; guardo a Promise antes de resolver para evitar race conditions
   MyApp.Cache = {};
 
   MyApp.log = (...a) =>
@@ -36,8 +35,8 @@
   };
 
   // ─── BUSCA JSON COM CACHE E TIMEOUT ─────────────────────────────────────
-  // Armazena a Promise imediatamente para que chamadas simultâneas ao mesmo
-  // URL não disparem fetchs duplicados (race condition).
+  // Guardo a Promise antes de ela resolver para que chamadas simultâneas ao
+  // mesmo URL reutilizem a mesma requisição em vez de duplicar o fetch.
   MyApp.fetchJSON = (url, timeoutMs = 8000) => {
     if (url in MyApp.Cache) return MyApp.Cache[url];
     const controller = new AbortController();
@@ -224,8 +223,8 @@
   }
 
   // ─── OBSERVER POOL ────────────────────────────────────────────────────────
-  // Cada tipo de observação usa um único IntersectionObserver singleton.
-  // Novos elementos são registados com observeX() em vez de criar um observer novo.
+  // Mantenho um IntersectionObserver por tipo de observação; criar um observer
+  // por elemento esgota recursos em páginas com muitos itens dinâmicos.
 
   let _lazyObserver = null;
   let _revealObserver = null;
@@ -289,14 +288,13 @@
     return _scrollSpyObserver;
   };
 
-  // Registra elementos lazy no observer singleton (pode ser chamado múltiplas vezes)
+  // Pode ser chamado em qualquer momento do ciclo de vida — o observer já existe
   MyApp.registerLazyElements = (elements) => {
     if (!("IntersectionObserver" in window)) return;
     const obs = getLazyObserver();
     elements.forEach((el) => obs.observe(el));
   };
 
-  // Registra elementos de reveal no observer singleton
   MyApp.registerRevealElements = (elements) => {
     if (!("IntersectionObserver" in window)) return;
     const obs = getRevealObserver();
@@ -467,7 +465,7 @@
     const text  = $("#min-modal-text",  overlay);
     let lastFocus = null;
 
-    // Foco seletável dentro do modal para o focus trap
+    // Excluo elementos disabled do ciclo de foco para não travar o Tab
     const getFocusable = () =>
       $$('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])', overlay)
         .filter((el) => !el.disabled);
@@ -495,14 +493,14 @@
       img.alt           = card.dataset.title ? `Imagem: ${card.dataset.title}` : "Imagem do Ministério";
       overlay.classList.add("open");
       document.body.style.overflow = "hidden";
-      // Foca o botão de fechar ao abrir
+      // requestAnimationFrame garante que o overlay já está visível antes de mover o foco
       requestAnimationFrame(() => $(".min-modal-close", overlay)?.focus());
     };
 
     const closeModal = () => {
       overlay.classList.remove("open");
       document.body.style.overflow = "";
-      // Retorna foco ao elemento que abriu o modal
+      // Devolvo o foco à origem para não perder o contexto de navegação por teclado
       lastFocus?.focus();
     };
 
@@ -531,7 +529,7 @@
   };
 
   const validateTimelineItem = (item) => {
-    // Campo "data" conforme schema do Decap CMS (config.yml)
+    // "data" é o name do campo no config.yml — valido aqui para detectar divergências cedo
     const required = ["data", "titulo", "descricao"];
     return required.every((k) => typeof item[k] === "string" && item[k].trim() !== "");
   };
@@ -647,7 +645,6 @@
 
   const renderTimelineItem = (item) => {
     if (!validateTimelineItem(item)) return "";
-    // Campo "data" conforme schema do Decap CMS (config.yml linha 82)
     return `
       <div class="timeline-item">
         <div class="timeline-dot"></div>
@@ -686,7 +683,8 @@
   };
 
   // ─── SEÇÃO DINÂMICA (PARAMETRIZADA) ──────────────────────────────────────
-  // Substitui initEventos e initSermoes como função genérica reutilizável.
+  // Centralizo aqui o padrão fetch → skeleton → render para não duplicar
+  // lógica entre initEventos, initSermoes e futuras grids carregadas via JSON.
   MyApp.initDynamicSection = async ({
     containerId,
     jsonFile,
@@ -695,8 +693,8 @@
     emptyMessage,
     errorMessage,
     onAfterRender,
-    skeletonTemplate = null, // função () => string HTML de um card skeleton
-    skeletonCount    = 3,    // quantos skeletons mostrar enquanto carrega
+    skeletonTemplate = null, // função () => string de um card placeholder
+    skeletonCount    = 3,    // número de placeholders durante o carregamento
   }) => {
     const grid = $(containerId);
     if (!grid) return;
@@ -772,10 +770,10 @@
       if (!entries.length) throw new Error("Feed vazio");
 
       grid.innerHTML = entries.map((entry, i) => {
-        // O <id> contém "yt:video:VIDEO_ID"
+        // O elemento <id> do feed segue o formato "yt:video:VIDEO_ID" — extraio só o ID
         const rawId   = entry.querySelector("id")?.textContent || "";
         const videoId = rawId.replace("yt:video:", "").trim();
-        if (!videoId) return ""; // ignora entradas sem ID válido
+        if (!videoId) return ""; // entrada corrompida — pulo silenciosamente
         const title   = escapeHTML(entry.querySelector("title")?.textContent || "Vídeo sem título");
         const pub     = entry.querySelector("published")?.textContent || "";
         const date    = pub ? new Date(pub).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" }) : "";
@@ -802,7 +800,7 @@
       MyApp.registerRevealElements($$("[data-animate]", grid));
 
     } catch (err) {
-      // Falha silenciosa: esconde a secção para não poluir o layout
+      // Escondo a seção inteira — o feed do YouTube não é crítico e não deve quebrar o layout
       const section = grid.closest("section");
       if (section) section.style.display = "none";
       MyApp.log("YouTube feed:", err.message);
@@ -826,11 +824,8 @@
   };
 
   // ─── PÁGINA SOBRE (DINÂMICA) ──────────────────────────────────────────────
-  // Estrutura do sobre.json segue o schema do Decap CMS (admin/config.yml):
-  //   hero.titulo, hero.subtitulo, hero.imagem
-  //   historia.titulo, historia.paragrafo1, historia.paragrafo2, historia.imagem
-  //   timeline[].data, timeline[].titulo, timeline[].descricao
-  //   lideranca[].nome, lideranca[].cargo, lideranca[].imagem, lideranca[].instagram
+  // Mapeio os campos de sobre.json conforme o schema definido no config.yml:
+  //   hero | historia | timeline[].data/titulo/descricao | lideranca[].nome/cargo/imagem/instagram
   MyApp.initSobre = async () => {
     const textoEl     = $("#sobre-texto");
     const timelineEl  = $("#timeline-container");
@@ -924,7 +919,7 @@
     banner.rel       = "noopener noreferrer";
     banner.className = "live-banner";
     banner.innerHTML = `<span class="live-dot"></span><span><strong>ESTAMOS EM DIRETO:</strong> Clique aqui para assistir ao culto de hoje!</span>`;
-    // Insere depois do skip-link (se existir) para não quebrar a ordem de foco
+    // Insiro após o skip-link para preservar a ordem de foco esperada por leitores de ecrã
     const skipLink = document.querySelector(".skip-link");
     if (skipLink?.nextSibling) {
       document.body.insertBefore(banner, skipLink.nextSibling);
@@ -1120,7 +1115,7 @@
   MyApp.initMap = () => {
     const map = $(".mapa-wrapper iframe[data-src]");
     if (!map || !("IntersectionObserver" in window)) return;
-    // Reutiliza o observer de lazy loading singleton
+    // Reaproveito o observer singleton de lazy loading — sem criar um exclusivo para o mapa
     getLazyObserver().observe(map);
   };
 
@@ -1147,7 +1142,7 @@
       applyTheme(current === "dark" ? "light" : "dark");
     });
 
-    // Sincroniza com mudanças do sistema operacional enquanto a aba está aberta
+    // Respondo a mudanças de preferência do SO sem exigir que o utilizador recarregue
     window
       .matchMedia("(prefers-color-scheme: dark)")
       .addEventListener("change", (e) => {
@@ -1247,11 +1242,11 @@
       });
     };
 
-    // SW novo já está em espera (ex: aba recarregada)
+    // Aba recarregada com SW em espera — mostro o banner imediatamente
     if (registration.waiting && navigator.serviceWorker.controller) showBanner();
 
-    // SW novo encontrado após o carregamento da página
-    // _pendingUpdate evita reload automático na 1.ª instalação do SW
+    // _pendingUpdate impede reload automático na primeira instalação,
+    // onde clients.claim() também dispara controllerchange
     let _pendingUpdate = false;
     registration.addEventListener("updatefound", () => {
       const newWorker = registration.installing;
@@ -1270,7 +1265,7 @@
   };
 
   // ─── WEB SHARE API ────────────────────────────────────────────────────────
-  // Delegação de evento no document — funciona para cards injetados dinamicamente
+  // Uso delegação no document para capturar cliques em cards injetados após DOMContentLoaded
   MyApp.initWebShare = () => {
     on(document, "click", async (e) => {
       const btn = e.target.closest(".btn-share");
@@ -1290,7 +1285,7 @@
         }
       }
 
-      // Fallback: WhatsApp ou link direto
+      // Fallback para browsers sem Web Share API: abre o WhatsApp com o link pré-preenchido
       const waUrl = fallback && fallback !== encodeURI("#")
         ? fallback
         : `https://wa.me/?text=${encodeURIComponent(`${title}\n${url}`)}`;

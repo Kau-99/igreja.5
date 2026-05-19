@@ -1,4 +1,4 @@
-// ── OneSignal SDK (descomente após configurar o App ID em components.js) ──
+// Descomente após configurar ONESIGNAL_APP_ID em components.js
 // importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
 const CACHE_NAME = "advic-v7";
@@ -73,7 +73,7 @@ self.addEventListener("notificationclick", (event) => {
   );
 });
 
-// Só armazena em cache respostas válidas e não opacas
+// Respostas opacas (cross-origin sem CORS) não têm status confiável — excluo para não inflar a quota
 const safePut = (cache, request, response) => {
   if (response.ok && response.type !== "opaque") {
     cache.put(request, response.clone()).catch(() => { /* quota */ });
@@ -86,10 +86,10 @@ self.addEventListener("fetch", (event) => {
 
   if (request.method !== "GET") return;
 
-  // Ignora requisições externas ao domínio (CDNs, YouTube, etc.) — sem caching
+  // Deixo CDNs e APIs externas sem cache — o browser e os próprios CDNs já tratam isso
   if (url.origin !== self.location.origin) return;
 
-  // HTML → Network-First com fallback offline
+  // HTML sempre vai à rede primeiro — garanto que o usuário não veja conteúdo obsoleto
   if ((request.headers.get("Accept") || "").includes("text/html")) {
     event.respondWith(
       fetch(request)
@@ -104,7 +104,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // JSON → Network-First (conteúdo dinâmico via CMS)
+  // JSON via CMS pode mudar a qualquer momento — prefiro a rede mas sirvo o cache em falha
   if (url.pathname.endsWith(".json")) {
     event.respondWith(
       fetch(request)
@@ -117,7 +117,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Assets estáticos → Cache-First
+  // CSS, JS e imagens mudam junto com o deploy — Cache-First melhora o LCP e funciona offline
   event.respondWith(
     caches.match(request).then((cachedResponse) => {
       if (cachedResponse) return cachedResponse;
