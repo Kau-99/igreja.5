@@ -34,6 +34,14 @@
     );
   };
 
+  // Aceita apenas URLs http/https — rejeita javascript:, data: e outros esquemas perigosos
+  const safeUrl = (raw) => {
+    if (!raw) return "";
+    try {
+      return /^https?:$/i.test(new URL(raw).protocol) ? encodeURI(raw) : "";
+    } catch { return ""; }
+  };
+
   // ─── BUSCA JSON COM CACHE E TIMEOUT ─────────────────────────────────────
   // Guardo a Promise antes de ela resolver para que chamadas simultâneas ao
   // mesmo URL reutilizem a mesma requisição em vez de duplicar o fetch.
@@ -240,7 +248,7 @@
         const src = el.dataset.src || el.dataset.lazy;
         if (!src || /^\s*javascript:/i.test(src)) return obs.unobserve(el);
         if (el.tagName === "IMG" || el.tagName === "IFRAME") el.src = src;
-        else el.style.backgroundImage = `url(${src})`;
+        else el.style.backgroundImage = `url("${src}")`;
         el.removeAttribute("data-src");
         el.removeAttribute("data-lazy");
         el.classList.remove("lazy");
@@ -579,9 +587,9 @@
     const dataISO     = escapeHTML(evento.dataISO);
     const imgUrl      = encodeURI(evento.imagem || "");
     const calendarUrl = evento.linkCalendario && evento.linkCalendario !== "#"
-      ? encodeURI(evento.linkCalendario) : "";
+      ? safeUrl(evento.linkCalendario) : "";
     const whatsUrl = evento.linkWhats && evento.linkWhats !== "#"
-      ? encodeURI(evento.linkWhats) : "";
+      ? safeUrl(evento.linkWhats) : "";
 
     const calendarBtn = calendarUrl
       ? `<a class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer" href="${calendarUrl}">Calendário</a>`
@@ -619,9 +627,9 @@
     const titulo      = escapeHTML(sermao.titulo);
     const pregadorData = escapeHTML(sermao.pregadorData);
     const videoUrl = sermao.linkVideo && sermao.linkVideo !== "#"
-      ? encodeURI(sermao.linkVideo) : "";
+      ? safeUrl(sermao.linkVideo) : "";
     const audioUrl = sermao.linkAudio && sermao.linkAudio !== "#"
-      ? encodeURI(sermao.linkAudio) : "";
+      ? safeUrl(sermao.linkAudio) : "";
 
     const btnAudio = (sermao.audioDisponivel && audioUrl)
       ? `<a class="btn btn-outline-primary btn-sm" href="${audioUrl}" target="_blank" rel="noopener noreferrer">Ouvir áudio</a>`
@@ -662,7 +670,7 @@
     const nome      = escapeHTML(lider.nome);
     const cargo     = escapeHTML(lider.cargo);
     const imgSrc    = encodeURI(lider.imagem || "");
-    const instagramRaw = lider.instagram && lider.instagram !== "#" ? encodeURI(lider.instagram) : "";
+    const instagramRaw = lider.instagram && lider.instagram !== "#" ? safeUrl(lider.instagram) : "";
     const instagramHtml = instagramRaw
       ? `<a href="${instagramRaw}" target="_blank" rel="noopener noreferrer" aria-label="Instagram de ${nome}"><i class="fab fa-instagram" aria-hidden="true"></i></a>`
       : `<span class="leader-social-placeholder" aria-hidden="true"><i class="fab fa-instagram"></i></span>`;
@@ -950,7 +958,7 @@
     const agora      = new Date();
     const inicioAno  = new Date(agora.getFullYear(), 0, 1);
     const diasPass   = Math.floor((agora - inicioAno) / 86400000);
-    const semana     = Math.ceil((agora.getDay() + 1 + diasPass) / 7);
+    const semana     = Math.ceil((diasPass + 1) / 7);
     const idx        = semana % versiculos.length;
 
     verseText.textContent = `"${versiculos[idx].texto}"`;

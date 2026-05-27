@@ -36,20 +36,16 @@ self.addEventListener("message", (event) => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME)
-          .map((key) => caches.delete(key)),
-      );
-    }),
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
+    ).then(() => self.clients.claim()),
   );
-  self.clients.claim();
 });
 
 // ─── WEB PUSH NOTIFICATIONS ───────────────────────────────────────────────
 self.addEventListener("push", (event) => {
-  const data    = event.data?.json() ?? {};
+  let data = {};
+  try { data = event.data?.json() ?? {}; } catch { /* payload não é JSON — usa defaults */ }
   const title   = data.title   || "ADVIC";
   const options = {
     body:  data.body  || "Nova notificação da ADVIC.",
