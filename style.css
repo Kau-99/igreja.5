@@ -308,7 +308,10 @@ a:hover { color: var(--brand-strong); }
   color: var(--brand);
 }
 .on-dark .em-display,
-.band-deep .em-display { color: var(--accent-soft); }
+.band-deep .em-display,
+.cta .em-display,
+.page-header-plain .em-display,
+.hero .em-display { color: var(--accent-soft); }
 
 /* =========================================================
    04. BOTÕES (sobrepõe Bootstrap via CSS vars)
@@ -440,7 +443,13 @@ a:hover { color: var(--brand-strong); }
   border-radius: var(--radius-sm);
   font-weight: 600;
   transition: background var(--fast), border-color var(--fast), transform var(--fast);
+  /* Quando o link aponta para a página atual, components.js adiciona .active
+     e o Bootstrap aplicaria .btn.active com variáveis vazias (fundo some) */
+  --bs-btn-active-bg: var(--brand-strong);
+  --bs-btn-active-border-color: var(--brand-strong);
+  --bs-btn-active-color: var(--cream);
 }
+.nav-menu .btn-cta.active::after { display: none; }
 .btn-cta:hover {
   background: var(--brand-strong);
   border-color: var(--brand-strong);
@@ -454,6 +463,11 @@ a:hover { color: var(--brand-strong); }
 }
 [data-theme="dark"] .btn-cta:hover {
   background: var(--brand);
+  color: #12191A !important;
+}
+[data-theme="dark"] .btn-cta.active {
+  background: var(--brand);
+  border-color: var(--brand);
   color: #12191A !important;
 }
 
