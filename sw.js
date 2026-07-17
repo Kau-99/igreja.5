@@ -1,12 +1,13 @@
 // Descomente após configurar ONESIGNAL_APP_ID em components.js
 // importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-const CACHE_NAME = "advic-v12"; // v12: precache ignora cache HTTP (CSS/JS obsoletos)
+const CACHE_NAME = "advic-v13"; // v13: página de Missões
 
 const STATIC_ASSETS = [
   "/",
   "/index.html",
   "/sobre.html",
+  "/missoes.html",
   "/galeria.html",
   "/eventos.html",
   "/contato.html",
