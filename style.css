@@ -954,6 +954,218 @@ a:hover { color: var(--brand-strong); }
 }
 
 /* =========================================================
+   09b. MISSÕES — capela escura monumental
+   Tipografia e dados reais como protagonistas; globo em
+   line-art com a Janela 10/40 respirando em âmbar.
+========================================================= */
+.missions {
+  position: relative;
+  background: linear-gradient(180deg, #08262A 0%, #0B3237 55%, #092B30 100%);
+  color: var(--cream);
+  padding-block: calc(var(--section-y) * 1.15);
+  overflow: hidden;
+}
+.missions::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--grain);
+  pointer-events: none;
+}
+.missions .container { position: relative; }
+
+/* Globo decorativo — sangra pela direita */
+.missions-globe {
+  position: absolute;
+  top: 50%;
+  right: max(-14rem, -16vw);
+  transform: translateY(-50%);
+  width: min(52vw, 660px);
+  height: auto;
+  pointer-events: none;
+}
+.missions-globe .globe-lines {
+  fill: none;
+  stroke: rgba(243, 238, 227, .13);
+  stroke-width: 1;
+}
+.missions-globe .globe-band rect {
+  fill: rgba(217, 168, 78, .1);
+  stroke: none;
+}
+.missions-globe .globe-band line {
+  stroke: rgba(217, 168, 78, .55);
+  stroke-width: 1.2;
+  stroke-dasharray: 5 7;
+}
+/* Respiração muito lenta da Janela 10/40 */
+.missions-globe .globe-band {
+  animation: band-breathe 8s ease-in-out infinite;
+}
+@keyframes band-breathe {
+  0%, 100% { opacity: .55; }
+  50%      { opacity: 1; }
+}
+
+.missions-head { max-width: 44rem; }
+
+.missions-title {
+  font-size: clamp(2.3rem, 1.6rem + 3vw, 3.9rem);
+  line-height: 1.06;
+  letter-spacing: -.02em;
+  color: var(--cream);
+  margin-bottom: 1.1rem;
+  text-wrap: balance;
+}
+.missions .em-display { color: var(--accent-soft); }
+
+.missions-lead {
+  color: var(--cream-muted);
+  font-size: clamp(1rem, .95rem + .3vw, 1.15rem);
+  line-height: 1.7;
+  max-width: 38rem;
+  margin: 0;
+}
+.missions-lead cite {
+  font-style: normal;
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+}
+
+/* O número-monumento */
+.missions-monument {
+  margin-top: var(--sp-7);
+  max-width: 52rem;
+}
+.missions-big {
+  font-family: var(--font-display);
+  font-weight: 560;
+  font-size: clamp(4.4rem, 2.6rem + 10vw, 9.5rem);
+  line-height: .95;
+  letter-spacing: -.03em;
+  color: var(--cream);
+  font-variant-numeric: tabular-nums;
+  margin: 0 0 1rem;
+}
+.missions-big-suffix {
+  font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.6rem);
+  font-style: italic;
+  font-weight: 480;
+  letter-spacing: 0;
+  color: var(--accent-soft);
+}
+.missions-big-label {
+  color: var(--cream-muted);
+  font-size: clamp(1rem, .95rem + .3vw, 1.15rem);
+  line-height: 1.65;
+  max-width: 36rem;
+  margin: 0;
+}
+.missions-big-label strong { color: var(--cream); font-weight: 600; }
+
+/* Grade de dados com réguas */
+.missions-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 clamp(2rem, 5vw, 4.5rem);
+  margin: var(--sp-7) 0 0;
+  max-width: 56rem;
+}
+.missions-stat {
+  border-top: 1px solid rgba(243, 238, 227, .18);
+  padding: 1.4rem 0 1.6rem;
+}
+.missions-stat dt {
+  font-family: var(--font-display);
+  font-weight: 560;
+  font-size: clamp(2rem, 1.6rem + 1.6vw, 3rem);
+  line-height: 1;
+  letter-spacing: -.02em;
+  color: var(--accent-soft);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: .5rem;
+}
+.missions-stat-suffix {
+  font-size: .55em;
+  font-style: italic;
+  font-weight: 480;
+}
+.missions-stat dd {
+  margin: 0;
+  color: var(--cream-muted);
+  font-size: .97rem;
+  line-height: 1.6;
+  max-width: 24rem;
+}
+.missions-cite {
+  display: block;
+  margin-top: .55rem;
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(243, 238, 227, .5);
+}
+
+/* Ore · Vá · Contribua */
+.missions-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-5) clamp(2rem, 5vw, 4rem);
+  margin-top: var(--sp-7);
+  max-width: 56rem;
+  border-top: 1px solid rgba(243, 238, 227, .18);
+  padding-top: var(--sp-6);
+}
+.missions-action h3 {
+  font-size: 1.5rem;
+  font-style: italic;
+  font-weight: 480;
+  color: var(--cream);
+  margin-bottom: .4rem;
+}
+.missions-action h3::after {
+  content: "";
+  display: block;
+  width: 2.1rem;
+  height: 2px;
+  background: var(--accent-soft);
+  margin-top: .6rem;
+}
+.missions-action p {
+  color: var(--cream-muted);
+  font-size: .95rem;
+  line-height: 1.6;
+  margin: .75rem 0 0;
+}
+
+.missions-cta { margin-top: var(--sp-6); }
+
+.missions-sources {
+  margin: var(--sp-7) 0 0;
+  font-size: .72rem;
+  letter-spacing: .08em;
+  color: rgba(243, 238, 227, .45);
+}
+
+@media (max-width: 991px) {
+  .missions-globe {
+    width: 130vw;
+    right: -46vw;
+    top: 28%;
+    opacity: .55;
+  }
+}
+@media (max-width: 767px) {
+  .missions-stats { grid-template-columns: 1fr; }
+  .missions-actions { grid-template-columns: 1fr; gap: var(--sp-5); }
+  .missions-cta .btn { width: 100%; text-align: center; }
+}
+
+/* =========================================================
    10. MINISTÉRIOS (card-min) + MODAL
 ========================================================= */
 .card-min {
@@ -2829,6 +3041,7 @@ body.a11y-reduce-motion *::after {
   ::view-transition-new(root) { animation: none; }
   html { scroll-behavior: auto; }
   .hero:not(.hero-sm) .hero-bg { animation: none; }
+  .missions-globe .globe-band { animation: none; }
   .gallery-item:hover,
   .latest-video-facade:hover img,
   .gallery-item:hover img { transform: none; }

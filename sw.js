@@ -1,7 +1,7 @@
 // Descomente após configurar ONESIGNAL_APP_ID em components.js
 // importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-const CACHE_NAME = "advic-v9"; // v9: galeria, view transitions, último culto, live real
+const CACHE_NAME = "advic-v10"; // v10: seção de missões
 
 const STATIC_ASSETS = [
   "/",

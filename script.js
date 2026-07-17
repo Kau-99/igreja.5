@@ -1189,6 +1189,46 @@
     getLazyObserver().observe(map);
   };
 
+  // ─── CONTADORES DA SEÇÃO DE MISSÕES ──────────────────────────────────────
+  // Números com data-countup contam de 0 até o valor quando entram na tela.
+  // O HTML já traz o valor final: sem JS, com movimento reduzido ou sem
+  // IntersectionObserver, nada muda — o dado real continua visível.
+  MyApp.initCountUp = () => {
+    const els = $$("[data-countup]");
+    if (!els.length || !("IntersectionObserver" in window)) return;
+
+    const reduceMotion =
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      document.body.classList.contains("a11y-reduce-motion");
+    if (reduceMotion) return;
+
+    const fmt = (v, dec) =>
+      v.toLocaleString("pt-BR", { minimumFractionDigits: dec, maximumFractionDigits: dec });
+
+    const obs = new IntersectionObserver((entries, o) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        o.unobserve(en.target);
+        const el     = en.target;
+        const target = parseFloat(el.dataset.countup);
+        const dec    = parseInt(el.dataset.countupDecimals || "0", 10);
+        if (isNaN(target)) return;
+        const dur   = 1500;
+        const start = performance.now();
+        const tick = (now) => {
+          const p     = Math.min((now - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - p, 3); // ease-out cúbico
+          el.textContent = fmt(target * eased, dec);
+          if (p < 1) requestAnimationFrame(tick);
+          else el.textContent = fmt(target, dec);
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.5 });
+
+    els.forEach((el) => obs.observe(el));
+  };
+
   // ─── GALERIA (GOOGLE DRIVE) ──────────────────────────────────────────────
   // As fotos vêm de uma pasta compartilhada do Drive da igreja, listada pela
   // function serverless drive-gallery (a equipe só precisa soltar as fotos na
@@ -1529,6 +1569,7 @@
     MyApp.initSermoes();
     MyApp.initSobre();
     MyApp.initGaleria();
+    MyApp.initCountUp();
 
     MyApp.initDarkMode();
     MyApp.initWebShare();
