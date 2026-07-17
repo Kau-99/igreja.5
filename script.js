@@ -131,6 +131,15 @@
   MyApp.initPreloader = () => {
     const preloader = $("#preloader");
     if (!preloader) return;
+
+    // Marca a sessão: nas próximas navegações o script inline do <head>
+    // adiciona .no-preloader ao <html> e o site flui sem tela de carregamento
+    try { sessionStorage.setItem("advic-nav", "1"); } catch { /* privado */ }
+    if (document.documentElement.classList.contains("no-preloader")) {
+      preloader.remove();
+      return;
+    }
+
     const start = window.performance?.now?.() || Date.now();
     document.body.classList.add("preloader-active");
 
@@ -775,9 +784,39 @@
 
       const xmlText = await response.text();
       const doc     = new DOMParser().parseFromString(xmlText, "application/xml");
-      const entries = Array.from(doc.querySelectorAll("entry")).slice(0, 6);
+      let entries   = Array.from(doc.querySelectorAll("entry")).slice(0, 7);
 
       if (!entries.length) throw new Error("Feed vazio");
+
+      // Destaque editorial: o vídeo mais recente vira uma "facade" grande —
+      // o player só é carregado quando o usuário clica (sem custo de perf)
+      const feature = $("#latest-video");
+      if (feature) {
+        const first   = entries[0];
+        const rawId   = first.querySelector("id")?.textContent || "";
+        const videoId = rawId.replace("yt:video:", "").trim();
+        if (videoId) {
+          entries = entries.slice(1);
+          const title = escapeHTML(first.querySelector("title")?.textContent || "Último culto");
+          feature.innerHTML = `
+            <button type="button" class="latest-video-facade" aria-label="Assistir agora: ${title}">
+              <img src="https://img.youtube.com/vi/${encodeURIComponent(videoId)}/hqdefault.jpg" alt="" loading="lazy" />
+              <span class="latest-video-play" aria-hidden="true"><i class="fa-solid fa-play"></i></span>
+              <span class="latest-video-info">
+                <span class="latest-video-tag">Mensagem mais recente</span>
+                <span class="latest-video-title">${title}</span>
+              </span>
+            </button>`;
+          on($(".latest-video-facade", feature), "click", () => {
+            feature.innerHTML = `
+              <iframe src="https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0"
+                title="${title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>`;
+          });
+        }
+      }
+
+      entries = entries.slice(0, 6);
 
       grid.innerHTML = entries.map((entry, i) => {
         // O elemento <id> do feed segue o formato "yt:video:VIDEO_ID" — extraio só o ID
@@ -918,25 +957,45 @@
   };
 
   // ─── BANNER AO VIVO ───────────────────────────────────────────────────────
-  MyApp.initLiveBanner = () => {
+  // Primeiro pergunto à function serverless se o canal está realmente
+  // transmitindo; se ela não estiver disponível (dev local, erro), caio no
+  // fallback por janela de horário fixa.
+  MyApp.initLiveBanner = async () => {
+    const showBanner = (href) => {
+      if ($(".live-banner")) return;
+      const banner = document.createElement("a");
+      banner.href      = href || MyApp.config.liveUrl;
+      banner.target    = "_blank";
+      banner.rel       = "noopener noreferrer";
+      banner.className = "live-banner";
+      banner.innerHTML = `<span class="live-dot"></span><span><strong>ESTAMOS AO VIVO:</strong> Clique aqui para assistir ao culto de hoje!</span>`;
+      // Insiro após o skip-link para preservar a ordem de foco esperada por leitores de ecrã
+      const skipLink = document.querySelector(".skip-link");
+      if (skipLink?.nextSibling) {
+        document.body.insertBefore(banner, skipLink.nextSibling);
+      } else {
+        document.body.insertBefore(banner, document.body.firstChild);
+      }
+    };
+
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 5000);
+      const res = await fetch("/.netlify/functions/youtube-live", { signal: controller.signal });
+      clearTimeout(timer);
+      if (res.ok) {
+        const data = await res.json();
+        // Resposta com autoridade: mostra só se estiver mesmo ao vivo
+        if (data.live) showBanner(safeUrl(data.url) || MyApp.config.liveUrl);
+        return;
+      }
+    } catch { /* function indisponível — usa o horário */ }
+
     const { dayOfWeek, startHour, endHour } = MyApp.config.liveSchedule;
     const agora = new Date();
     if (agora.getDay() !== dayOfWeek) return;
     if (agora.getHours() < startHour || agora.getHours() >= endHour) return;
-
-    const banner = document.createElement("a");
-    banner.href      = MyApp.config.liveUrl;
-    banner.target    = "_blank";
-    banner.rel       = "noopener noreferrer";
-    banner.className = "live-banner";
-    banner.innerHTML = `<span class="live-dot"></span><span><strong>ESTAMOS EM DIRETO:</strong> Clique aqui para assistir ao culto de hoje!</span>`;
-    // Insiro após o skip-link para preservar a ordem de foco esperada por leitores de ecrã
-    const skipLink = document.querySelector(".skip-link");
-    if (skipLink?.nextSibling) {
-      document.body.insertBefore(banner, skipLink.nextSibling);
-    } else {
-      document.body.insertBefore(banner, document.body.firstChild);
-    }
+    showBanner(MyApp.config.liveUrl);
   };
 
   // ─── VERSÍCULO DA SEMANA ──────────────────────────────────────────────────
@@ -1128,6 +1187,123 @@
     if (!map || !("IntersectionObserver" in window)) return;
     // Reaproveito o observer singleton de lazy loading — sem criar um exclusivo para o mapa
     getLazyObserver().observe(map);
+  };
+
+  // ─── GALERIA (GOOGLE DRIVE) ──────────────────────────────────────────────
+  // As fotos vêm de uma pasta compartilhada do Drive da igreja, listada pela
+  // function serverless drive-gallery (a equipe só precisa soltar as fotos na
+  // pasta). Sem configuração, a página mostra um estado "em preparação".
+  MyApp.initGaleria = async () => {
+    const grid = $("#galeria-grid");
+    if (!grid) return;
+
+    let fotos = [];
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 9000);
+      const res = await fetch("/.netlify/functions/drive-gallery", { signal: controller.signal });
+      clearTimeout(timer);
+
+      if (res.status === 501) {
+        grid.innerHTML = `<div class="grid-empty" style="column-span: all;">
+          <i class="fa-regular fa-images" aria-hidden="true"></i>
+          A galeria está em preparação. Em breve você verá aqui os registros dos nossos cultos e eventos.</div>`;
+        return;
+      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      fotos = Array.isArray(data.fotos) ? data.fotos : [];
+    } catch (err) {
+      MyApp.log("Galeria:", err.message);
+      grid.innerHTML = `<div class="grid-empty" style="column-span: all;">
+        <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+        Não foi possível carregar a galeria agora. Tente recarregar a página.</div>`;
+      return;
+    }
+
+    if (!fotos.length) {
+      grid.innerHTML = `<div class="grid-empty" style="column-span: all;">
+        <i class="fa-regular fa-images" aria-hidden="true"></i>
+        Nenhuma foto publicada ainda. Volte em breve!</div>`;
+      return;
+    }
+
+    const legenda = (nome) => escapeHTML((nome || "").replace(/\.[a-z0-9]+$/i, "").replace(/[-_]+/g, " ").trim());
+
+    grid.innerHTML = fotos.map((f, i) => {
+      const thumb = safeUrl(f.thumb);
+      const full  = safeUrl(f.full);
+      if (!thumb || !full) return "";
+      return `
+        <button type="button" class="gallery-item" data-index="${i}" data-full="${full}"
+          aria-label="Ampliar foto: ${legenda(f.nome) || `foto ${i + 1}`}">
+          <img src="${thumb}" alt="${legenda(f.nome)}" loading="lazy" decoding="async" />
+        </button>`;
+    }).join("");
+
+    // ── Lightbox ──
+    $("#lightbox-overlay")?.remove();
+    const overlay = document.createElement("div");
+    overlay.id        = "lightbox-overlay";
+    overlay.className = "lightbox-overlay";
+    overlay.innerHTML = `
+      <div class="lightbox-figure" role="dialog" aria-modal="true" aria-label="Foto ampliada">
+        <img id="lightbox-img" src="" alt="" />
+        <p class="lightbox-caption" id="lightbox-caption"></p>
+      </div>
+      <button type="button" class="lightbox-close" aria-label="Fechar foto"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      <button type="button" class="lightbox-prev" aria-label="Foto anterior"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+      <button type="button" class="lightbox-next" aria-label="Próxima foto"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>`;
+    document.body.appendChild(overlay);
+
+    const img     = $("#lightbox-img", overlay);
+    const caption = $("#lightbox-caption", overlay);
+    let current   = 0;
+    let lastFocus = null;
+
+    const showFoto = (i) => {
+      current = (i + fotos.length) % fotos.length;
+      const f = fotos[current];
+      img.src = safeUrl(f.full);
+      img.alt = legenda(f.nome);
+      caption.textContent = legenda(f.nome) || `Foto ${current + 1} de ${fotos.length}`;
+    };
+
+    const openLightbox = (i) => {
+      lastFocus = document.activeElement;
+      showFoto(i);
+      overlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+      requestAnimationFrame(() => $(".lightbox-close", overlay)?.focus());
+    };
+
+    const closeLightbox = () => {
+      overlay.classList.remove("open");
+      document.body.style.overflow = "";
+      lastFocus?.focus();
+    };
+
+    $$(".gallery-item", grid).forEach((btn) =>
+      on(btn, "click", () => openLightbox(parseInt(btn.dataset.index, 10) || 0)));
+
+    on($(".lightbox-close", overlay), "click", closeLightbox);
+    on($(".lightbox-prev",  overlay), "click", () => showFoto(current - 1));
+    on($(".lightbox-next",  overlay), "click", () => showFoto(current + 1));
+    on(overlay, "click", (e) => { if (e.target === overlay) closeLightbox(); });
+    on(document, "keydown", (e) => {
+      if (!overlay.classList.contains("open")) return;
+      if (e.key === "Escape")     closeLightbox();
+      if (e.key === "ArrowLeft")  showFoto(current - 1);
+      if (e.key === "ArrowRight") showFoto(current + 1);
+      if (e.key === "Tab") {
+        // Ciclo de foco simples entre os três botões do lightbox
+        const focusable = $$(".lightbox-close, .lightbox-prev, .lightbox-next", overlay);
+        const first = focusable[0];
+        const last  = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
   };
 
   // ─── FALLBACK DE IMAGENS ─────────────────────────────────────────────────
@@ -1352,6 +1528,7 @@
     MyApp.initEventos();
     MyApp.initSermoes();
     MyApp.initSobre();
+    MyApp.initGaleria();
 
     MyApp.initDarkMode();
     MyApp.initWebShare();

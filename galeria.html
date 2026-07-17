@@ -4,9 +4,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Eventos | ADVIC</title>
-  <meta name="description" content="Próximos eventos e programações da ADVIC." />
-
+  <title>Galeria | ADVIC</title>
+  <meta name="description" content="Registros dos cultos, eventos e da vida da comunidade ADVIC em Vila de Cava." />
   <script>try{if(sessionStorage.getItem("advic-nav"))document.documentElement.classList.add("no-preloader")}catch(e){}</script>
 
   <link rel="icon" type="image/png" href="imagens/logo.png" />
@@ -33,17 +32,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
   </noscript>
   <link rel="stylesheet" href="style.css" />
-  <link rel="canonical" href="https://igrejaadvic.netlify.app/eventos.html" />
-  <meta property="og:title" content="Eventos | ADVIC" />
-  <meta property="og:description" content="Próximos eventos e programações da Assembleia de Deus de Vila de Cava." />
+  <link rel="canonical" href="https://igrejaadvic.netlify.app/galeria.html" />
+  <meta property="og:title" content="Galeria | ADVIC" />
+  <meta property="og:description" content="Registros dos cultos, eventos e da vida da comunidade ADVIC." />
   <meta property="og:image" content="https://igrejaadvic.netlify.app/imagens/logo.png" />
-  <meta property="og:url" content="https://igrejaadvic.netlify.app/eventos.html" />
+  <meta property="og:url" content="https://igrejaadvic.netlify.app/galeria.html" />
   <meta property="og:type" content="website" />
 
   <!-- Twitter / X Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Eventos | ADVIC" />
-  <meta name="twitter:description" content="Próximos eventos e programações da ADVIC." />
+  <meta name="twitter:title" content="Galeria | ADVIC" />
+  <meta name="twitter:description" content="Registros dos cultos, eventos e da vida da comunidade ADVIC." />
   <meta name="twitter:image" content="https://igrejaadvic.netlify.app/imagens/logo.png" />
 
   <!-- Robots -->
@@ -75,7 +74,7 @@
         <ul class="nav-menu">
           <li><a href="index.html">Início</a></li>
           <li><a href="sobre.html">Sobre</a></li>
-          <li><a href="galeria.html">Galeria</a></li>
+          <li><a class="active" aria-current="page" href="galeria.html">Galeria</a></li>
           <li><a href="eventos.html">Eventos</a></li>
           <li><a href="contato.html">Contato</a></li>
           <li><a href="privacidade.html">Privacidade &amp; Imagem</a></li>
@@ -87,46 +86,37 @@
 
   <main id="conteudo">
     <!-- PAGE HEADER -->
-    <section class="hero hero-sm" aria-label="Eventos da ADVIC">
-      <div class="hero-bg" data-lazy="imagens/imagem-igreja.jpg" role="img" aria-label="Igreja durante culto"></div>
+    <section class="hero hero-sm" aria-label="Galeria de fotos">
+      <div class="hero-bg" data-lazy="imagens/irmas.jpg" role="img" aria-label="Ministério de louvor durante o culto">
+      </div>
       <div class="hero-scrim" aria-hidden="true"></div>
       <div class="container">
         <div class="hero-content">
-          <p class="eyebrow eyebrow-light">Agenda</p>
-          <h1>Eventos</h1>
-          <p class="lead">Fique por dentro da nossa programação.</p>
+          <p class="eyebrow eyebrow-light">Memória viva</p>
+          <h1>Galeria</h1>
+          <p class="lead">Momentos dos nossos cultos, eventos e da vida em comunidade.</p>
         </div>
       </div>
     </section>
 
-    <!-- PROGRAMAÇÃO -->
+    <!-- MOSAICO DE FOTOS -->
     <section class="section">
       <div class="container">
-        <div class="eventos-toolbar">
-          <div class="section-head mb-0">
-            <p class="eyebrow">Próximos encontros</p>
-            <h2 class="section-title mb-0">Programação</h2>
-          </div>
-          <div class="d-flex gap-2 align-items-center flex-grow-1 flex-sm-grow-0">
-            <label class="me-1 text-nowrap" for="filtro-eventos">Filtrar:</label>
-            <select id="filtro-eventos" class="form-select form-select-sm flex-grow-1 select-filtro-eventos">
-              <option value="todos">Todos os eventos</option>
-              <option value="culto">Culto</option>
-              <option value="louvor">Louvor</option>
-              <option value="familia">Família</option>
-              <option value="vigilia">Vigília</option>
-            </select>
-          </div>
+        <div class="section-head" data-animate="fade-up">
+          <p class="eyebrow">Registros</p>
+          <h2 class="section-title">A igreja em <span class="em-display">imagens</span></h2>
         </div>
-
-        <div id="eventos-grid" class="row g-4">
-          <div class="col-12 text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">A carregar a programação…</span>
-            </div>
-            <p class="text-muted mt-2" aria-hidden="true">Carregando a programação...</p>
-          </div>
+        <div id="galeria-grid" class="gallery-grid">
+          <!-- Preenchido por initGaleria() a partir da pasta do Drive da igreja -->
+          <div class="skeleton gallery-skeleton" style="height: 260px;"></div>
+          <div class="skeleton gallery-skeleton" style="height: 340px;"></div>
+          <div class="skeleton gallery-skeleton" style="height: 220px;"></div>
+          <div class="skeleton gallery-skeleton" style="height: 300px;"></div>
+          <div class="skeleton gallery-skeleton" style="height: 240px;"></div>
+          <div class="skeleton gallery-skeleton" style="height: 320px;"></div>
         </div>
+        <p class="text-muted mt-4 mb-0" style="font-size: .88rem;">Apareceu em alguma foto e prefere não estar aqui?
+          Veja nossa <a href="privacidade.html">política de uso de imagem</a> — removemos rapidamente a pedido.</p>
       </div>
     </section>
 
@@ -134,11 +124,11 @@
     <section class="cta">
       <div class="container d-lg-flex align-items-center justify-content-between">
         <div class="me-lg-4">
-          <p class="eyebrow eyebrow-light">Participe</p>
-          <h2 class="mb-2">Todos são <span class="em-display">bem-vindos</span></h2>
-          <p class="mb-0">Veja como chegar e participe conosco.</p>
+          <p class="eyebrow eyebrow-light">Faça parte</p>
+          <h2 class="mb-2">Venha viver esses momentos <span class="em-display">conosco</span></h2>
+          <p class="mb-0">Cultos aos domingos, 9h e 18h, e às quartas, 19h30.</p>
         </div>
-        <a class="btn btn-light btn-lg mt-4 mt-lg-0" href="contato.html">Entre em contato</a>
+        <a class="btn btn-light btn-lg mt-4 mt-lg-0" href="eventos.html">Ver programação</a>
       </div>
     </section>
   </main>
@@ -160,7 +150,7 @@
             <li><a href="index.html">Início</a></li>
             <li><a href="sobre.html">Sobre</a></li>
             <li><a href="galeria.html">Galeria</a></li>
-          <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
             <li><a href="contato.html">Contato</a></li>
             <li><a href="privacidade.html">Privacidade &amp; Imagem</a></li>
           </ul>

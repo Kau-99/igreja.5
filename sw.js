@@ -1,12 +1,13 @@
 // Descomente após configurar ONESIGNAL_APP_ID em components.js
 // importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-const CACHE_NAME = "advic-v8"; // v8: redesign "Reverência Contemporânea"
+const CACHE_NAME = "advic-v9"; // v9: galeria, view transitions, último culto, live real
 
 const STATIC_ASSETS = [
   "/",
   "/index.html",
   "/sobre.html",
+  "/galeria.html",
   "/eventos.html",
   "/contato.html",
   "/privacidade.html",
