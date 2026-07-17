@@ -497,6 +497,8 @@
       lastFocus = document.activeElement;
       title.textContent = card.dataset.title || "";
       text.textContent  = card.dataset.text  || "";
+      // Limpa o fallback de imagem de uma abertura anterior
+      img.closest(".min-modal-header")?.classList.remove("img-missing");
       img.src           = card.dataset.img   || "";
       img.alt           = card.dataset.title ? `Imagem: ${card.dataset.title}` : "Imagem do Ministério";
       overlay.classList.add("open");
@@ -553,8 +555,8 @@
       <div class="skeleton-card h-100 d-flex flex-column">
         <div class="skeleton skeleton-img"></div>
         <div class="p-3 d-flex flex-column flex-grow-1">
-          <div class="skeleton skeleton-line w-75"></div>
           <div class="skeleton skeleton-line w-50"></div>
+          <div class="skeleton skeleton-line w-75" style="height:1.3rem"></div>
           <div class="skeleton skeleton-line mt-2 w-100"></div>
           <div class="skeleton skeleton-line w-90 mb-3"></div>
           <div class="d-flex gap-2 mt-auto">
@@ -566,11 +568,11 @@
     </div>`;
 
   const skeletonSermao = () => `
-    <div class="col-12 col-md-4">
-      <div class="skeleton-card h-100 d-flex flex-column p-3">
-        <div class="skeleton skeleton-line w-90 mb-2" style="height:1.3rem"></div>
-        <div class="skeleton skeleton-line w-60 mb-auto"></div>
-        <div class="d-flex gap-2 pt-3">
+    <div class="col-12">
+      <div class="skeleton-row">
+        <div class="skeleton skeleton-line w-75 mb-0"></div>
+        <div class="skeleton skeleton-line w-50 mb-0" style="height:1.4rem"></div>
+        <div class="d-flex gap-2">
           <div class="skeleton skeleton-btn"></div>
           <div class="skeleton skeleton-btn"></div>
         </div>
@@ -606,13 +608,13 @@
       </button>`;
     return `
       <div class="col-12 col-md-6 col-lg-4 evento-item" data-animate="fade-up" data-delay="${delay}" data-tipo="${escapeHTML(evento.tipo || "")}">
-        <article class="card-event h-100 d-flex flex-column">
-          <img class="lazy" data-src="${imgUrl}" alt="${titulo}" />
-          <div class="p-3 d-flex flex-column flex-grow-1">
-            <h3 class="mb-1">${titulo}</h3>
-            <p class="text-muted mb-1"><strong>Data:</strong> <time datetime="${dataISO}">${dataExib}</time></p>
-            <p class="mb-3 flex-grow-1">${descricao}</p>
-            <div class="d-flex gap-2 mt-auto">
+        <article class="card-event">
+          <div class="card-event-media"><img class="lazy" data-src="${imgUrl}" alt="${titulo}" /></div>
+          <div class="card-event-body">
+            <p class="card-event-date"><time datetime="${dataISO}">${dataExib}</time></p>
+            <h3>${titulo}</h3>
+            <p class="card-event-desc">${descricao}</p>
+            <div class="card-event-actions">
               ${calendarBtn}
               ${shareBtn}
             </div>
@@ -636,11 +638,11 @@
       : `<button class="btn btn-outline-primary btn-sm" disabled aria-disabled="true" title="Áudio ainda não disponível">Ouvir (em breve)</button>`;
 
     return `
-      <div class="col-12 col-md-4" data-animate="fade-up" data-delay="${delay}">
-        <article class="sermon h-100 d-flex flex-column">
-          <h3 class="mb-2">${titulo}</h3>
-          <p class="text-muted mb-3 flex-grow-1">${pregadorData}</p>
-          <div class="d-flex gap-2 mt-auto">
+      <div class="col-12" data-animate="fade-up" data-delay="${delay}">
+        <article class="sermon">
+          <p class="sermon-meta">${pregadorData}</p>
+          <h3 class="sermon-title">${titulo}</h3>
+          <div class="sermon-actions">
             ${videoUrl
               ? `<a class="btn btn-primary btn-sm" href="${videoUrl}" target="_blank" rel="noopener noreferrer">Assistir</a>`
               : `<button class="btn btn-primary btn-sm" disabled aria-disabled="true" title="Vídeo ainda não disponível">Assistir</button>`
@@ -716,7 +718,7 @@
       const dados = await MyApp.fetchJSON(jsonFile);
       const items = Array.isArray(dados[key]) ? dados[key] : [];
       if (!items.length) {
-        grid.innerHTML = `<div class="col-12 text-center py-5 text-muted">${emptyMessage}</div>`;
+        grid.innerHTML = `<div class="col-12 grid-empty"><i class="fa-regular fa-calendar" aria-hidden="true"></i>${emptyMessage}</div>`;
         return;
       }
       grid.innerHTML = items.map(renderer).join("");
@@ -724,9 +726,9 @@
     } catch (err) {
       const isOffline = !navigator.onLine;
       const msg = isOffline
-        ? `<i class="fa-solid fa-wifi-slash me-2"></i>Você está offline. ${errorMessage}`
-        : `<i class="fa-solid fa-circle-exclamation me-2"></i>${errorMessage}`;
-      grid.innerHTML = `<div class="col-12 text-center py-5 text-danger">${msg}</div>`;
+        ? `<i class="fa-solid fa-wifi-slash" aria-hidden="true"></i>Você está offline. ${errorMessage}`
+        : `<i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>${errorMessage}`;
+      grid.innerHTML = `<div class="col-12 grid-empty">${msg}</div>`;
       MyApp.log("Erro ao carregar", jsonFile, err.message);
     }
   };
@@ -848,6 +850,7 @@
       if (textoEl) {
         const titulo = escapeHTML(historia.titulo || "Uma Igreja Família");
         textoEl.innerHTML = `
+          <p class="eyebrow">Quem somos</p>
           <h2 class="section-title mb-3">${titulo}</h2>
           ${historia.paragrafo1 ? `<p>${escapeHTML(historia.paragrafo1)}</p>` : ""}
           ${historia.paragrafo2 ? `<p>${escapeHTML(historia.paragrafo2)}</p>` : ""}`;
@@ -1127,6 +1130,25 @@
     getLazyObserver().observe(map);
   };
 
+  // ─── FALLBACK DE IMAGENS ─────────────────────────────────────────────────
+  // Se uma imagem de card falhar (arquivo ausente no repositório/CMS), o
+  // contêiner recebe .img-missing e o CSS exibe um placeholder tonal elegante
+  // em vez do ícone de imagem quebrada do navegador.
+  MyApp.initImageFallbacks = () => {
+    document.addEventListener(
+      "error",
+      (e) => {
+        const img = e.target;
+        if (!(img instanceof HTMLImageElement)) return;
+        const wrapper = img.closest(
+          ".card-min-media, .card-event-media, .leader-img-wrapper, .min-modal-header",
+        );
+        wrapper?.classList.add("img-missing");
+      },
+      true, // eventos de erro não borbulham — captura necessária
+    );
+  };
+
   // ─── DARK MODE ────────────────────────────────────────────────────────────
   MyApp.initDarkMode = () => {
     const btn = $("#btnDarkMode");
@@ -1181,16 +1203,20 @@
       const alvo   = new Date(evento.dataISO);
 
       container.innerHTML = `
-        <p class="countdown-label">PRÓXIMO EVENTO</p>
-        <p class="countdown-titulo">${escapeHTML(evento.titulo)}</p>
-        <div class="countdown-timer" id="countdown-timer" role="timer" aria-live="off" aria-label="Contagem regressiva">
-          <div class="countdown-unit"><span id="cd-days">--</span><small>dias</small></div>
-          <span class="countdown-sep" aria-hidden="true">:</span>
-          <div class="countdown-unit"><span id="cd-hours">--</span><small>horas</small></div>
-          <span class="countdown-sep" aria-hidden="true">:</span>
-          <div class="countdown-unit"><span id="cd-mins">--</span><small>min</small></div>
-          <span class="countdown-sep" aria-hidden="true">:</span>
-          <div class="countdown-unit"><span id="cd-secs">--</span><small>seg</small></div>
+        <div class="countdown-inner">
+          <div class="countdown-info">
+            <p class="countdown-label">Próximo evento</p>
+            <p class="countdown-titulo">${escapeHTML(evento.titulo)}</p>
+          </div>
+          <div class="countdown-timer" id="countdown-timer" role="timer" aria-live="off" aria-label="Contagem regressiva">
+            <div class="countdown-unit"><span id="cd-days">--</span><small>dias</small></div>
+            <span class="countdown-sep" aria-hidden="true">:</span>
+            <div class="countdown-unit"><span id="cd-hours">--</span><small>horas</small></div>
+            <span class="countdown-sep" aria-hidden="true">:</span>
+            <div class="countdown-unit"><span id="cd-mins">--</span><small>min</small></div>
+            <span class="countdown-sep" aria-hidden="true">:</span>
+            <div class="countdown-unit"><span id="cd-secs">--</span><small>seg</small></div>
+          </div>
         </div>`;
 
       const pad  = (n) => String(n).padStart(2, "0");
@@ -1199,7 +1225,7 @@
         const diff = alvo - new Date();
         if (diff <= 0) {
           clearInterval(MyApp._countdownTimerId);
-          container.innerHTML = `<p class="lead fw-bold text-primary">O evento está a acontecer agora! 🎉</p>`;
+          container.innerHTML = `<p class="lead fw-bold mb-0">O evento está a acontecer agora! 🎉</p>`;
           return;
         }
         const d = Math.floor(diff / 86400000);
@@ -1312,6 +1338,7 @@
 
     MyApp.initMenu();
     MyApp.initSmoothScroll();
+    MyApp.initImageFallbacks();
     MyApp.initLazy();
     MyApp.initScrollSpy();
     MyApp.initReveal();

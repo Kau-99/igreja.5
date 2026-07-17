@@ -13,7 +13,7 @@
   <link rel="icon" type="image/png" sizes="48x48" href="imagens/logo.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="imagens/logo.png" />
   <link rel="manifest" href="site.webmanifest" />
-  <meta name="theme-color" content="#0f8c95" />
+  <meta name="theme-color" content="#0E4B4F" />
 
   <script type="application/ld+json">
   {
@@ -56,7 +56,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..640;1,9..144,400..640&family=Inter:wght@400;500;600&display=swap"
     rel="stylesheet" />
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" as="style"
     onload="this.onload=null;this.rel='stylesheet'" />
@@ -105,8 +105,8 @@
     <div class="container d-flex align-items-center justify-content-between py-2">
       <a class="logo d-flex align-items-center text-decoration-none" href="index.html"
         aria-label="Página inicial ADVIC">
-        <img src="imagens/logo.png" alt="Logo ADVIC" class="logo-img me-2" height="52" loading="eager" />
-        <span class="logo-text fw-bold">ADVIC</span>
+        <img src="imagens/logo.png" alt="Logo ADVIC" class="logo-img me-2" height="46" loading="eager" />
+        <span class="logo-text">ADVIC</span>
       </a>
       <button class="nav-toggle" aria-label="Abrir menu de navegação" aria-expanded="false"
         aria-controls="primary-navigation">
@@ -126,111 +126,136 @@
   </header>
 
   <main id="conteudo">
-    <section class="hero position-relative text-center text-white">
+    <!-- HERO — cinematográfico, texto ancorado à esquerda -->
+    <section class="hero" aria-label="Boas-vindas">
       <div id="hero-bg" class="hero-bg" data-lazy="imagens/imagem-igreja.jpg" role="img"
         aria-label="Interior da igreja"></div>
-      <div class="container position-relative py-5">
-        <h1 id="hero-titulo" class="display-5 fw-bold">Bem-vindo à Assembleia de Deus de Vila de Cava</h1>
-        <p id="hero-subtitulo" class="lead mt-2">Um lugar de adoração, comunhão e crescimento espiritual.</p>
-        <div class="d-flex gap-3 justify-content-center mt-3">
-          <a class="btn btn-primary btn-lg" href="eventos.html">Participe Este Domingo</a>
-          <a class="btn btn-outline-light btn-lg" href="sobre.html">Conheça a ADVIC</a>
+      <div class="hero-scrim" aria-hidden="true"></div>
+      <div class="container">
+        <div class="hero-content">
+          <p class="eyebrow eyebrow-light">Igreja em Vila de Cava · Nova Iguaçu</p>
+          <h1 id="hero-titulo">Bem-vindo à Assembleia de Deus de Vila de Cava</h1>
+          <p id="hero-subtitulo" class="hero-sub">Um lugar de adoração, comunhão e crescimento espiritual.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-lg" href="eventos.html">Participe este domingo</a>
+            <a class="btn btn-outline-light btn-lg" href="sobre.html">Conheça a ADVIC</a>
+          </div>
+          <p class="hero-note">Cultos — <strong>domingos, 9h e 18h</strong> · <strong>quartas, 19h30</strong></p>
         </div>
       </div>
     </section>
 
+    <!-- COUNTDOWN — banda petróleo, preenchida por initCountdown() -->
     <section id="proximo-evento" class="countdown-section" aria-label="Próximo evento">
-      <div class="container text-center" id="countdown-container">
+      <div class="container" id="countdown-container">
         <!-- preenchido dinamicamente por initCountdown() -->
       </div>
     </section>
 
-    <section id="pilares" class="py-5">
+    <!-- O QUE NOS GUIA — manifesto editorial (antigos "pilares") -->
+    <section id="pilares" class="section">
       <div class="container">
-        <h2 class="section-title text-center">Nossos Pilares</h2>
-        <p class="text-center text-muted mb-4">O que guia nossa caminhada.</p>
-        <div class="row g-4">
-          <div class="col-6 col-md-3" data-animate="fade-up">
-            <div class="pillar"><i class="fa-solid fa-heart"></i>
+        <div class="values-grid">
+          <div class="values-intro" data-animate="fade-up">
+            <p class="eyebrow">Nossa caminhada</p>
+            <h2 class="section-title">O que nos <span class="em-display">guia</span></h2>
+            <p class="lead">Quatro convicções sustentam tudo o que fazemos — do culto de domingo ao cuidado com cada
+              família da comunidade.</p>
+          </div>
+          <ul class="values-list">
+            <li class="value-item" data-animate="fade-up">
               <h3>Amor</h3>
               <p>Vivemos o mandamento do amor a Deus e ao próximo.</p>
-            </div>
-          </div>
-          <div class="col-6 col-md-3" data-animate="fade-up" data-delay="80">
-            <div class="pillar"><i class="fa-solid fa-people-group"></i>
+            </li>
+            <li class="value-item" data-animate="fade-up" data-delay="80">
               <h3>Comunidade</h3>
               <p>Relacionamentos que edificam e acolhem.</p>
-            </div>
-          </div>
-          <div class="col-6 col-md-3" data-animate="fade-up" data-delay="160">
-            <div class="pillar"><i class="fa-solid fa-hands-praying"></i>
+            </li>
+            <li class="value-item" data-animate="fade-up" data-delay="160">
               <h3>Fé</h3>
               <p>Firmados na Palavra e em oração contínua.</p>
-            </div>
-          </div>
-          <div class="col-6 col-md-3" data-animate="fade-up" data-delay="240">
-            <div class="pillar"><i class="fa-solid fa-hand-holding-heart"></i>
+            </li>
+            <li class="value-item" data-animate="fade-up" data-delay="240">
               <h3>Serviço</h3>
               <p>Servimos a Deus servindo pessoas.</p>
-            </div>
-          </div>
+            </li>
+          </ul>
         </div>
       </div>
     </section>
 
+    <!-- VERSÍCULO — peça tipográfica contemplativa -->
     <section class="verse-section">
       <div class="container" data-animate="fade-up">
-        <p class="verse-label">MEDITAÇÃO DA SEMANA</p>
+        <p class="verse-label">Meditação da semana</p>
         <h2 id="verse-text" class="verse-text">Carregando versículo...</h2>
         <span id="verse-ref" class="verse-ref"></span>
       </div>
     </section>
 
-    <section id="ministerios" class="py-5 bg-soft">
+    <!-- MINISTÉRIOS -->
+    <section id="ministerios" class="section">
       <div class="container">
-        <h2 class="section-title text-center">Ministérios</h2>
-        <div class="row g-4 mt-1">
+        <div class="section-head" data-animate="fade-up">
+          <p class="eyebrow">Servindo juntos</p>
+          <h2 class="section-title">Ministérios</h2>
+          <p class="lead">Cada chamado encontra um lugar para servir — do louvor às crianças, da juventude à
+            comunidade.</p>
+        </div>
+        <div class="row g-4">
           <div class="col-12 col-md-6 col-lg-3" data-animate="slide-up">
             <article class="card-min" data-title="Ministério de Louvor" data-img="imagens/min-louvor.jpg"
               data-text="O Ministério de Louvor da ADVIC tem como principal missão conduzir a igreja a uma adoração profunda e verdadeira.">
-              <img data-src="imagens/min-louvor.jpg" alt="Ministério de Louvor" class="lazy" />
-              <div class="p-3 position-relative">
+              <div class="card-min-media"><img data-src="imagens/min-louvor.jpg" alt="Ministério de Louvor"
+                  class="lazy" /></div>
+              <div class="card-min-body">
+                <p class="card-min-tag">Ministério</p>
                 <h3>Louvor</h3>
-                <p>Adoramos com excelência e reverência.</p><a class="stretched-link open-ministry-modal" href="#">Saiba
-                  mais</a>
+                <p>Adoramos com excelência e reverência.</p>
+                <a class="stretched-link open-ministry-modal" href="#">Conhecer <span class="link-arrow"
+                    aria-hidden="true">→</span></a>
               </div>
             </article>
           </div>
           <div class="col-12 col-md-6 col-lg-3" data-animate="slide-up" data-delay="80">
             <article class="card-min" data-title="Departamento Infantil" data-img="imagens/min-infantil.jpg"
               data-text="O Departamento Infantil trabalha com dedicação para ensinar a Palavra de Deus de forma lúdica.">
-              <img data-src="imagens/min-infantil.jpg" alt="Departamento Infantil" class="lazy" />
-              <div class="p-3 position-relative">
+              <div class="card-min-media"><img data-src="imagens/min-infantil.jpg" alt="Departamento Infantil"
+                  class="lazy" /></div>
+              <div class="card-min-body">
+                <p class="card-min-tag">Ministério</p>
                 <h3>Departamento Infantil</h3>
-                <p>Evangelho para as crianças com alegria.</p><a class="stretched-link open-ministry-modal"
-                  href="#">Saiba mais</a>
+                <p>Evangelho para as crianças com alegria.</p>
+                <a class="stretched-link open-ministry-modal" href="#">Conhecer <span class="link-arrow"
+                    aria-hidden="true">→</span></a>
               </div>
             </article>
           </div>
           <div class="col-12 col-md-6 col-lg-3" data-animate="slide-up" data-delay="160">
             <article class="card-min" data-title="Ministério de Jovens" data-img="imagens/jovens.jpeg"
               data-text="O Ministério de Jovens promove encontros dinâmicos, vigílias e momentos de profunda comunhão.">
-              <img data-src="imagens/jovens.jpeg" alt="Ministério de Jovens" class="lazy" />
-              <div class="p-3 position-relative">
+              <div class="card-min-media"><img data-src="imagens/jovens.jpeg" alt="Ministério de Jovens"
+                  class="lazy" /></div>
+              <div class="card-min-body">
+                <p class="card-min-tag">Ministério</p>
                 <h3>Jovens</h3>
-                <p>Uma geração apaixonada por Cristo.</p><a class="stretched-link open-ministry-modal" href="#">Saiba
-                  mais</a>
+                <p>Uma geração apaixonada por Cristo.</p>
+                <a class="stretched-link open-ministry-modal" href="#">Conhecer <span class="link-arrow"
+                    aria-hidden="true">→</span></a>
               </div>
             </article>
           </div>
           <div class="col-12 col-md-6 col-lg-3" data-animate="slide-up" data-delay="240">
             <article class="card-min" data-title="Ação Social" data-img="imagens/min-social.jpg"
               data-text="Trabalhamos ativamente para ser as mãos e pés de Jesus através de ações na comunidade local.">
-              <img data-src="imagens/min-social.jpg" alt="Ação Social" class="lazy" />
-              <div class="p-3 position-relative">
+              <div class="card-min-media"><img data-src="imagens/min-social.jpg" alt="Ação Social" class="lazy" />
+              </div>
+              <div class="card-min-body">
+                <p class="card-min-tag">Ministério</p>
                 <h3>Ação Social</h3>
-                <p>Cuidando de pessoas e necessidades locais.</p><a class="stretched-link open-ministry-modal"
-                  href="#">Saiba mais</a>
+                <p>Cuidando de pessoas e necessidades locais.</p>
+                <a class="stretched-link open-ministry-modal" href="#">Conhecer <span class="link-arrow"
+                    aria-hidden="true">→</span></a>
               </div>
             </article>
           </div>
@@ -238,10 +263,14 @@
       </div>
     </section>
 
-    <section id="sermoes" class="py-5">
+    <!-- SERMÕES — índice editorial -->
+    <section id="sermoes" class="section bg-soft">
       <div class="container">
-        <h2 class="section-title text-center">Sermões Recentes</h2>
-        <div id="sermoes-grid" class="row g-4 mt-1 justify-content-center">
+        <div class="section-head" data-animate="fade-up">
+          <p class="eyebrow">A Palavra</p>
+          <h2 class="section-title">Sermões recentes</h2>
+        </div>
+        <div id="sermoes-grid" class="row g-0 sermon-list-wrap">
           <div class="col-12 text-center py-4">
             <div class="spinner-border text-primary" role="status">
               <span class="visually-hidden">A carregar pregações…</span>
@@ -252,16 +281,18 @@
       </div>
     </section>
 
-    <section id="youtube" class="py-5 bg-soft">
+    <!-- YOUTUBE -->
+    <section id="youtube" class="section">
       <div class="container">
-        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
-          <div>
+        <div class="d-flex align-items-end justify-content-between mb-4 flex-wrap gap-3">
+          <div class="section-head mb-0">
+            <p class="eyebrow">Acompanhe de onde estiver</p>
             <h2 class="section-title mb-1">No YouTube</h2>
             <p class="text-muted mb-0">Últimas pregações e vídeos do canal.</p>
           </div>
           <a class="btn btn-outline-primary btn-sm" href="https://www.youtube.com/@advicof" target="_blank"
             rel="noopener noreferrer">
-            <i class="fab fa-youtube me-2" aria-hidden="true"></i>Inscrever-se no Canal
+            <i class="fab fa-youtube me-2" aria-hidden="true"></i>Inscrever-se no canal
           </a>
         </div>
         <div id="youtube-grid" class="row g-4">
@@ -275,28 +306,61 @@
       </div>
     </section>
 
+    <!-- CTA FINAL -->
     <section id="cta" class="cta">
       <div class="container d-lg-flex align-items-center justify-content-between">
-        <div class="me-lg-3">
-          <h2 class="mb-2">Visite-nos neste domingo</h2>
+        <div class="me-lg-4">
+          <p class="eyebrow eyebrow-light">Você é bem-vindo</p>
+          <h2 class="mb-2">Visite-nos neste <span class="em-display">domingo</span></h2>
           <p class="mb-0">R. Vítor Hugo, 76 — Vila de Cava, Nova Iguaçu — RJ</p>
         </div>
-        <a class="btn btn-light btn-lg mt-3 mt-lg-0" href="contato.html">Como chegar</a>
+        <a class="btn btn-light btn-lg mt-4 mt-lg-0" href="contato.html">Como chegar</a>
       </div>
     </section>
   </main>
 
   <footer class="site-footer" role="contentinfo">
-    <div class="container footer-content">
-      <div class="footer-brand">
-        <img src="imagens/logo.png" alt="Logo ADVIC" class="logo-img" height="56" loading="lazy" />
-        <p class="mb-0">© 2025 ADVIC — Todos os direitos reservados</p>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="imagens/logo.png" alt="Logo ADVIC" class="logo-img" height="52" loading="lazy" />
+          <div>
+            <p class="footer-name">ADVIC</p>
+            <p class="footer-tagline">Assembleia de Deus de Vila de Cava — uma igreja de portas abertas em Nova
+              Iguaçu.</p>
+          </div>
+        </div>
+        <nav aria-label="Páginas do site">
+          <p class="footer-heading">Navegue</p>
+          <ul class="footer-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="contato.html">Contato</a></li>
+            <li><a href="privacidade.html">Privacidade &amp; Imagem</a></li>
+          </ul>
+        </nav>
+        <div>
+          <p class="footer-heading">Cultos e endereço</p>
+          <ul class="footer-info">
+            <li><i class="fa-solid fa-calendar-days" aria-hidden="true"></i>Domingos, 9h e 18h · Quartas, 19h30</li>
+            <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i>R. Vítor Hugo, 76 — Vila de Cava, Nova
+              Iguaçu — RJ</li>
+          </ul>
+          <nav class="social-links" aria-label="Redes sociais">
+            <a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer"
+              aria-label="Instagram da ADVIC (abre em nova aba)"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+            <a href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer"
+              aria-label="Facebook da ADVIC (abre em nova aba)"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+            <a href="https://www.youtube.com/@advicof" target="_blank" rel="noopener noreferrer"
+              aria-label="YouTube da ADVIC (abre em nova aba)"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+          </nav>
+        </div>
       </div>
-      <nav class="social-links" aria-label="Redes sociais">
-        <a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer" aria-label="Instagram da ADVIC (abre em nova aba)"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-        <a href="https://www.facebook.com/advcviladecava" target="_blank" rel="noopener noreferrer" aria-label="Facebook da ADVIC (abre em nova aba)"><i class="fab fa-facebook" aria-hidden="true"></i></a>
-        <a href="https://www.youtube.com/@advicof" target="_blank" rel="noopener noreferrer" aria-label="YouTube da ADVIC (abre em nova aba)"><i class="fab fa-youtube" aria-hidden="true"></i></a>
-      </nav>
+      <div class="footer-bottom">
+        <p>© 2025 ADVIC — Todos os direitos reservados</p>
+        <p><a href="privacidade.html">Política de privacidade e uso de imagem</a></p>
+      </div>
     </div>
   </footer>
 
