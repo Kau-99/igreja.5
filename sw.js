@@ -1,7 +1,7 @@
 // Descomente após configurar ONESIGNAL_APP_ID em components.js
 // importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-const CACHE_NAME = "advic-v11"; // v11: correção do clone de Response + functions sem cache
+const CACHE_NAME = "advic-v12"; // v12: precache ignora cache HTTP (CSS/JS obsoletos)
 
 const STATIC_ASSETS = [
   "/",
@@ -27,7 +27,11 @@ const STATIC_ASSETS = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS)),
+    caches.open(CACHE_NAME).then((cache) =>
+      // cache: "reload" ignora o cache HTTP do navegador — garante que cada
+      // nova versão do SW pré-carregue os arquivos REALMENTE atuais da rede
+      cache.addAll(STATIC_ASSETS.map((url) => new Request(url, { cache: "reload" }))),
+    ),
   );
 });
 

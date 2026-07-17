@@ -203,7 +203,8 @@
         <defs>
           <clipPath id="globe-clip"><circle r="190" /></clipPath>
         </defs>
-        <g class="globe-lines">
+        <!-- Atributos de apresentação garantem o desenho em linhas mesmo se o CSS falhar -->
+        <g class="globe-lines" fill="none" stroke="#F3EEE3" stroke-opacity=".13" stroke-width="1">
           <circle r="190" />
           <ellipse rx="63" ry="190" />
           <ellipse rx="127" ry="190" />
@@ -215,9 +216,11 @@
           <line x1="-95" y1="164" x2="95" y2="164" />
         </g>
         <g class="globe-band" clip-path="url(#globe-clip)">
-          <rect x="-190" y="-122" width="380" height="89" />
-          <line x1="-190" y1="-122" x2="190" y2="-122" />
-          <line x1="-190" y1="-33" x2="190" y2="-33" />
+          <rect x="-190" y="-122" width="380" height="89" fill="#D9A84E" fill-opacity=".1" />
+          <line x1="-190" y1="-122" x2="190" y2="-122" stroke="#D9A84E" stroke-opacity=".55" stroke-width="1.2"
+            stroke-dasharray="5 7" />
+          <line x1="-190" y1="-33" x2="190" y2="-33" stroke="#D9A84E" stroke-opacity=".55" stroke-width="1.2"
+            stroke-dasharray="5 7" />
         </g>
       </svg>
 
