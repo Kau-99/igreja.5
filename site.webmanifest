@@ -8,8 +8,8 @@
   "orientation": "portrait-primary",
   "lang": "pt-BR",
   "dir": "ltr",
-  "background_color": "#ffffff",
-  "theme_color": "#0f8c95",
+  "background_color": "#F7F4EF",
+  "theme_color": "#0E4B4F",
   "categories": ["religion", "community"],
   "prefer_related_applications": false,
   "icons": [

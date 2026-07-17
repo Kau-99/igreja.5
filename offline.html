@@ -8,9 +8,10 @@
   <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" type="image/png" href="imagens/logo.png" />
   <link rel="manifest" href="site.webmanifest" />
-  <meta name="theme-color" content="#0f8c95" />
+  <meta name="theme-color" content="#0E4B4F" />
   <link rel="stylesheet" href="style.css" />
   <style>
+    /* Página exibida offline — sem fontes externas de propósito */
     .offline-page {
       min-height: 100dvh;
       display: flex;
@@ -19,16 +20,25 @@
       justify-content: center;
       text-align: center;
       padding: 2rem;
-      gap: 1.5rem;
+      gap: 1.25rem;
+      background: var(--bg);
+      color: var(--ink);
     }
     .offline-icon {
       font-size: 4rem;
-      color: var(--primary, #0f8c95);
-      opacity: .7;
+      color: var(--brand);
+      opacity: .55;
     }
-    .offline-page h1 { font-size: 1.75rem; margin: 0; }
-    .offline-page p  { max-width: 30ch; color: var(--text-muted, #6c757d); margin: 0; }
-    .offline-page .btn { margin-top: .5rem; }
+    .offline-page h1 {
+      font-size: 1.9rem;
+      margin: 0;
+    }
+    .offline-page p {
+      max-width: 34ch;
+      color: var(--muted);
+      margin: 0;
+    }
+    .offline-page .btn { margin-top: .5rem; min-width: 200px; }
   </style>
 </head>
 
@@ -51,7 +61,7 @@
     <button class="btn btn-primary" onclick="window.location.reload()">
       Tentar novamente
     </button>
-    <a class="btn btn-outline-secondary" href="/">Ir para o início</a>
+    <a class="btn btn-outline-primary" href="/">Ir para o início</a>
   </main>
 </body>
 
