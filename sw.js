@@ -1,7 +1,7 @@
 // Descomente após configurar ONESIGNAL_APP_ID em components.js
 // importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-const CACHE_NAME = "advic-v10"; // v10: seção de missões
+const CACHE_NAME = "advic-v11"; // v11: correção do clone de Response + functions sem cache
 
 const STATIC_ASSETS = [
   "/",
@@ -70,10 +70,12 @@ self.addEventListener("notificationclick", (event) => {
   );
 });
 
-// Respostas opacas (cross-origin sem CORS) não têm status confiável — excluo para não inflar a quota
-const safePut = (cache, request, response) => {
-  if (response.ok && response.type !== "opaque") {
-    cache.put(request, response.clone()).catch(() => { /* quota */ });
+// Respostas opacas (cross-origin sem CORS) não têm status confiável — excluo para não inflar a quota.
+// Recebe um clone já feito de forma síncrona: clonar depois que a página começou a
+// consumir o corpo dispara "Response body is already used".
+const safePut = (cache, request, responseClone) => {
+  if (responseClone.ok && responseClone.type !== "opaque") {
+    cache.put(request, responseClone).catch(() => { /* quota */ });
   }
 };
 
@@ -86,12 +88,17 @@ self.addEventListener("fetch", (event) => {
   // Deixo CDNs e APIs externas sem cache — o browser e os próprios CDNs já tratam isso
   if (url.origin !== self.location.origin) return;
 
+  // Functions (feed do YouTube, status ao vivo, galeria do Drive) são dados
+  // vivos — nunca podem ficar presos no cache-first
+  if (url.pathname.startsWith("/.netlify/")) return;
+
   // HTML sempre vai à rede primeiro — garanto que o usuário não veja conteúdo obsoleto
   if ((request.headers.get("Accept") || "").includes("text/html")) {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          caches.open(CACHE_NAME).then((cache) => safePut(cache, request, response));
+          const copy = response.clone(); // clone síncrono, antes de entregar à página
+          caches.open(CACHE_NAME).then((cache) => safePut(cache, request, copy));
           return response;
         })
         .catch(() =>
@@ -106,7 +113,8 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          caches.open(CACHE_NAME).then((cache) => safePut(cache, request, response));
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => safePut(cache, request, copy));
           return response;
         })
         .catch(() => caches.match(request)),
@@ -119,7 +127,8 @@ self.addEventListener("fetch", (event) => {
     caches.match(request).then((cachedResponse) => {
       if (cachedResponse) return cachedResponse;
       return fetch(request).then((response) => {
-        caches.open(CACHE_NAME).then((cache) => safePut(cache, request, response));
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then((cache) => safePut(cache, request, copy));
         return response;
       });
     }),
