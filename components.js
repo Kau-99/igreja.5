@@ -129,12 +129,18 @@
     });
   }
 
-  const rawFile   = window.location.pathname.split("/").pop();
-  const currentFile = rawFile === "" || rawFile === "index.html" ? "index.html" : rawFile;
+  // Normaliza caminhos para comparar página atual × href do link.
+  // Necessário porque a Netlify serve pretty URLs ("/sobre") e também
+  // reescreve os hrefs internos ("sobre.html" → "/sobre") no pós-build.
+  const pageSlug = (path) => {
+    const last = (path || "").split("/").pop().replace(/\.html$/, "");
+    return last === "" ? "index" : last;
+  };
+  const currentSlug = pageSlug(window.location.pathname);
   document.querySelectorAll(".nav-menu a[href]").forEach((link) => {
-    const href = link.getAttribute("href");
-    const isActive = href === currentFile ||
-      (currentFile === "index.html" && (href === "" || href === "/"));
+    const href = link.getAttribute("href") || "";
+    if (/^(https?:|mailto:|tel:|#)/i.test(href)) return;
+    const isActive = pageSlug(href) === currentSlug;
     link.classList.toggle("active", isActive);
     if (isActive) {
       link.setAttribute("aria-current", "page");
