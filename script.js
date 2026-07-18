@@ -999,12 +999,14 @@
   };
 
   // ─── VERSÍCULO DA SEMANA ──────────────────────────────────────────────────
-  MyApp.initVersiculoDaSemana = () => {
+  // A lista editável vive em versiculos.json (gerenciada pelo painel /admin);
+  // a lista embutida abaixo é o fallback para falha de rede/JSON inválido.
+  MyApp.initVersiculoDaSemana = async () => {
     const verseText = $("#verse-text");
     const verseRef  = $("#verse-ref");
     if (!verseText || !verseRef) return;
 
-    const versiculos = [
+    let versiculos = [
       { texto: "O Senhor é o meu pastor; nada me faltará.",                                                                              ref: "Salmos 23:1"         },
       { texto: "Entregue o seu caminho ao Senhor; confie nele, e ele agirá.",                                                            ref: "Salmos 37:5"         },
       { texto: "Tudo posso naquele que me fortalece.",                                                                                   ref: "Filipenses 4:13"     },
@@ -1016,6 +1018,16 @@
       { texto: "Lâmpada para os meus pés é tua palavra, e luz para o meu caminho.",                                                     ref: "Salmos 119:105"      },
       { texto: "Sejam fortes e corajosos. Não tenham medo nem fiquem apavorados... pois o Senhor os acompanhará.",                      ref: "Deuteronômio 31:6"   },
     ];
+
+    try {
+      const dados = await MyApp.fetchJSON("versiculos.json");
+      const lista = Array.isArray(dados.versiculos)
+        ? dados.versiculos.filter((v) => v && typeof v.texto === "string" && v.texto.trim() && typeof v.ref === "string" && v.ref.trim())
+        : [];
+      if (lista.length) versiculos = lista;
+    } catch {
+      MyApp.log("Usando lista embutida de versículos.");
+    }
 
     const agora      = new Date();
     const inicioAno  = new Date(agora.getFullYear(), 0, 1);

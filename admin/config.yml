@@ -33,13 +33,11 @@ slug:
   sanitize_replacement: "-"
 
 # ── Biblioteca de mídia ──────────────────────────────────────
+# Nota: o bloco "media_library: name: default" foi removido — no Decap CMS 3
+# ele causa o erro "Missing external media library 'default'". A biblioteca
+# embutida é usada automaticamente com media_folder/public_folder.
 media_folder:  "imagens"
 public_folder: "imagens"
-media_library:
-  name: default
-  config:
-    max_file_size: 5242880   # 5 MB
-    multiple:      false
 
 # ── Fluxo editorial ──────────────────────────────────────────
 # Ativar quando houver múltiplos editores — exige revisão antes de publicar
@@ -301,6 +299,36 @@ collections:
                 required: false
                 hint:     "Ex: https://wa.me/?text=Participe+do+evento…"
                 pattern:  ["^(https?://.*)?$", "URL completa ou deixe vazio"]
+
+      # ── Versículos da Semana ─────────────────────────────
+      # Exibidos em rotação semanal na página inicial (um por semana).
+      - label: "📖 Versículos da Semana"
+        name:  "versiculos"
+        file:  "versiculos.json"
+        editor:
+          preview: false
+        fields:
+          - label:      "Lista de Versículos"
+            name:       "versiculos"
+            widget:     "list"
+            summary:    "📖 {{fields.ref}}"
+            collapsed:  true
+            add_to_top: false
+            hint:       "O site alterna automaticamente um versículo por semana, na ordem da lista."
+            min:        1
+            max:        60
+            fields:
+              - label:    "Texto do Versículo"
+                name:     "texto"
+                widget:   "text"
+                hint:     "Sem as aspas — o site as adiciona automaticamente."
+                required: true
+
+              - label:    "Referência"
+                name:     "ref"
+                widget:   "string"
+                hint:     "Ex: Salmos 23:1 | João 3:16"
+                required: true
 
       # ── Sermões ─────────────────────────────────────────
       - label: "🎙️ Sermões e Pregações"

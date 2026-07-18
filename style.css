@@ -1307,15 +1307,18 @@ a:hover { color: var(--brand-strong); }
   color: var(--accent-soft);
 }
 
-/* Diagrama da Janela 10/40 */
+/* Mapa da Janela 10/40 — duotone petróleo */
 .window-figure {
   margin: 0 0 var(--sp-5);
   color: var(--brand);
 }
-.window-figure svg {
+.window-figure img {
   width: 100%;
   height: auto;
   display: block;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-2);
 }
 .window-figure figcaption {
   margin-top: .75rem;
@@ -1325,7 +1328,6 @@ a:hover { color: var(--brand-strong); }
   text-transform: uppercase;
   color: var(--muted);
 }
-.window-band-zone { animation: band-breathe 8s ease-in-out infinite; }
 
 /* Estatísticas sobre fundo claro (Brasil) */
 .field-stats {
@@ -3358,7 +3360,6 @@ body.a11y-reduce-motion *::after {
   .missions-globe .globe-band { animation: none; }
   .missions-hero-scroll span { animation: none; }
   .missions-hero-img { animation: none; }
-  .window-band-zone { animation: none; }
   .gallery-item:hover,
   .latest-video-facade:hover img,
   .gallery-item:hover img { transform: none; }

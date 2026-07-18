@@ -1,7 +1,7 @@
 // Descomente após configurar ONESIGNAL_APP_ID em components.js
 // importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-const CACHE_NAME = "advic-v15"; // v15: fotos reais na página de missões
+const CACHE_NAME = "advic-v16"; // v16: mapa 10/40 real, versículos via CMS
 
 const STATIC_ASSETS = [
   "/",
@@ -19,6 +19,7 @@ const STATIC_ASSETS = [
   "/components.js",
   "/site.webmanifest",
   "/inicio.json",
+  "/versiculos.json",
   "/eventos.json",
   "/sermoes.json",
   "/contatos.json",

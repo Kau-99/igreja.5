@@ -9,9 +9,11 @@
 
   <link rel="icon" type="image/png" href="../imagens/logo.png" />
 
-  <!-- Inter — mesma fonte do site principal -->
+  <!-- Fraunces + Inter — mesmas fontes do site principal -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..640;1,9..144,400..640&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
 
   <!-- Netlify Identity (deve carregar ANTES do Decap CMS) -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
@@ -21,15 +23,17 @@
        VARIÁVEIS E RESET
     ══════════════════════════════════════════════════════════════ */
     :root {
-      --p:    #0f8c95;  /* primary    */
-      --p-d:  #0b6b72;  /* primary dark */
-      --p-l:  #1fc9d6;  /* primary light */
-      --bg:   #f0f5f5;
-      --card: #ffffff;
-      --text: #1f2937;
-      --muted:#6b7280;
-      --border:#e5e7eb;
-      --r:    12px;
+      /* Paleta "Reverência Contemporânea" — a mesma do site */
+      --p:     #0E4B4F;  /* petróleo institucional */
+      --p-d:   #0A3A3E;  /* petróleo escuro        */
+      --p-l:   #8FC1BD;  /* petróleo claro          */
+      --amber: #C9922E;  /* acento âmbar            */
+      --bg:    #F7F4EF;  /* osso                    */
+      --card:  #FCFAF6;
+      --text:  #221E19;
+      --muted: #675F51;
+      --border:#E3DCD0;
+      --r:     12px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -47,7 +51,7 @@
       position: fixed;
       inset: 0;
       z-index: 99999;
-      background: radial-gradient(ellipse at 30% 40%, #0d6b72 0%, #04282c 55%, #020d0e 100%);
+      background: linear-gradient(180deg, #071F23 0%, #0B3237 60%, #092B30 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -65,13 +69,13 @@
       height: 96px;
       border-radius: 22px;
       object-fit: contain;
-      background: rgba(255,255,255,.06);
+      background: rgba(243,238,227,.07);
       padding: 8px;
-      animation: adm-glow 2.4s ease-in-out infinite;
+      animation: adm-glow 2.6s ease-in-out infinite;
     }
     @keyframes adm-glow {
-      0%,100% { box-shadow: 0 0 30px rgba(31,201,214,.35); }
-      50%      { box-shadow: 0 0 60px rgba(31,201,214,.65); }
+      0%,100% { box-shadow: 0 0 26px rgba(217,168,78,.25); }
+      50%      { box-shadow: 0 0 52px rgba(217,168,78,.5); }
     }
     .adm-brand {
       text-align: center;
@@ -80,26 +84,29 @@
       gap: .4rem;
     }
     .adm-brand strong {
-      color: #fff;
-      font-size: 1.4rem;
-      font-weight: 700;
+      font-family: 'Fraunces', Georgia, serif;
+      color: #F3EEE3;
+      font-size: 1.6rem;
+      font-weight: 560;
       letter-spacing: -.02em;
     }
     .adm-brand span {
-      color: rgba(255,255,255,.5);
-      font-size: .85rem;
-      letter-spacing: .03em;
+      color: rgba(243,238,227,.55);
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
     }
     .adm-bar-wrap {
       width: 180px;
       height: 3px;
-      background: rgba(255,255,255,.12);
+      background: rgba(243,238,227,.14);
       border-radius: 999px;
       overflow: hidden;
     }
     .adm-bar {
       height: 100%;
-      background: linear-gradient(90deg, var(--p-l), var(--p));
+      background: linear-gradient(90deg, #D9A84E, #C9922E);
       border-radius: 999px;
       animation: adm-sweep 1.6s ease-in-out infinite;
     }
@@ -320,6 +327,62 @@
     }
 
     /* ══════════════════════════════════════════════════════════════
+       CENTRAL DE CONTROLE — barra de atalhos rápidos
+       Injetada por JS depois que o CMS termina de carregar.
+    ══════════════════════════════════════════════════════════════ */
+    .adm-shortcuts {
+      position: fixed;
+      left: 1rem;
+      bottom: 1rem;
+      z-index: 9000;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      background: #0B3237;
+      border: 1px solid rgba(243,238,227,.18);
+      border-radius: 999px;
+      padding: .35rem .5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      font-size: .8rem;
+    }
+    .adm-shortcuts strong {
+      color: #D9A84E;
+      font-weight: 600;
+      font-size: .66rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: 0 .4rem 0 .6rem;
+      user-select: none;
+    }
+    .adm-shortcuts a {
+      color: #F3EEE3;
+      text-decoration: none;
+      font-weight: 600;
+      padding: .35rem .7rem;
+      border-radius: 999px;
+      transition: background .2s ease, color .2s ease;
+      white-space: nowrap;
+    }
+    .adm-shortcuts a:hover {
+      background: #F3EEE3;
+      color: #0B3237;
+    }
+    .adm-shortcuts button {
+      background: none;
+      border: 0;
+      color: rgba(243,238,227,.55);
+      font-size: 1rem;
+      line-height: 1;
+      padding: .3rem .45rem;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+    .adm-shortcuts button:hover { color: #F3EEE3; }
+    @media (max-width: 700px) {
+      .adm-shortcuts { display: none; } /* no celular o espaço é do editor */
+    }
+
+    /* ══════════════════════════════════════════════════════════════
        SCROLL SMOOTH — boas práticas
     ══════════════════════════════════════════════════════════════ */
     html { scroll-behavior: smooth; }
@@ -368,9 +431,9 @@
       return h('div', { style: { padding: '1.5rem', fontFamily: 'Inter, sans-serif' } },
         h('div', {
           style: {
-            background: '#fff',
+            background: '#FCFAF6',
             borderRadius: '14px',
-            border: '1px solid #e5e7eb',
+            border: '1px solid #E3DCD0',
             overflow: 'hidden',
             maxWidth: '380px',
             boxShadow: '0 10px 24px rgba(0,0,0,.08)',
@@ -385,15 +448,15 @@
             h('span', {
               style: {
                 display: 'inline-block', padding: '.2rem .7rem',
-                background: '#f5fbfc', color: '#0a5b61',
+                background: '#EFEAE1', color: '#0E4B4F',
                 borderRadius: '999px', fontSize: '.8rem',
                 fontWeight: 700, marginBottom: '.5rem',
-                border: '1px solid rgba(31,201,214,.2)'
+                border: '1px solid #E3DCD0'
               }
             }, get('tipo') || 'evento'),
-            h('h3', { style: { fontFamily: 'Georgia, serif', color: '#0a5b61', margin: '.25rem 0' } },
+            h('h3', { style: { fontFamily: 'Fraunces, Georgia, serif', color: '#0E4B4F', margin: '.25rem 0' } },
               get('titulo') || 'Título do Evento'),
-            h('p',  { style: { color: '#6b7280', fontSize: '.9rem', margin: '.5rem 0' } },
+            h('p',  { style: { color: '#675F51', fontSize: '.9rem', margin: '.5rem 0' } },
               get('dataExibicao') || 'Data do evento'),
             h('p',  { style: { fontSize: '.95rem', lineHeight: 1.6 } },
               get('descricao') || 'Descrição do evento.')
@@ -412,17 +475,17 @@
       return h('div', { style: { padding: '1.5rem', fontFamily: 'Inter, sans-serif' } },
         h('div', {
           style: {
-            background: '#fff',
+            background: '#FCFAF6',
             borderRadius: '14px',
-            border: '1px solid #e5e7eb',
+            border: '1px solid #E3DCD0',
             padding: '1.25rem',
             maxWidth: '420px',
             boxShadow: '0 10px 24px rgba(0,0,0,.08)',
           }
         },
-          h('h3', { style: { fontFamily: 'Georgia, serif', color: '#0a5b61', marginBottom: '.25rem' } },
+          h('h3', { style: { fontFamily: 'Fraunces, Georgia, serif', color: '#0E4B4F', marginBottom: '.25rem' } },
             get('titulo') || 'Título do Sermão'),
-          h('p',  { style: { color: '#6b7280', fontSize: '.9rem', marginBottom: '1rem' } },
+          h('p',  { style: { color: '#675F51', fontSize: '.9rem', marginBottom: '1rem' } },
             get('pregadorData') || 'Pr. Nome — Data'),
           get('linkVideo') && h('a', {
             href: get('linkVideo'),
@@ -436,7 +499,7 @@
             }
           }, '▶  Assistir no YouTube'),
           get('audioDisponivel') && h('p', {
-            style: { marginTop: '.75rem', color: '#0f8c95', fontSize: '.9rem', fontWeight: 500 }
+            style: { marginTop: '.75rem', color: '#0E4B4F', fontSize: '.9rem', fontWeight: 500 }
           }, '🎵  Áudio disponível')
         )
       );
@@ -452,8 +515,8 @@
       return h('div', { style: { padding: '1.5rem', fontFamily: 'Inter, sans-serif' } },
         h('div', {
           style: {
-            background: '#fff', borderRadius: '14px',
-            border: '1px solid #e5e7eb', overflow: 'hidden',
+            background: '#FCFAF6', borderRadius: '14px',
+            border: '1px solid #E3DCD0', overflow: 'hidden',
             maxWidth: '220px', boxShadow: '0 10px 24px rgba(0,0,0,.08)',
             textAlign: 'center', padding: '1.25rem'
           }
@@ -463,10 +526,10 @@
             style: { width: '120px', height: '120px', borderRadius: '50%',
                      objectFit: 'cover', display: 'block', margin: '0 auto .75rem' }
           }),
-          h('h3', { style: { fontFamily: 'Georgia, serif', color: '#0a5b61',
+          h('h3', { style: { fontFamily: 'Fraunces, Georgia, serif', color: '#0E4B4F',
                              fontSize: '1rem', marginBottom: '.25rem' } },
             get('nome') || 'Nome do Líder'),
-          h('span', { style: { color: '#6b7280', fontSize: '.85rem' } },
+          h('span', { style: { color: '#675F51', fontSize: '.85rem' } },
             get('cargo') || 'Cargo / Função')
         )
       );
@@ -480,6 +543,23 @@
     var _hideLoader  = function() {
       if (_loadingEl) _loadingEl.classList.add('hidden');
     };
+    /* ── Central de controle: atalhos rápidos após o CMS abrir ── */
+    var _addShortcuts = function() {
+      if (document.querySelector('.adm-shortcuts')) return;
+      var bar = document.createElement('nav');
+      bar.className = 'adm-shortcuts';
+      bar.setAttribute('aria-label', 'Atalhos rápidos');
+      bar.innerHTML =
+        '<strong>ADVIC</strong>' +
+        '<a href="/" target="_blank" rel="noopener">Ver o site</a>' +
+        '<a href="/galeria" target="_blank" rel="noopener">Galeria</a>' +
+        '<a href="https://www.youtube.com/@advicof" target="_blank" rel="noopener noreferrer">YouTube</a>' +
+        '<a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer">Instagram</a>' +
+        '<button type="button" aria-label="Fechar atalhos" title="Fechar">×</button>';
+      bar.querySelector('button').addEventListener('click', function() { bar.remove(); });
+      document.body.appendChild(bar);
+    };
+
     var _checkReady  = setInterval(function() {
       var appReady =
         document.querySelector('#nc-root header')             ||
@@ -488,7 +568,7 @@
         document.querySelector('[data-testid="cms-main"]')    ||
         document.querySelector('header[class*="css-"]')       ||
         document.querySelector('.nc-appHeader-root');
-      if (appReady) { _hideLoader(); clearInterval(_checkReady); }
+      if (appReady) { _hideLoader(); _addShortcuts(); clearInterval(_checkReady); }
     }, 250);
     /* Fallback máximo: 8 s (rede lenta / dispositivos lentos) */
     setTimeout(function() { _hideLoader(); clearInterval(_checkReady); }, 8000);
