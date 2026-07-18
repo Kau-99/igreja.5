@@ -50,6 +50,9 @@
 
   <!-- Robots -->
   <meta name="robots" content="index, follow" />
+
+  <!-- Imagem principal do hero — LCP da página -->
+  <link rel="preload" as="image" href="imagens/globo.jpg" />
 </head>
 
 <body>
@@ -89,32 +92,10 @@
   </header>
 
   <main id="conteudo">
-    <!-- HERO DE MISSÕES — capela escura com o globo -->
-    <section class="missions-hero" aria-label="Missões — a tarefa inacabada">
-      <svg class="missions-globe missions-globe-hero" viewBox="-200 -200 400 400" aria-hidden="true"
-        focusable="false">
-        <defs>
-          <clipPath id="globe-clip-hero"><circle r="190" /></clipPath>
-        </defs>
-        <g class="globe-lines" fill="none" stroke="#F3EEE3" stroke-opacity=".13" stroke-width="1">
-          <circle r="190" />
-          <ellipse rx="63" ry="190" />
-          <ellipse rx="127" ry="190" />
-          <line x1="0" y1="-190" x2="0" y2="190" />
-          <line x1="-190" y1="0" x2="190" y2="0" />
-          <line x1="-164" y1="-95" x2="164" y2="-95" />
-          <line x1="-164" y1="95" x2="164" y2="95" />
-          <line x1="-95" y1="-164" x2="95" y2="-164" />
-          <line x1="-95" y1="164" x2="95" y2="164" />
-        </g>
-        <g class="globe-band" clip-path="url(#globe-clip-hero)">
-          <rect x="-190" y="-122" width="380" height="89" fill="#D9A84E" fill-opacity=".1" />
-          <line x1="-190" y1="-122" x2="190" y2="-122" stroke="#D9A84E" stroke-opacity=".55" stroke-width="1.2"
-            stroke-dasharray="5 7" />
-          <line x1="-190" y1="-33" x2="190" y2="-33" stroke="#D9A84E" stroke-opacity=".55" stroke-width="1.2"
-            stroke-dasharray="5 7" />
-        </g>
-      </svg>
+    <!-- HERO DE MISSÕES — a Terra vista do espaço -->
+    <section class="missions-hero missions-hero-photo" aria-label="Missões — a tarefa inacabada">
+      <div class="missions-hero-img" role="img" aria-label="O planeta Terra visto do espaço"></div>
+      <div class="missions-hero-veil" aria-hidden="true"></div>
       <div class="container">
         <div class="missions-hero-content">
           <p class="eyebrow eyebrow-light" data-animate="fade-up">Missões</p>
@@ -229,11 +210,19 @@
               e, ao mesmo tempo, uma das regiões com menos obreiros cristãos por habitante.</p>
           </div>
           <div class="col-12 col-lg-6" data-animate="fade-up" data-delay="100">
-            <p>Orar com um mapa aberto muda a forma como a igreja enxerga o mundo: cada linha dessa faixa carrega povos
-              com nome, língua e história — e uma promessa ainda em andamento: <em>“de todas as nações, tribos, povos e
-                línguas”</em> diante do trono.</p>
+            <p>Não por acaso, é também onde seguir a Cristo custa mais caro: <strong>a maior parte dos 50 países da
+                Lista Mundial da Perseguição está dentro ou na borda dessa mesma faixa</strong>. Orar com um mapa
+              aberto muda a forma como a igreja enxerga o mundo.</p>
           </div>
         </div>
+
+        <figure class="persecution-figure" data-animate="fade-up">
+          <img src="imagens/janela1040.webp" width="860" height="407"
+            alt="Mapa-múndi destacando os 50 países onde os cristãos são mais perseguidos, concentrados na África e na Ásia"
+            loading="lazy" decoding="async" />
+          <figcaption>Os 50 países onde os cristãos são mais perseguidos — quase todos na mesma região da Janela
+            10/40. <span class="figure-credit">Lista Mundial da Perseguição 2026 · Portas Abertas</span></figcaption>
+        </figure>
       </div>
     </section>
 
@@ -349,7 +338,7 @@
         <p class="missions-final-ref">Apocalipse 7:9</p>
         <p class="missions-final-line">Essa cena é o futuro. Missões é o caminho até lá.</p>
         <p class="missions-sources">Fontes: Joshua Project (2026) · Wycliffe Global Alliance (2025) · AMTB · IBGE,
-          Censo Demográfico 2022</p>
+          Censo Demográfico 2022 · Portas Abertas, Lista Mundial da Perseguição 2026</p>
       </div>
     </section>
   </main>

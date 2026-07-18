@@ -1201,6 +1201,66 @@ a:hover { color: var(--brand-strong); }
   width: min(58vw, 720px);
 }
 
+/* Hero fotográfico — a Terra vista do espaço.
+   O fundo preto da foto se funde ao petróleo por um véu em degradê. */
+.missions-hero-photo { background: #05090C; }
+.missions-hero-img {
+  position: absolute;
+  inset: 0;
+  background-image: url("imagens/globo.jpg");
+  background-repeat: no-repeat;
+  background-size: auto min(135%, 980px);
+  background-position: calc(100% + 6vw) center;
+  animation: hero-drift 22s var(--ease) forwards;
+  will-change: transform;
+}
+.missions-hero-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, #05090C 0%, rgba(5, 9, 12, .9) 32%, rgba(5, 9, 12, .35) 58%, rgba(7, 31, 35, .12) 100%),
+    linear-gradient(to top, rgba(5, 9, 12, .55) 0%, transparent 30%);
+  pointer-events: none;
+}
+@media (max-width: 991px) {
+  .missions-hero-img {
+    background-size: auto min(110%, 620px);
+    background-position: calc(100% + 24vw) center;
+  }
+  .missions-hero-veil {
+    background:
+      linear-gradient(90deg, rgba(5, 9, 12, .94) 0%, rgba(5, 9, 12, .72) 55%, rgba(5, 9, 12, .45) 100%);
+  }
+}
+
+/* Figura do mapa da perseguição (Portas Abertas) */
+.persecution-figure {
+  margin: var(--sp-6) 0 0;
+}
+.persecution-figure img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-1);
+  background: #EDEDED;
+}
+.persecution-figure figcaption {
+  margin-top: .8rem;
+  font-size: .88rem;
+  color: var(--muted);
+  max-width: 46rem;
+}
+.figure-credit {
+  display: block;
+  margin-top: .3rem;
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+
 /* Indicador de rolagem — linha que desce */
 .missions-hero-scroll {
   position: absolute;
@@ -3297,6 +3357,7 @@ body.a11y-reduce-motion *::after {
   .hero:not(.hero-sm) .hero-bg { animation: none; }
   .missions-globe .globe-band { animation: none; }
   .missions-hero-scroll span { animation: none; }
+  .missions-hero-img { animation: none; }
   .window-band-zone { animation: none; }
   .gallery-item:hover,
   .latest-video-facade:hover img,
