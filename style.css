@@ -317,12 +317,17 @@ a:hover { color: var(--brand-strong); }
   font-weight: 480;
   color: var(--brand);
 }
+/* Sobre qualquer banda escura o itálico de destaque vira âmbar claro —
+   petróleo sobre petróleo não tem contraste suficiente */
 .on-dark .em-display,
 .band-deep .em-display,
 .cta .em-display,
 .page-header-plain .em-display,
 .missions-hero .em-display,
 .missions-final .em-display,
+.memoir-cover .em-display,
+.memoir-milestone .em-display,
+.memoir-pullquote-deep .em-display,
 .hero .em-display { color: var(--accent-soft); }
 
 /* =========================================================
@@ -2152,6 +2157,320 @@ a:hover { color: var(--brand-strong); }
   letter-spacing: .12em;
   text-transform: uppercase;
   display: block;
+}
+
+/* =========================================================
+   14b. MEMÓRIA — página de história (depoimento longform)
+   Coluna de leitura estreita, marcos em banda petróleo e
+   citações tratadas como peça tipográfica.
+========================================================= */
+.memoir { background: var(--bg); }
+
+/* Capa: retrato histórico + título */
+.memoir-cover {
+  position: relative;
+  background: linear-gradient(180deg, #071F23 0%, #0B3237 100%);
+  color: var(--cream);
+  padding-block: clamp(3rem, 7vw, 5.5rem);
+  overflow: hidden;
+}
+.memoir-cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--grain);
+  pointer-events: none;
+}
+.memoir-cover .container { position: relative; }
+
+.memoir-cover-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+.memoir-cover h1 {
+  color: var(--cream);
+  font-size: clamp(2.8rem, 2rem + 4vw, 5rem);
+  line-height: 1;
+  margin-bottom: 1.25rem;
+}
+.memoir-standfirst {
+  font-size: clamp(1.05rem, 1rem + .45vw, 1.3rem);
+  line-height: 1.6;
+  color: var(--cream-muted);
+  max-width: 34rem;
+  margin: 0 0 1.5rem;
+}
+.memoir-standfirst strong { color: var(--cream); font-weight: 600; }
+.memoir-credit {
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(243, 238, 227, .5);
+  border-top: 1px solid rgba(243, 238, 227, .2);
+  padding-top: 1rem;
+  max-width: 28rem;
+  margin: 0;
+}
+
+.memoir-cover-photo { margin: 0; }
+.memoir-cover-photo img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .5);
+  filter: contrast(1.02);
+}
+.memoir-cover-photo figcaption {
+  margin-top: .9rem;
+  font-size: .82rem;
+  line-height: 1.5;
+  color: var(--cream-muted);
+  border-left: 2px solid var(--accent-soft);
+  padding-left: .8rem;
+}
+
+@media (max-width: 767px) {
+  .memoir-cover-grid { grid-template-columns: 1fr; }
+  .memoir-cover-photo { max-width: 300px; }
+}
+
+/* Capítulos — coluna de leitura confortável */
+.memoir-chapter { padding-block: clamp(2.5rem, 5vw, 4rem); }
+.memoir-body {
+  max-width: 38rem;
+  margin-inline: auto;
+}
+.memoir-body p {
+  font-size: 1.06rem;
+  line-height: 1.75;
+  margin: 0 0 1.25rem;
+  color: var(--ink);
+}
+.memoir-body h2 {
+  font-size: clamp(1.7rem, 1.35rem + 1.6vw, 2.5rem);
+  margin: 0 0 1.5rem;
+  text-wrap: balance;
+}
+.memoir-marker {
+  font-size: .72rem !important;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  margin: 0 0 .9rem !important;
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+}
+.memoir-marker::before {
+  content: "";
+  width: 2.1rem;
+  height: 2px;
+  background: var(--accent);
+  flex: 0 0 auto;
+}
+.memoir-lead {
+  font-size: 1.2rem !important;
+  line-height: 1.65 !important;
+  color: var(--muted) !important;
+}
+
+/* Falas dentro da narrativa */
+.memoir-body q {
+  font-style: italic;
+  color: var(--brand);
+  quotes: "“" "”" "‘" "’";
+}
+[data-theme="dark"] .memoir-body q { color: var(--brand-strong); }
+
+/* Lista de fundadores */
+.memoir-founders {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-strong);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: .6rem 2rem;
+}
+.memoir-founders li {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 520;
+  color: var(--ink);
+  line-height: 1.35;
+}
+.memoir-founders span {
+  display: block;
+  font-family: var(--font-body);
+  font-size: .78rem;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: .04em;
+}
+
+/* Marcos de ano — banda petróleo entre capítulos */
+.memoir-milestone {
+  position: relative;
+  background: var(--brand-deep);
+  color: var(--cream);
+  padding-block: clamp(2rem, 4vw, 3rem);
+  overflow: hidden;
+}
+.memoir-milestone::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--grain);
+  pointer-events: none;
+}
+.memoir-milestone .container {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: clamp(1rem, 4vw, 2.5rem);
+  flex-wrap: wrap;
+}
+.memoir-milestone-year {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 2rem + 3vw, 4.2rem);
+  font-weight: 560;
+  line-height: 1;
+  letter-spacing: -.02em;
+  color: var(--accent-soft);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+  flex: 0 0 auto;
+}
+.memoir-milestone-text {
+  font-size: clamp(1rem, .95rem + .3vw, 1.15rem);
+  line-height: 1.5;
+  color: var(--cream);
+  margin: 0;
+  max-width: 34rem;
+}
+
+/* Citações destacadas */
+.memoir-pullquote {
+  margin: 0;
+  padding-block: clamp(2rem, 5vw, 3.5rem);
+  background: var(--bg-alt);
+}
+.memoir-pullquote p {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 480;
+  font-size: clamp(1.4rem, 1.1rem + 1.8vw, 2.2rem);
+  line-height: 1.35;
+  letter-spacing: -.01em;
+  color: var(--ink);
+  max-width: 38rem;
+  margin-inline: auto;
+  text-wrap: balance;
+  border-left: 2px solid var(--accent);
+  padding-left: clamp(1.25rem, 3vw, 2rem);
+}
+.memoir-pullquote footer {
+  max-width: 38rem;
+  margin: 1rem auto 0;
+  padding-left: clamp(1.25rem, 3vw, 2rem);
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+/* Variante escura — para as falas de maior peso */
+.memoir-pullquote-deep {
+  position: relative;
+  background: var(--brand-deep);
+  overflow: hidden;
+}
+.memoir-pullquote-deep::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--grain);
+  pointer-events: none;
+}
+.memoir-pullquote-deep .container { position: relative; }
+.memoir-pullquote-deep p {
+  color: var(--cream);
+  border-left-color: var(--accent-soft);
+}
+.memoir-pullquote-deep footer { color: var(--accent-soft); }
+
+/* Link de apoio dentro do texto */
+.memoir-aside {
+  border-top: 1px solid var(--border-strong);
+  padding-top: 1.25rem;
+  margin-top: 2rem !important;
+}
+.memoir-aside a {
+  font-weight: 600;
+  font-size: .95rem;
+  text-decoration: none;
+  color: var(--brand);
+}
+.memoir-aside a:hover { color: var(--brand-strong); }
+
+/* Convite ao depoimento (exibido na página Sobre) */
+.memoir-invite {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 8fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+  max-width: 52rem;
+  margin: var(--sp-7) auto 0;
+  padding: clamp(1.5rem, 3vw, 2rem);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+}
+.memoir-invite img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: var(--radius-sm);
+}
+.memoir-invite h3 {
+  font-size: clamp(1.3rem, 1.1rem + .9vw, 1.7rem);
+  margin-bottom: .5rem;
+}
+.memoir-invite p:not(.eyebrow) {
+  color: var(--muted);
+  font-size: .98rem;
+  margin: 0 0 1.25rem;
+}
+@media (max-width: 575px) {
+  .memoir-invite { grid-template-columns: 1fr; text-align: left; }
+  .memoir-invite img { max-width: 190px; }
+}
+
+/* Nota de continuação */
+.memoir-continues {
+  margin-top: 2.5rem !important;
+  padding: 1.25rem 1.5rem;
+  background: var(--bg-alt);
+  border-left: 2px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: .95rem !important;
+  color: var(--muted) !important;
+}
+.memoir-continues span {
+  display: block;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--ink);
+  margin-bottom: .3rem;
 }
 
 /* =========================================================

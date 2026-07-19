@@ -6,30 +6,35 @@
   },
   "historia": {
     "titulo": "Uma Igreja Família",
-    "paragrafo1": "A Assembleia de Deus de Vila de Cava (ADVIC) nasceu do desejo de espalhar o amor de Cristo na nossa região. Desde o primeiro culto, nosso foco tem sido acolher famílias, restaurar vidas e ensinar a Palavra com integridade.",
-    "paragrafo2": "Cremos que a igreja não é feita de tijolos, mas de pessoas que servem umas às outras. Aqui, cada membro encontra um ambiente de crescimento, comunhão e propósito.",
+    "paragrafo1": "A Assembleia de Deus de Vila de Cava nasceu em novembro de 1964, na sala da casa do saudoso pastor João Bezerra, com 32 irmãos que vieram de carta da Assembleia de Deus de Jaceruba. Em 1968, a igreja recebeu sua emancipação e passou a ter vida própria.",
+    "paragrafo2": "Desde 1985, sob a liderança do pastor Luiz Paes Leme, a igreja implantou sua secretaria de missões e plantou congregações no Rio de Janeiro, no Espírito Santo e até na Bahia — todas hoje emancipadas. Cremos que a igreja não é feita de tijolos, mas de pessoas.",
     "imagem": "imagens/imagem-igreja.jpg"
   },
   "timeline": [
     {
-      "data": "Anos 80",
-      "titulo": "O Início do Sonho",
-      "descricao": "Nossos primeiros cultos aconteceram em lares e pequenos salões. Um tempo de oração e sacrifício."
+      "data": "1964",
+      "titulo": "O primeiro culto",
+      "descricao": "Na casa do pastor João Bezerra, 32 irmãos se reúnem pela primeira vez. Ali nasce a igreja em Vila de Cava."
     },
     {
-      "data": "1995",
-      "titulo": "O Primeiro Templo",
-      "descricao": "Com a graça de Deus inauguramos nosso primeiro templo físico, um ponto de luz em Vila de Cava."
+      "data": "1968",
+      "titulo": "A emancipação",
+      "descricao": "Com o primeiro templo construído e a igreja organizada, o pastor Roldão e o pastor João Bezerra assinam a emancipação."
     },
     {
-      "data": "2010",
-      "titulo": "Expansão da Visão",
-      "descricao": "Nossos ministérios de jovens e ação social cresceram e começamos trabalhos assistenciais intensos."
+      "data": "1985",
+      "titulo": "Uma nova liderança",
+      "descricao": "Após 20 anos servindo ao lado do fundador, o pastor Luiz Paes Leme assume a presidência da igreja."
     },
     {
-      "data": "Dias Atuais",
-      "titulo": "Vivendo o Extraordinário",
-      "descricao": "Hoje somos uma igreja vibrante e estruturada, pronta para o futuro, firmada na Palavra."
+      "data": "A partir de 1985",
+      "titulo": "A igreja que saiu",
+      "descricao": "Nasce a secretaria de missões. Congregações são plantadas em Adrianópolis, Bangu, São João de Meriti, Dores de Macabu, Mimoso do Sul e até na Bahia."
+    },
+    {
+      "data": "Dias atuais",
+      "titulo": "A história continua",
+      "descricao": "Seis décadas depois, a ADVIC segue firmada na Palavra, acolhendo famílias e enviando obreiros."
     }
   ],
   "lideranca": [
@@ -48,7 +53,7 @@
     {
       "nome": "Lucas Martins",
       "cargo": "Líder de Jovens",
-      "imagem": "imagens/pastor lider em 1950.jpg",
+      "imagem": "",
       "instagram": ""
     },
     {

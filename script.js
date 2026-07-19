@@ -685,10 +685,14 @@
     const instagramHtml = instagramRaw
       ? `<a href="${instagramRaw}" target="_blank" rel="noopener noreferrer" aria-label="Instagram de ${nome}"><i class="fab fa-instagram" aria-hidden="true"></i></a>`
       : `<span class="leader-social-placeholder" aria-hidden="true"><i class="fab fa-instagram"></i></span>`;
+    // Sem foto cadastrada: o wrapper já entra com o placeholder tonal,
+    // em vez de ficar um retângulo vazio esperando uma imagem que não vem
+    const wrapperClass = imgSrc ? "leader-img-wrapper" : "leader-img-wrapper img-missing";
+
     return `
       <div class="col-12 col-sm-6 col-md-4 col-lg-3" data-animate="fade-up" data-delay="${delay}">
         <div class="leader-card">
-          <div class="leader-img-wrapper">
+          <div class="${wrapperClass}">
             <img data-src="${imgSrc}" alt="${nome}" class="lazy" />
             <div class="leader-social">
               ${instagramHtml}
