@@ -1,7 +1,7 @@
 {
-  "name": "ADVIC — Assembleia de Deus de Vila de Cava",
+  "name": "ADVIC | Assembleia de Deus de Vila de Cava",
   "short_name": "ADVIC",
-  "description": "Cultos, eventos, ministérios e contato da ADVIC em Vila de Cava, Nova Iguaçu — RJ.",
+  "description": "Cultos, eventos, ministérios e contato da ADVIC em Vila de Cava, Nova Iguaçu, RJ.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

@@ -1,5 +1,5 @@
 # ============================================================
-#  ADVIC — Painel Administrativo (Decap CMS v3)
+#  ADVIC: Painel Administrativo (Decap CMS v3)
 #  Documentação: https://decapcms.org/docs/configuration-options/
 # ============================================================
 
@@ -8,9 +8,9 @@ backend:
   name: git-gateway
   branch: main
   commit_messages:
-    create:      "feat(cms): Adicionar {{collection}} — {{slug}}"
-    update:      "fix(cms): Atualizar {{collection}} — {{slug}}"
-    delete:      "chore(cms): Remover {{collection}} — {{slug}}"
+    create:      "feat(cms): Adicionar {{collection}}: {{slug}}"
+    update:      "fix(cms): Atualizar {{collection}}: {{slug}}"
+    delete:      "chore(cms): Remover {{collection}}: {{slug}}"
     uploadMedia: "chore(cms): Carregar imagem {{path}}"
     deleteMedia: "chore(cms): Remover imagem {{path}}"
 
@@ -23,24 +23,24 @@ site_url:  "https://igrejaadvic.netlify.app"
 logo_url:  "https://igrejaadvic.netlify.app/imagens/logo.png"
 locale:    "pt"
 
-# Exibe "Ver no site" ao lado de cada item — útil para confirmar mudanças após publicação
+# Exibe "Ver no site" ao lado de cada item, útil para confirmar mudanças após publicação
 show_preview_links: true
 
-# Garante slugs limpos nos commits — sem acentos, sem espaços
+# Garante slugs limpos nos commits, sem acentos, sem espaços
 slug:
   encoding:             "unicode"
   clean_accents:        true
   sanitize_replacement: "-"
 
 # ── Biblioteca de mídia ──────────────────────────────────────
-# Nota: o bloco "media_library: name: default" foi removido — no Decap CMS 3
+# Nota: o bloco "media_library: name: default" foi removido porque, no Decap CMS 3,
 # ele causa o erro "Missing external media library 'default'". A biblioteca
 # embutida é usada automaticamente com media_folder/public_folder.
 media_folder:  "imagens"
 public_folder: "imagens"
 
 # ── Fluxo editorial ──────────────────────────────────────────
-# Ativar quando houver múltiplos editores — exige revisão antes de publicar
+# Ativar quando houver múltiplos editores, exige revisão antes de publicar
 # publish_mode: editorial_workflow
 
 # ============================================================
@@ -140,7 +140,7 @@ collections:
               - label:    "Parágrafo 2"
                 name:     "paragrafo2"
                 widget:   "text"
-                hint:     "Complemento — valores e visão. Opcional."
+                hint:     "Complemento: valores e visão. Opcional."
                 required: false
 
               - label:    "Foto ao Lado do Texto"
@@ -153,7 +153,7 @@ collections:
             name:       "timeline"
             widget:     "list"
             collapsed:  true
-            summary:    "{{fields.data}} — {{fields.titulo}}"
+            summary:    "{{fields.data}}: {{fields.titulo}}"
             add_to_top: false
             hint:       "Marcos históricos da ADVIC. Reordene arrastando."
             min:        1
@@ -162,7 +162,7 @@ collections:
               - label:    "Ano / Período"
                 name:     "data"
                 widget:   "string"
-                hint:     "Ex: Anos 80 | 1995 | Dias Atuais"
+                hint:     "Ex: 1964 | 1968 | Dias atuais"
                 required: true
 
               - label:    "Título do Marco"
@@ -180,7 +180,7 @@ collections:
             name:       "lideranca"
             widget:     "list"
             collapsed:  true
-            summary:    "{{fields.nome}} — {{fields.cargo}}"
+            summary:    "{{fields.nome}}, {{fields.cargo}}"
             add_to_top: false
             hint:       "Pastores e líderes exibidos na página Sobre Nós."
             min:        1
@@ -208,7 +208,7 @@ collections:
                 name:     "instagram"
                 widget:   "string"
                 required: false
-                hint:     "URL completa. Ex: https://instagram.com/fulano — ou deixe vazio."
+                hint:     "URL completa. Ex: https://instagram.com/fulano (ou deixe vazio)."
                 pattern:  ["^(https?://.*)?$", "URL completa (https://) ou deixe vazio"]
 
   # ──────────────────────────────────────────────────────────
@@ -230,7 +230,7 @@ collections:
           - label:      "Lista de Eventos"
             name:       "eventos"
             widget:     "list"
-            summary:    "📅 {{fields.dataExibicao}} — {{fields.titulo}} [{{fields.tipo}}]"
+            summary:    "📅 {{fields.dataExibicao}}: {{fields.titulo}} [{{fields.tipo}}]"
             collapsed:  true
             add_to_top: true
             hint:       "Eventos mais recentes no topo. Clique em ＋ para adicionar."
@@ -260,14 +260,14 @@ collections:
                   - { label: "Família", value: "familia" }
                   - { label: "Vigília", value: "vigilia" }
 
-              - label:    "Data e Hora (ISO — para ordenação)"
+              - label:    "Data e Hora (ISO, para ordenação)"
                 name:     "dataISO"
                 widget:   "datetime"
                 format:   "YYYY-MM-DDTHH:mm"
                 hint:     "Selecione no calendário. Usado para ordenar e para o contador."
                 required: true
 
-              - label:    "Data e Hora (texto — exibido no card)"
+              - label:    "Data e Hora (texto exibido no card)"
                 name:     "dataExibicao"
                 widget:   "string"
                 hint:     "Texto livre. Ex: 20 Abr • 19h | Domingo, 18h"
@@ -286,14 +286,14 @@ collections:
                 hint:     "Paisagem 16:9. Mín. 800×450 px. JPG ou WebP."
                 required: false
 
-              - label:    "Link — Google Agenda"
+              - label:    "Link do Google Agenda"
                 name:     "linkCalendario"
                 widget:   "string"
                 required: false
                 hint:     "Gere em calendar.google.com/calendar/r/eventedit e cole aqui."
                 pattern:  ["^(https?://.*)?$", "URL completa ou deixe vazio"]
 
-              - label:    "Link — Compartilhar no WhatsApp"
+              - label:    "Link para compartilhar no WhatsApp"
                 name:     "linkWhats"
                 widget:   "string"
                 required: false
@@ -321,7 +321,7 @@ collections:
               - label:    "Texto do Versículo"
                 name:     "texto"
                 widget:   "text"
-                hint:     "Sem as aspas — o site as adiciona automaticamente."
+                hint:     "Sem as aspas. O site as adiciona automaticamente."
                 required: true
 
               - label:    "Referência"
@@ -340,7 +340,7 @@ collections:
           - label:      "Lista de Sermões"
             name:       "sermoes"
             widget:     "list"
-            summary:    "🎙️ {{fields.titulo}} — {{fields.pregadorData}}"
+            summary:    "🎙️ {{fields.titulo}}, {{fields.pregadorData}}"
             collapsed:  true
             add_to_top: true
             hint:       "Sermões mais recentes no topo."
@@ -361,7 +361,7 @@ collections:
               - label:    "Pregador e Data"
                 name:     "pregadorData"
                 widget:   "string"
-                hint:     "Ex: Pr. Luiz — 12 Abr | Miss. Ana — Dom. 19h"
+                hint:     "Ex: Pr. Luiz, 12 Abr | Miss. Ana, Dom. 19h"
                 required: true
 
               - label:    "Link do Vídeo (YouTube)"
@@ -426,7 +426,7 @@ collections:
             hint:     "Formato: (21) 00000-0000"
             required: false
             pattern:  ["^(\\(\\d{2}\\)\\s?\\d{4,5}-\\d{4})?$",
-                       "Formato: (21) 00000-0000 — ou deixe vazio"]
+                       "Formato: (21) 00000-0000 (ou deixe vazio)"]
 
           - label:    "E-mail de Contato"
             name:     "email"
@@ -434,7 +434,7 @@ collections:
             hint:     "Ex: contato@advic.org.br"
             required: false
             pattern:  ['^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})?$',
-                       "E-mail válido — ou deixe vazio"]
+                       "E-mail válido (ou deixe vazio)"]
 
           - label:    "Endereço Completo"
             name:     "endereco"
