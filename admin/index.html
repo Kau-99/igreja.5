@@ -554,8 +554,11 @@
         '<strong>ADVIC</strong>' +
         '<a href="/" target="_blank" rel="noopener">Ver o site</a>' +
         '<a href="/galeria" target="_blank" rel="noopener">Galeria</a>' +
+        // Fotos de celular costumam ter 5 MB ou mais. Cada imagem enviada pelo
+        // painel vira um commit permanente, então deixo o compressor à mão.
+        '<a href="https://squoosh.app/" target="_blank" rel="noopener noreferrer" ' +
+        'title="Reduza o tamanho da foto antes de enviar">Comprimir foto</a>' +
         '<a href="https://www.youtube.com/@advicof" target="_blank" rel="noopener noreferrer">YouTube</a>' +
-        '<a href="https://www.instagram.com/advic_viladecava/" target="_blank" rel="noopener noreferrer">Instagram</a>' +
         '<button type="button" aria-label="Fechar atalhos" title="Fechar">×</button>';
       bar.querySelector('button').addEventListener('click', function() { bar.remove(); });
       document.body.appendChild(bar);

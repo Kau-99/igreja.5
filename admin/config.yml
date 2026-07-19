@@ -33,9 +33,11 @@ slug:
   sanitize_replacement: "-"
 
 # ── Biblioteca de mídia ──────────────────────────────────────
-# Nota: o bloco "media_library: name: default" foi removido porque, no Decap CMS 3,
-# ele causa o erro "Missing external media library 'default'". A biblioteca
-# embutida é usada automaticamente com media_folder/public_folder.
+# IMPORTANTE: não adicione um bloco "media_library" aqui. No Decap CMS 3 ele
+# quebra o painel das duas formas: com "name: default" dá "Missing external
+# media library", e sem "name" dá "must have required property name".
+# A biblioteca embutida (com upload de arquivos do computador) já funciona
+# apenas com media_folder/public_folder abaixo.
 media_folder:  "imagens"
 public_folder: "imagens"
 
@@ -72,7 +74,7 @@ collections:
               - label:    "Imagem de Fundo"
                 name:     "imagem"
                 widget:   "image"
-                hint:     "Resolução ideal 1920×1080 px. Formato JPG ou WebP."
+                hint:     "Clique no campo para escolher uma foto do computador (botão Enviar novo). Ideal: 1920×1080 px, até 2 MB."
                 required: true
 
               - label:    "Título Principal"
@@ -104,7 +106,7 @@ collections:
               - label:    "Imagem de Fundo"
                 name:     "imagem"
                 widget:   "image"
-                hint:     "Mesma imagem da página inicial ou foto da fachada."
+                hint:     "Escolha uma foto do computador ou reaproveite uma já enviada. Ideal: 1920×1080 px, até 2 MB."
                 required: true
 
               - label:    "Título"
@@ -146,7 +148,7 @@ collections:
               - label:    "Foto ao Lado do Texto"
                 name:     "imagem"
                 widget:   "image"
-                hint:     "Proporção 4:3 ideal."
+                hint:     "Foto do computador, na proporção 4:3. Ideal: até 1600 px de largura e 2 MB."
                 required: false
 
           - label:      "Nossa Caminhada (Linha do Tempo)"
@@ -189,7 +191,7 @@ collections:
               - label:    "Foto"
                 name:     "imagem"
                 widget:   "image"
-                hint:     "Proporção 1:1 (quadrada). Mín. 400×400 px. JPG ou WebP."
+                hint:     "Retrato quadrado (1:1), escolhido do computador. Entre 400×400 e 1200×1200 px, até 1 MB."
                 required: true
 
               - label:    "Nome Completo"
@@ -283,7 +285,7 @@ collections:
               - label:    "Arte do Evento (imagem)"
                 name:     "imagem"
                 widget:   "image"
-                hint:     "Paisagem 16:9. Mín. 800×450 px. JPG ou WebP."
+                hint:     "Arte do evento em paisagem (16:9), escolhida do computador. Ideal: 1200×675 px, até 1 MB."
                 required: false
 
               - label:    "Link do Google Agenda"
