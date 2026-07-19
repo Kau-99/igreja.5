@@ -14,19 +14,19 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "imagens/logo.png",
+      "src": "imagens/favicons/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "imagens/logo.png",
+      "src": "imagens/favicons/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "imagens/logo.png",
+      "src": "imagens/favicons/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -38,21 +38,21 @@
       "short_name": "Eventos",
       "description": "Ver a programação de cultos e eventos",
       "url": "/eventos.html",
-      "icons": [{ "src": "imagens/logo.png", "sizes": "96x96", "type": "image/png" }]
+      "icons": [{ "src": "imagens/favicons/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" }]
     },
     {
       "name": "Contato",
       "short_name": "Contato",
       "description": "Falar com a ADVIC e ver horários",
       "url": "/contato.html",
-      "icons": [{ "src": "imagens/logo.png", "sizes": "96x96", "type": "image/png" }]
+      "icons": [{ "src": "imagens/favicons/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" }]
     },
     {
       "name": "Pedido de Oração",
       "short_name": "Oração",
       "description": "Enviar um pedido de oração",
       "url": "/contato.html#oracao",
-      "icons": [{ "src": "imagens/logo.png", "sizes": "96x96", "type": "image/png" }]
+      "icons": [{ "src": "imagens/favicons/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" }]
     }
   ]
 }

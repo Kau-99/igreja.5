@@ -1,7 +1,7 @@
 // Descomente após configurar ONESIGNAL_APP_ID em components.js
 // importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-const CACHE_NAME = "advic-v16"; // v16: mapa 10/40 real, versículos via CMS
+const CACHE_NAME = "advic-v17"; // v17: imagens otimizadas, favicons, offline p/ pretty URLs
 
 const STATIC_ASSETS = [
   "/",
@@ -107,9 +107,14 @@ self.addEventListener("fetch", (event) => {
           caches.open(CACHE_NAME).then((cache) => safePut(cache, request, copy));
           return response;
         })
-        .catch(() =>
-          caches.match(request).then((cached) => cached || caches.match("/offline.html"))
-        ),
+        .catch(async () => {
+          // Offline: a Netlify serve pretty URLs ("/sobre"), mas o precache
+          // guarda "/sobre.html" — tento as duas formas antes do offline.html
+          const cached =
+            (await caches.match(request)) ||
+            (!url.pathname.includes(".") && (await caches.match(url.pathname.replace(/\/$/, "") + ".html")));
+          return cached || caches.match("/offline.html");
+        }),
     );
     return;
   }

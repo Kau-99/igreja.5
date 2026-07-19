@@ -1280,7 +1280,16 @@
       return;
     }
 
-    const legenda = (nome) => escapeHTML((nome || "").replace(/\.[a-z0-9]+$/i, "").replace(/[-_]+/g, " ").trim());
+    // Nomes automáticos de câmera/WhatsApp não servem como legenda —
+    // nesses casos o lightbox mostra "Foto N de M" no lugar
+    const legenda = (nome) => {
+      const limpo = (nome || "").replace(/\.[a-z0-9]+$/i, "").replace(/[-_]+/g, " ").trim();
+      if (/^(img|dsc|dcim|pxl|screenshot|captura|photo|foto|imagem do whatsapp|whatsapp image)\b/i.test(limpo) ||
+          /^\d{8,}/.test(limpo)) {
+        return "";
+      }
+      return escapeHTML(limpo);
+    };
 
     grid.innerHTML = fotos.map((f, i) => {
       const thumb = safeUrl(f.thumb);
