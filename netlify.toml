@@ -8,7 +8,10 @@
   functions = "netlify/functions"
 
 [build.environment]
-  NODE_VERSION = "18"
+  # Node 18 saiu de suporte em abr/2025 e a Netlify parou de aceitá-lo no
+  # empacotamento das functions. As três functions só usam fetch nativo,
+  # disponível desde o 18, então subir para o 22 (LTS) não exige mudanças.
+  NODE_VERSION = "22"
 
 # ── Otimização de assets (pós-build) ────────────────────────
 [build.processing]
