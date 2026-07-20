@@ -1,6 +1,6 @@
 {
   "hero": {
-    "imagem": "imagens/imagem-igreja.jpg",
+    "imagem": "/imagens/imagem-igreja.jpg",
     "titulo": "Nossa História",
     "subtitulo": "Conheça as raízes, os propósitos e as pessoas que formam a ADVIC."
   },
@@ -8,7 +8,7 @@
     "titulo": "Uma Igreja Família",
     "paragrafo1": "A Assembleia de Deus de Vila de Cava nasceu em novembro de 1964, na sala da casa do saudoso pastor João Bezerra, com 32 irmãos que vieram de carta da Assembleia de Deus de Jaceruba. Em 1968, a igreja recebeu sua emancipação e passou a ter vida própria.",
     "paragrafo2": "Desde 1985, sob a liderança do pastor Luiz Paes Leme, a igreja implantou sua secretaria de missões e plantou congregações no Rio de Janeiro, no Espírito Santo e até na Bahia, todas hoje emancipadas. Cremos que a igreja não é feita de tijolos, mas de pessoas.",
-    "imagem": "imagens/imagem-igreja.jpg"
+    "imagem": "/imagens/imagem-igreja.jpg"
   },
   "timeline": [
     {
@@ -41,13 +41,13 @@
     {
       "nome": "Pr. Luiz Paes Leme",
       "cargo": "Pastor Presidente",
-      "imagem": "imagens/WhatsApp Image 2025-10-17 at 20.57.52.jpeg",
+      "imagem": "/imagens/WhatsApp Image 2025-10-17 at 20.57.52.jpeg",
       "instagram": ""
     },
     {
       "nome": "Pr. Roberto Alves",
       "cargo": "Vice-Presidente",
-      "imagem": "imagens/pastor2.jpg",
+      "imagem": "/imagens/pastor2.jpg",
       "instagram": ""
     },
     {
@@ -59,7 +59,7 @@
     {
       "nome": "Miss. Ana Júlia",
       "cargo": "Coord. Infantil",
-      "imagem": "imagens/pastor4.jpg",
+      "imagem": "/imagens/pastor4.jpg",
       "instagram": ""
     }
   ]

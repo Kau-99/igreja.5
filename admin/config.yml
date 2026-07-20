@@ -39,7 +39,7 @@ slug:
 # A biblioteca embutida (com upload de arquivos do computador) já funciona
 # apenas com media_folder/public_folder abaixo.
 media_folder:  "imagens"
-public_folder: "imagens"
+public_folder: "/imagens"   # barra inicial: sem ela o painel busca /admin/imagens/ (404)
 
 # ── Fluxo editorial ──────────────────────────────────────────
 # Ativar quando houver múltiplos editores, exige revisão antes de publicar

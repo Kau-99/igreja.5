@@ -2,7 +2,7 @@
   "eventos": [
     {
       "descricao": "Adoração e Palavra para toda a família.",
-      "imagem": "imagens/evento1.jpg",
+      "imagem": "/imagens/evento1.jpg",
       "tipo": "louvor",
       "linkWhats": "https://wa.me/?text=Participe+do+Culto+dos+Jovens+na+ADVIC+dia+15/11+às+19h",
       "titulo": "Culto dos Jovens",
@@ -13,7 +13,7 @@
     },
     {
       "descricao": "Ministrações voltadas para união e fortalecimento.",
-      "imagem": "imagens/evento2.jpg",
+      "imagem": "/imagens/evento2.jpg",
       "tipo": "familia",
       "linkWhats": "https://wa.me/?text=Culto+da+Família+na+ADVIC+dia+22/11+às+19h",
       "titulo": "Culto da Família",
@@ -24,7 +24,7 @@
     },
     {
       "descricao": "Celebração ao Senhor com toda a igreja.",
-      "imagem": "imagens/evento3.jpg",
+      "imagem": "/imagens/evento3.jpg",
       "tipo": "culto",
       "linkWhats": "https://wa.me/?text=Culto+dos+Varões+na+ADVIC+dia+29/11+às+18h",
       "titulo": "Culto dos Varões",

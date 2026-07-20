@@ -425,7 +425,7 @@
 
     /* ── Preview: Evento ──────────────────────────────────────── */
     var EventoPreview = function(props) {
-      var h   = window.React.createElement;
+      var h   = window.h; // Decap 3 expõe h(); window.React não existe mais
       var e   = props.entry;
       var get = function(k) { return e.getIn(['data', k]) || ''; };
 
@@ -469,7 +469,7 @@
 
     /* ── Preview: Sermão ──────────────────────────────────────── */
     var SermaoPreview = function(props) {
-      var h   = window.React.createElement;
+      var h   = window.h; // Decap 3 expõe h(); window.React não existe mais
       var e   = props.entry;
       var get = function(k) { return e.getIn(['data', k]) || ''; };
 
@@ -509,7 +509,7 @@
 
     /* ── Preview: Líder ───────────────────────────────────────── */
     var LiderPreview = function(props) {
-      var h   = window.React.createElement;
+      var h   = window.h; // Decap 3 expõe h(); window.React não existe mais
       var e   = props.entry;
       var get = function(k) { return e.getIn(['data', k]) || ''; };
 
