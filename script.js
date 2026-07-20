@@ -1295,16 +1295,46 @@
       return escapeHTML(limpo);
     };
 
-    grid.innerHTML = fotos.map((f, i) => {
+    // O Drive recusa miniaturas quando a página pede dezenas de uma vez
+    // (a partir de ~70 ele começa a devolver erro), então mostro em lotes.
+    const LOTE = 24;
+    let exibidas = 0;
+
+    const cartao = (f, i) => {
       const thumb = safeUrl(f.thumb);
       const full  = safeUrl(f.full);
       if (!thumb || !full) return "";
       return `
         <button type="button" class="gallery-item" data-index="${i}" data-full="${full}"
           aria-label="Ampliar foto: ${legenda(f.nome) || `foto ${i + 1}`}">
-          <img src="${thumb}" alt="${legenda(f.nome)}" loading="lazy" decoding="async" />
+          <img src="${thumb}" alt="${legenda(f.nome)}" loading="lazy" decoding="async"
+            referrerpolicy="no-referrer" />
         </button>`;
-    }).join("");
+    };
+
+    const botaoMais = $("#galeria-mais");
+
+    const mostrarLote = () => {
+      const proximo = fotos.slice(exibidas, exibidas + LOTE);
+      const html = proximo.map((f, n) => cartao(f, exibidas + n)).join("");
+      if (exibidas === 0) grid.innerHTML = html;
+      else grid.insertAdjacentHTML("beforeend", html);
+      exibidas += proximo.length;
+
+      // Liga o clique só nos cartões recém-inseridos
+      $$(".gallery-item:not([data-ligado])", grid).forEach((btn) => {
+        btn.setAttribute("data-ligado", "1");
+        on(btn, "click", () => openLightbox(parseInt(btn.dataset.index, 10) || 0));
+      });
+
+      if (botaoMais) {
+        const restantes = fotos.length - exibidas;
+        botaoMais.hidden = restantes <= 0;
+        botaoMais.textContent = restantes > 0
+          ? `Ver mais fotos (${restantes} restantes)`
+          : "";
+      }
+    };
 
     // ── Lightbox ──
     $("#lightbox-overlay")?.remove();
@@ -1348,8 +1378,9 @@
       lastFocus?.focus();
     };
 
-    $$(".gallery-item", grid).forEach((btn) =>
-      on(btn, "click", () => openLightbox(parseInt(btn.dataset.index, 10) || 0)));
+    // Primeiro lote (os cliques são ligados dentro de mostrarLote)
+    mostrarLote();
+    on(botaoMais, "click", mostrarLote);
 
     on($(".lightbox-close", overlay), "click", closeLightbox);
     on($(".lightbox-prev",  overlay), "click", () => showFoto(current - 1));

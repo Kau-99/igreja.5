@@ -1,7 +1,7 @@
 // Descomente após configurar ONESIGNAL_APP_ID em components.js
 // importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-const CACHE_NAME = "advic-v18"; // v18: página de história (depoimento do pr. Luiz)
+const CACHE_NAME = "advic-v19"; // v19: galeria em lotes + CSP do painel
 
 const STATIC_ASSETS = [
   "/",

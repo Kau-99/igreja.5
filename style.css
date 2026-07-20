@@ -2732,6 +2732,15 @@ a:hover { color: var(--brand-strong); }
 }
 .gallery-item:hover img { transform: scale(1.03); }
 
+/* Botão "Ver mais fotos" — o Drive limita miniaturas em massa,
+   então a galeria carrega em lotes */
+.gallery-more {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--sp-5);
+}
+.gallery-more button[hidden] { display: none; }
+
 /* Skeleton do mosaico */
 .gallery-skeleton {
   break-inside: avoid;
